@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:vvcmc_citizen_app/feature/home_screen.dart';
 
 void main() {
   runApp(const MyApp());
@@ -37,13 +38,13 @@ class MyApp extends StatelessWidget {
       ),
       debugShowCheckedModeBanner: false,
       themeMode: ThemeMode.light,
-      home: const MyHomePage(),
+      home: const Main(),
     );
   }
 }
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key});
+class Main extends StatefulWidget {
+  const Main({super.key});
 
   // This widget is the home page of your application. It is stateful, meaning
   // that it has a State object (defined below) that contains fields that affect
@@ -55,10 +56,24 @@ class MyHomePage extends StatefulWidget {
   // always marked "final".
 
   @override
-  State<MyHomePage> createState() => _MyHomePageState();
+  State<Main> createState() => _MainState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
+class _MainState extends State<Main> with TickerProviderStateMixin {
+  late final TabController _tabController;
+  @override
+  void initState() {
+    _tabController =
+        TabController(length: 4, vsync: this, animationDuration: Duration.zero);
+    _tabController.addListener(() {
+      if (mounted && !_tabController.indexIsChanging) {
+        setState(() {});
+      }
+    });
+    // Todo: implement initState
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     // This method is rerun every time setState is called, for instance as done
@@ -144,9 +159,120 @@ class _MyHomePageState extends State<MyHomePage> {
           ],
         ),
       ),
-      body: Container(
-        width: MediaQuery.of(context).size.width,
-        child: Image.asset("assets/images/banner.png", fit: BoxFit.fill),
+      bottomNavigationBar: Container(
+        decoration: const BoxDecoration(
+          border: BorderDirectional(
+            top: BorderSide(width: 0.5, color: Colors.grey),
+          ),
+        ),
+        child: TabBar(
+          controller: _tabController,
+          indicator: _tabController.index == 3
+              ? const BoxDecoration()
+              : BoxDecoration(
+                  border: BorderDirectional(
+                      bottom: BorderSide(
+                          width: 2.0, color: Theme.of(context).primaryColor))),
+          indicatorPadding: const EdgeInsets.only(bottom: 8.0),
+          tabs: [
+            Padding(
+              padding: const EdgeInsets.only(top: 8.0),
+              child: Tab(
+                icon: ImageIcon(
+                  const AssetImage("assets/icons/home.png"),
+                  color: _tabController.index == 0
+                      ? Theme.of(context).primaryColor
+                      : Colors.black,
+                  size: 32,
+                ),
+                child: Text(
+                  "Home",
+                  style: TextStyle(
+                    fontWeight: _tabController.index == 0
+                        ? FontWeight.bold
+                        : FontWeight.normal,
+                    color: Colors.black,
+                  ),
+                ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(top: 8.0),
+              child: Tab(
+                icon: ImageIcon(
+                  const AssetImage("assets/icons/services.png"),
+                  color: _tabController.index == 1
+                      ? Theme.of(context).primaryColor
+                      : Colors.black,
+                  size: 32,
+                ),
+                child: Text(
+                  "Services",
+                  style: TextStyle(
+                    fontWeight: _tabController.index == 1
+                        ? FontWeight.bold
+                        : FontWeight.normal,
+                    color: Colors.black,
+                  ),
+                ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(top: 8.0),
+              child: Tab(
+                icon: ImageIcon(
+                  const AssetImage("assets/icons/utilities.png"),
+                  color: _tabController.index == 2
+                      ? Theme.of(context).primaryColor
+                      : Colors.black,
+                  size: 32,
+                ),
+                child: Text(
+                  "Utilities",
+                  style: TextStyle(
+                    fontWeight: _tabController.index == 2
+                        ? FontWeight.bold
+                        : FontWeight.normal,
+                    color: Colors.black,
+                  ),
+                ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 8.0),
+              child: InkWell(
+                child: Image.asset(
+                  _tabController.index == 3
+                      ? "assets/icons/sos-selected.png"
+                      : "assets/icons/sos.png",
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+      // Bottomnavigationbar(
+      //   items: [
+      //     BottomNavigationBarItem(
+      //       icon: Padding(
+      //         padding: const EdgeInsets.only(bottom: 12.0),
+      //         child: Image.asset("assets/icons/home.png"),
+      //       ),
+      //       label: "Home",
+
+      //     ),
+      //     const BottomNavigationBarItem(icon: Text("hi"), label: "Not Home"),
+      //   ],
+      // ),
+      body: TabBarView(
+        physics: NeverScrollableScrollPhysics(),
+        controller: _tabController,
+        children: const [
+          HomeScreen(),
+          Placeholder(),
+          Placeholder(),
+          Placeholder(),
+        ],
       ),
     );
   }
