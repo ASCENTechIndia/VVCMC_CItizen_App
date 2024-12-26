@@ -1,6 +1,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
     <application
-        android:label="vvcmc_citizen_app"
+        android:label="VVCMC Citizen App"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity
