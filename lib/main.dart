@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:vvcmc_citizen_app/feature/home_screen.dart';
+import 'package:vvcmc_citizen_app/feature/services_screen.dart';
 
 void main() {
   runApp(const MyApp());
@@ -31,9 +32,10 @@ class MyApp extends StatelessWidget {
         // tested with just a hot reload.
         scaffoldBackgroundColor: Colors.white,
         colorScheme: ColorScheme.fromSeed(
-            brightness: Brightness.light,
-            seedColor: const Color(0xFF338CC3),
-            primary: const Color(0xFF338CC3)),
+          brightness: Brightness.light,
+          seedColor: const Color(0xFF338CC3),
+          primary: const Color(0xFF338CC3),
+        ),
         useMaterial3: true,
       ),
       debugShowCheckedModeBanner: false,
@@ -269,7 +271,7 @@ class _MainState extends State<Main> with TickerProviderStateMixin {
         controller: _tabController,
         children: const [
           HomeScreen(),
-          Placeholder(),
+          ServicesScreen(),
           Placeholder(),
           Placeholder(),
         ],
