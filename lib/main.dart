@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:vvcmc_citizen_app/feature/home_screen.dart';
 import 'package:vvcmc_citizen_app/feature/services_screen.dart';
+import 'package:vvcmc_citizen_app/feature/sos_screen.dart';
+import 'package:vvcmc_citizen_app/feature/utitlities_screen.dart';
 
 void main() {
   runApp(const MyApp());
@@ -272,8 +274,8 @@ class _MainState extends State<Main> with TickerProviderStateMixin {
         children: const [
           HomeScreen(),
           ServicesScreen(),
-          Placeholder(),
-          Placeholder(),
+          UtilitiesScreen(),
+          SosScreen(),
         ],
       ),
     );

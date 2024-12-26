@@ -1,39 +1,31 @@
 import 'package:flutter/material.dart';
 import 'package:vvcmc_citizen_app/widgets/card_widget.dart';
 
-class ServicesScreen extends StatelessWidget {
-  const ServicesScreen({super.key});
+class UtilitiesScreen extends StatelessWidget {
+  const UtilitiesScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     List cards = [
       [
-        {"icon": "logo.png", "text": "About VVMC"},
-        {"icon": "emergency.png", "text": "Emergency Number"},
+        {"icon": "property-tax.png", "text": "View Your Propert Tax"},
+        {"icon": "water-tax.png", "text": "View Your Water Tax"},
       ],
       [
-        {"icon": "elected.png", "text": "Elected Member"},
-        {"icon": "prabhag.png", "text": "Prabhag Samiti"},
+        {"icon": "complaint.png", "text": "Register Your Complaint"},
+        {"icon": "clean.png", "text": "Clean VVMC"},
       ],
       [
-        {"icon": "official.png", "text": "Official Numbers"},
-        {"icon": "commissioner.png", "text": "Commissioner Message"},
+        {"icon": "news.png", "text": "News Update"},
+        {"icon": "track.png", "text": "Track My Complaint"},
       ],
       [
-        {"icon": "mayor.png", "text": "Mayor Message"},
-        {"icon": "map.png", "text": "Map"},
+        {"icon": "vvmt.png", "text": "VVMT"},
+        {"icon": "tax.png", "text": "Tax Calculator"},
       ],
       [
-        {"icon": "gallery.png", "text": "Gallery"},
-        {"icon": "twitter.png", "text": "Twitter"},
-      ],
-      [
-        {"icon": "logo.png", "text": "VVMC Website"},
-        {"icon": "facebook.png", "text": "Facebook"},
-      ],
-      [
-        {"icon": "youtube.png", "text": "Youtube"},
-        {"icon": "vts.png", "text": "VTS"},
+        {"icon": "property-receipt.png", "text": "Download\nProperty Tax\nReceipt"},
+        {"icon": "water-receipt.png", "text": "Download\nWater Tax\nReceipt"},
       ],
     ];
     return SingleChildScrollView(
@@ -48,14 +40,14 @@ class ServicesScreen extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   const Text(
-                    "Access essential services to ",
+                    "All the tools you need to manage ",
                     style: TextStyle(
                       fontWeight: FontWeight.w500,
                       fontSize: 22,
                     ),
                   ),
                   const Text(
-                    "keep your city life running smoothly.",
+                    "your municipal tasks, right here.",
                     style: TextStyle(
                       fontWeight: FontWeight.w500,
                       fontSize: 22,

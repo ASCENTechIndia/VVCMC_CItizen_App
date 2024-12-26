@@ -1,16 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:vvcmc_citizen_app/widgets/card_widget.dart';
 
-class HomeScreen extends StatefulWidget {
+class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
 
   @override
-  State<HomeScreen> createState() => _HomeScreenState();
-}
-
-class _HomeScreenState extends State<HomeScreen> {
-  @override
   Widget build(BuildContext context) {
+    List cards = [
+      [
+        {"icon": "property-tax.png", "text": "View Your Tax"},
+        {"icon": "complaint.png", "text": "Register Your Complaint"},
+      ],
+      [
+        {"icon": "news.png", "text": "News Update"},
+        {"icon": "vote.png", "text": "Election"},
+      ],
+      [
+        {"icon": "temperature.png", "text": "Temperature"},
+        {"icon": "scheme.png", "text": "Scheme"},
+      ],
+    ];
     return SizedBox(
       width: MediaQuery.of(context).size.width,
       child: Column(
@@ -36,84 +45,44 @@ class _HomeScreenState extends State<HomeScreen> {
                     fontSize: 22,
                   ),
                 ),
-                const SizedBox(height: 20),
+                const SizedBox(height: 10),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    Row(
-                      children: [
-                        Expanded(
-                          child: CardWidget(
-                            icon: Image.asset("assets/icons/tax.png"),
-                            title: const Text(
-                              "View Your Tax",
-                              style: TextStyle(fontWeight: FontWeight.w500),
-                            ),
+                  children: cards
+                      .map(
+                        (row) => Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 4.0),
+                          child: Row(
+                            children: [
+                              Expanded(
+                                child: CardWidget(
+                                  icon: Image.asset(
+                                      "assets/icons/${row[0]["icon"]}"),
+                                  title: Text(
+                                    row[0]["text"],
+                                    style: const TextStyle(
+                                        fontWeight: FontWeight.w500),
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(width: 8),
+                              Expanded(
+                                child: CardWidget(
+                                  icon: Image.asset(
+                                      "assets/icons/${row[1]["icon"]}"),
+                                  title: Text(
+                                    row[1]["text"],
+                                    style: const TextStyle(
+                                        fontWeight: FontWeight.w500),
+                                  ),
+                                ),
+                              ),
+                            ],
                           ),
                         ),
-                        const SizedBox(width: 8),
-                        Expanded(
-                          child: CardWidget(
-                            icon: Image.asset("assets/icons/complaint.png"),
-                            title: const Text(
-                              "Register Your Complaint",
-                              style: TextStyle(fontWeight: FontWeight.w500),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
+                      )
+                      .toList(),
                 ),
-                const SizedBox(height: 8),
-                Row(
-                  children: [
-                    Expanded(
-                      child: CardWidget(
-                        icon: Image.asset("assets/icons/news.png"),
-                        title: const Text(
-                          "News Update",
-                          style: TextStyle(fontWeight: FontWeight.w500),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(width: 8),
-                    Expanded(
-                      child: CardWidget(
-                        icon: Image.asset("assets/icons/vote.png"),
-                        title: const Text(
-                          "Election",
-                          style: TextStyle(fontWeight: FontWeight.w500),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 8),
-                Row(
-                  children: [
-                    Expanded(
-                      child: CardWidget(
-                        icon: Image.asset("assets/icons/temperature.png"),
-                        title: const Text(
-                          "Temperature",
-                          style: TextStyle(fontWeight: FontWeight.w500),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(width: 8),
-                    Expanded(
-                      child: CardWidget(
-                        icon: Image.asset("assets/icons/scheme.png"),
-                        title: const Text(
-                          "Scheme",
-                          style: TextStyle(fontWeight: FontWeight.w500),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 8),
                 Center(
                   child: CardWidget(
                     icon: Image.asset("assets/icons/disaster.png"),
