@@ -32,17 +32,10 @@ class HomeScreen extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 const Text(
-                  "Your city services, updates,",
+                  "Your city services, updates, and more - all in one place!",
                   style: TextStyle(
                     fontWeight: FontWeight.w500,
-                    fontSize: 22,
-                  ),
-                ),
-                const Text(
-                  "and more - all in one place!",
-                  style: TextStyle(
-                    fontWeight: FontWeight.w500,
-                    fontSize: 22,
+                    fontSize: 16,
                   ),
                 ),
                 const SizedBox(height: 10),
@@ -61,7 +54,9 @@ class HomeScreen extends StatelessWidget {
                                   title: Text(
                                     row[0]["text"],
                                     style: const TextStyle(
-                                        fontWeight: FontWeight.w500),
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.w500,
+                                    ),
                                   ),
                                 ),
                               ),
@@ -73,7 +68,9 @@ class HomeScreen extends StatelessWidget {
                                   title: Text(
                                     row[1]["text"],
                                     style: const TextStyle(
-                                        fontWeight: FontWeight.w500),
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.w500,
+                                    ),
                                   ),
                                 ),
                               ),
@@ -88,7 +85,7 @@ class HomeScreen extends StatelessWidget {
                     icon: Image.asset("assets/icons/disaster.png"),
                     title: const Text(
                       "Disaster Management",
-                      style: TextStyle(fontWeight: FontWeight.w500),
+                      style: TextStyle(fontSize: 12, fontWeight: FontWeight.w500),
                     ),
                   ),
                 ),

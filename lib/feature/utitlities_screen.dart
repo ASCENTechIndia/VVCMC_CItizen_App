@@ -24,8 +24,11 @@ class UtilitiesScreen extends StatelessWidget {
         {"icon": "tax.png", "text": "Tax Calculator"},
       ],
       [
-        {"icon": "property-receipt.png", "text": "Download\nProperty Tax\nReceipt"},
-        {"icon": "water-receipt.png", "text": "Download\nWater Tax\nReceipt"},
+        {
+          "icon": "property-receipt.png",
+          "text": "Download Property Tax Receipt"
+        },
+        {"icon": "water-receipt.png", "text": "Download Water Tax Receipt"},
       ],
     ];
     return SingleChildScrollView(
@@ -40,17 +43,10 @@ class UtilitiesScreen extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   const Text(
-                    "All the tools you need to manage ",
+                    "All the tools you need to manage your municipal tasks, right here.",
                     style: TextStyle(
                       fontWeight: FontWeight.w500,
-                      fontSize: 22,
-                    ),
-                  ),
-                  const Text(
-                    "your municipal tasks, right here.",
-                    style: TextStyle(
-                      fontWeight: FontWeight.w500,
-                      fontSize: 22,
+                      fontSize: 16,
                     ),
                   ),
                   const SizedBox(height: 10),
@@ -69,7 +65,9 @@ class UtilitiesScreen extends StatelessWidget {
                                     title: Text(
                                       row[0]["text"],
                                       style: const TextStyle(
-                                          fontWeight: FontWeight.w500),
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.w500,
+                                      ),
                                     ),
                                   ),
                                 ),
@@ -81,7 +79,9 @@ class UtilitiesScreen extends StatelessWidget {
                                     title: Text(
                                       row[1]["text"],
                                       style: const TextStyle(
-                                          fontWeight: FontWeight.w500),
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.w500,
+                                      ),
                                     ),
                                   ),
                                 ),

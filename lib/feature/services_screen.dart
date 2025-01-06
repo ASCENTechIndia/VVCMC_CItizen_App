@@ -48,17 +48,10 @@ class ServicesScreen extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   const Text(
-                    "Access essential services to ",
+                    "Access essential services to keep your city life running smoothly.",
                     style: TextStyle(
                       fontWeight: FontWeight.w500,
-                      fontSize: 22,
-                    ),
-                  ),
-                  const Text(
-                    "keep your city life running smoothly.",
-                    style: TextStyle(
-                      fontWeight: FontWeight.w500,
-                      fontSize: 22,
+                      fontSize: 16,
                     ),
                   ),
                   const SizedBox(height: 10),
@@ -77,7 +70,9 @@ class ServicesScreen extends StatelessWidget {
                                     title: Text(
                                       row[0]["text"],
                                       style: const TextStyle(
-                                          fontWeight: FontWeight.w500),
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.w500,
+                                      ),
                                     ),
                                   ),
                                 ),
@@ -89,7 +84,9 @@ class ServicesScreen extends StatelessWidget {
                                     title: Text(
                                       row[1]["text"],
                                       style: const TextStyle(
-                                          fontWeight: FontWeight.w500),
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.w500,
+                                      ),
                                     ),
                                   ),
                                 ),

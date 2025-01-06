@@ -88,7 +88,7 @@ class _MainState extends State<Main> with TickerProviderStateMixin {
     // than having to individually change instances of widgets.
     return Scaffold(
       appBar: AppBar(
-        toolbarHeight: 100,
+        toolbarHeight: 80,
         // TRY THIS: Try changing the color here to a specific color (to
         // Colors.amber, perhaps?) and trigger a hot reload to see the AppBar
         // change color while the other colors stay the same.
@@ -101,8 +101,8 @@ class _MainState extends State<Main> with TickerProviderStateMixin {
             Row(
               children: [
                 SizedBox(
-                    width: 50,
-                    height: 50,
+                    width: 40,
+                    height: 40,
                     child: Image.asset("assets/images/logo.png")),
                 const SizedBox(width: 10),
                 const Column(
@@ -111,16 +111,18 @@ class _MainState extends State<Main> with TickerProviderStateMixin {
                     Text(
                       "Vasai Virar City",
                       style: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white),
+                        fontSize: 15,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                      ),
                     ),
                     Text(
                       "Municipal Corporation",
                       style: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white),
+                        fontSize: 15,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                      ),
                     ),
                   ],
                 ),
@@ -269,7 +271,7 @@ class _MainState extends State<Main> with TickerProviderStateMixin {
       //   ],
       // ),
       body: TabBarView(
-        physics: NeverScrollableScrollPhysics(),
+        physics: const NeverScrollableScrollPhysics(),
         controller: _tabController,
         children: const [
           HomeScreen(),

@@ -27,14 +27,14 @@ class SosScreen extends StatelessWidget {
                     "Get quick help in emergencies.",
                     style: TextStyle(
                       fontWeight: FontWeight.w500,
-                      fontSize: 22,
+                      fontSize: 14,
                     ),
                   ),
                   const Text(
                     "Your safety is just one tap away.",
                     style: TextStyle(
                       fontWeight: FontWeight.w500,
-                      fontSize: 22,
+                      fontSize: 14,
                     ),
                   ),
                   const SizedBox(height: 10),
@@ -49,6 +49,7 @@ class SosScreen extends StatelessWidget {
                               title: Text(
                                 card["text"],
                                 style: const TextStyle(
+                                  fontSize: 12,
                                   fontWeight: FontWeight.w500,
                                 ),
                               ),
