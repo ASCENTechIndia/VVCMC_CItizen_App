@@ -1,6 +1,10 @@
 import 'dart:convert';
 
 import 'package:http/http.dart' as http;
+import 'package:vvcmc_citizen_app/models/elected_member.dart';
+import 'package:vvcmc_citizen_app/models/mayor_message.dart';
+import 'package:vvcmc_citizen_app/models/official_numbers.dart';
+import 'package:vvcmc_citizen_app/models/prabhag_samiti.dart';
 import 'package:xml/xml.dart';
 
 class SoapClient {
@@ -59,7 +63,12 @@ class SoapClient {
             document.rootElement.findAllElements("ResponseHeader").first;
         var responseDetails =
             document.rootElement.findAllElements("ResponseDetails").first;
-        if (responseHeader.findElements("SuccessCode").first.firstChild!.value == "9999") {
+        if (responseHeader
+                .findElements("SuccessCode")
+                .first
+                .firstChild!
+                .value ==
+            "9999") {
           return responseDetails;
         }
       } else {
@@ -70,5 +79,74 @@ class SoapClient {
       print("Request failed: $e");
     }
     return null;
+  }
+
+  Future<List<ElectedMember>> getElectedMembers() async {
+    try {
+      final xml = await post("GetElectedMembers", {});
+      if (xml == null) return [];
+      List<ElectedMember> electedMembers = [];
+      for (var child in xml.children) {
+        if (child.children.isNotEmpty) {
+          electedMembers.add(ElectedMember.fromXML(child));
+        }
+      }
+      return electedMembers;
+    } catch (error) {
+      print(error);
+      return [];
+    }
+  }
+
+  Future<List<PrabhagSamiti>> getPrabhagSamiti() async {
+    try {
+      final xml = await post("GetPrabhagSamiti", {});
+      if (xml == null) return [];
+      List<PrabhagSamiti> prabhagSamiti = [];
+      for (var child in xml.children) {
+        if (child.children.isNotEmpty) {
+          prabhagSamiti.add(PrabhagSamiti.fromXML(child));
+        }
+      }
+      return prabhagSamiti;
+    } catch (error) {
+      print(error);
+      return [];
+    }
+  }
+
+  Future<List<OfficialNumbers>> getOfficialNumbers() async {
+    try {
+      final xml = await post("GetOfficialNumbers", {});
+      if (xml == null) return [];
+      List<OfficialNumbers> officialNumbers = [];
+      for (var child in xml.children) {
+        if (child.children.isNotEmpty) {
+          officialNumbers.add(OfficialNumbers.fromXML(child));
+        }
+      }
+      return officialNumbers;
+    } catch (error) {
+      print(error);
+      return [];
+    }
+  }
+
+  Future<MayorMessage?> getMayorMessage() async {
+    try {
+      final xml = await post("GetMayorMessage", {});
+      if (xml == null) return null;
+      MayorMessage? mayorMessage;
+      print(xml.children);
+      for (var child in xml.children) {
+        if (child.children.isNotEmpty) {
+          mayorMessage = MayorMessage.fromXML(child);
+        }
+      }
+      return mayorMessage;
+    } catch (error) {
+      print(error);
+      return null;
+    }
   }
 }

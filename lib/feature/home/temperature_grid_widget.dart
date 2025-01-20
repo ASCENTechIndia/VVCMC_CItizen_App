@@ -78,7 +78,7 @@ class TemperatureGridWidget extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const Icon(CupertinoIcons.gauge_badge_plus),
+                const Icon(CupertinoIcons.gauge),
                 const Text("Pressure"),
                 Text("${temperature.pressure}"),
               ],

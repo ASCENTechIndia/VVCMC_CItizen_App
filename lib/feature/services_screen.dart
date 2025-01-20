@@ -1,6 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:vvcmc_citizen_app/models/elected_member.dart';
+import 'package:vvcmc_citizen_app/models/mayor_message.dart';
+import 'package:vvcmc_citizen_app/models/official_numbers.dart';
+import 'package:vvcmc_citizen_app/models/prabhag_samiti.dart';
+import 'package:vvcmc_citizen_app/utils/get_it.dart';
+import 'package:vvcmc_citizen_app/utils/soap_client.dart';
 import 'package:vvcmc_citizen_app/widgets/card_widget.dart';
 
 class ServicesScreen extends StatefulWidget {
@@ -12,6 +18,7 @@ class ServicesScreen extends StatefulWidget {
 
 class _ServicesScreenState extends State<ServicesScreen> {
   String page = "Services";
+  SoapClient soapClient = getIt<SoapClient>();
 
   @override
   Widget build(BuildContext context) {
@@ -38,6 +45,8 @@ class _ServicesScreenState extends State<ServicesScreen> {
             return buildOfficial();
           case "Commissioner Message":
             return buildComissioner();
+          case "Mayor Message":
+            return buildMayor();
           case "Twitter":
             SchedulerBinding.instance.addPostFrameCallback(
               (_) => launchUrl(
@@ -96,12 +105,40 @@ class _ServicesScreenState extends State<ServicesScreen> {
     );
   }
 
+  Widget buildMayor() {
+    return FutureBuilder(
+      future: soapClient.getMayorMessage(),
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          final MayorMessage mayorMessage = snapshot.data!;
+          return Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Image.network(mayorMessage.imageUrl),
+                const SizedBox(height: 10),
+                Center(child: Text(mayorMessage.mayorName)),
+                const SizedBox(height: 10),
+                Text(mayorMessage.mayorMessage),
+              ],
+            ),
+          );
+        }
+        if (snapshot.hasError) {
+          return const Center(child: Text("Failed to load data"));
+        }
+        return const Center(child: CircularProgressIndicator());
+      },
+    );
+  }
+
   Widget buildComissioner() {
     return SingleChildScrollView(
       child: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             const Center(
               child: Text(
@@ -109,6 +146,14 @@ class _ServicesScreenState extends State<ServicesScreen> {
                 style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
               ),
             ),
+            const SizedBox(height: 10),
+            FittedBox(
+              fit: BoxFit.fitWidth,
+              child: Image.network(
+                "https://onlinevvcmc.in/App/MobileImages/commissioner_Sir_changes.JPG",
+              ),
+            ),
+            const SizedBox(height: 10),
             Center(
               child: Text(
                 "Shri. Anilkumar Kanderao Pawar (I.A.S.)",
@@ -138,127 +183,177 @@ class _ServicesScreenState extends State<ServicesScreen> {
   }
 
   Widget buildOfficial() {
-    return Padding(
-      padding: const EdgeInsets.all(16.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          Card.outlined(
-            child: Padding(
-              padding: const EdgeInsets.all(12.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Text(
-                    "Corona Control Unit VVCMC",
-                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                  ),
-                  const Text("Disaster Management Number"),
-                  const Text("Email: it.vvmc@gov.in"),
-                  const Text("Ward: A"),
-                  const SizedBox(height: 10),
-                  InkWell(
-                    onTap: () {},
-                    child: Container(
-                      decoration: BoxDecoration(color: Colors.green[800]),
-                      width: MediaQuery.of(context).size.width,
-                      child: const Padding(
-                        padding: EdgeInsets.all(8.0),
-                        child: Center(
-                          child: Text(
-                            "7769049009",
-                            style: TextStyle(color: Colors.yellow),
-                          ),
+    return FutureBuilder(
+      future: soapClient.getOfficialNumbers(),
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          final List<OfficialNumbers> officialNumbers = snapshot.data!;
+          return Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: officialNumbers
+                  .map(
+                    (officialNumber) => Card.outlined(
+                      child: Padding(
+                        padding: const EdgeInsets.all(12.0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              officialNumber.memberName,
+                              style: const TextStyle(
+                                  fontSize: 16, fontWeight: FontWeight.bold),
+                            ),
+                            Text(officialNumber.designation),
+                            Text(officialNumber.emailId),
+                            Text("Ward: ${officialNumber.wardName}"),
+                            const SizedBox(height: 10),
+                            InkWell(
+                              onTap: () {},
+                              child: Container(
+                                decoration: BoxDecoration(
+                                    color: Theme.of(context).primaryColor),
+                                width: MediaQuery.of(context).size.width,
+                                child: const Padding(
+                                  padding: EdgeInsets.all(8.0),
+                                  child: Center(
+                                    child: Text(
+                                      "7769049009",
+                                      style: TextStyle(color: Colors.white),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
                       ),
                     ),
-                  ),
-                ],
-              ),
+                  )
+                  .toList(),
             ),
-          ),
-        ],
-      ),
+          );
+        }
+        if (snapshot.hasError) {
+          return const Center(child: Text("Failed to load data"));
+        }
+        return const Center(child: CircularProgressIndicator());
+      },
     );
   }
 
   Widget buildPrabhag() {
-    return Padding(
-      padding: const EdgeInsets.all(16.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          Card.outlined(
+    return FutureBuilder(
+      future: soapClient.getPrabhagSamiti(),
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          final List<PrabhagSamiti> prabhagSamiti = snapshot.data!;
+          return SingleChildScrollView(
             child: Padding(
-              padding: const EdgeInsets.all(12.0),
+              padding: const EdgeInsets.all(16.0),
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Text("AMC Ward A"),
-                  const Text("Smt. Sonali Kale"),
-                  const SizedBox(height: 10),
-                  InkWell(
-                    onTap: () {},
-                    child: Container(
-                      decoration: BoxDecoration(color: Colors.green[800]),
-                      width: MediaQuery.of(context).size.width,
-                      child: const Padding(
-                        padding: EdgeInsets.all(8.0),
-                        child: Center(
-                          child: Text(
-                            "7769049009",
-                            style: TextStyle(color: Colors.yellow),
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: prabhagSamiti
+                    .map(
+                      (member) => Card.outlined(
+                        child: Padding(
+                          padding: const EdgeInsets.all(12.0),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(member.memberName),
+                              Text(member.prabhagSamitiName),
+                              const SizedBox(height: 10),
+                              InkWell(
+                                onTap: () {},
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                      color: Theme.of(context).primaryColor),
+                                  width: MediaQuery.of(context).size.width,
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Center(
+                                      child: Text(
+                                        member.mobileNo,
+                                        style: const TextStyle(
+                                            color: Colors.white),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
                           ),
                         ),
                       ),
-                    ),
-                  ),
-                ],
+                    )
+                    .toList(),
               ),
             ),
-          ),
-        ],
-      ),
+          );
+        }
+        if (snapshot.hasError) {
+          return const Center(child: Text("Failed to load data"));
+        }
+        return const Center(child: CircularProgressIndicator());
+      },
     );
   }
 
   Widget buildElected() {
-    return Padding(
-      padding: const EdgeInsets.all(16.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          Card.outlined(
-            child: Padding(
-              padding: const EdgeInsets.all(12.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Text("AMC Ward A"),
-                  const Text("Smt. Sonali Kale"),
-                  const SizedBox(height: 10),
-                  InkWell(
-                    onTap: () {},
-                    child: Container(
-                      decoration: BoxDecoration(color: Colors.green[800]),
-                      width: MediaQuery.of(context).size.width,
-                      child: const Padding(
-                        padding: EdgeInsets.all(8.0),
-                        child: Center(
-                          child: Text(
-                            "7769049009",
-                            style: TextStyle(color: Colors.yellow),
-                          ),
+    return FutureBuilder(
+      future: soapClient.getElectedMembers(),
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          final List<ElectedMember> electedMembers = snapshot.data!;
+          return Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: electedMembers
+                  .map(
+                    (member) => Card.outlined(
+                      child: Padding(
+                        padding: const EdgeInsets.all(12.0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(member.wardNo),
+                            Text(member.memberName),
+                            const SizedBox(height: 10),
+                            InkWell(
+                              onTap: () {},
+                              child: Container(
+                                decoration: BoxDecoration(
+                                    color: Theme.of(context).primaryColor),
+                                width: MediaQuery.of(context).size.width,
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Center(
+                                    child: Text(
+                                      member.mobileNo,
+                                      style:
+                                          const TextStyle(color: Colors.white),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
                       ),
                     ),
-                  ),
-                ],
-              ),
+                  )
+                  .toList(),
             ),
-          ),
-        ],
-      ),
+          );
+        }
+        if (snapshot.hasError) {
+          return const Center(child: Text("Failed to load data"));
+        }
+        return const Center(child: CircularProgressIndicator());
+      },
     );
   }
 
