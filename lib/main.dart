@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:vvcmc_citizen_app/feature/home_screen.dart';
+import 'package:vvcmc_citizen_app/feature/home/home_screen.dart';
 import 'package:vvcmc_citizen_app/feature/services_screen.dart';
 import 'package:vvcmc_citizen_app/feature/sos_screen.dart';
 import 'package:vvcmc_citizen_app/feature/utilities_screen.dart';
 import 'package:vvcmc_citizen_app/feature/webview_screen.dart';
+import 'package:vvcmc_citizen_app/utils/get_it.dart' as sl;
 
-void main() {
+void main() async {
+  await sl.init();
   runApp(const MyApp());
 }
 
