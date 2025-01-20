@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:vvcmc_citizen_app/feature/home_screen.dart';
 import 'package:vvcmc_citizen_app/feature/services_screen.dart';
 import 'package:vvcmc_citizen_app/feature/sos_screen.dart';
-import 'package:vvcmc_citizen_app/feature/utitlities_screen.dart';
+import 'package:vvcmc_citizen_app/feature/utilities_screen.dart';
+import 'package:vvcmc_citizen_app/feature/webview_screen.dart';
 
 void main() {
   runApp(const MyApp());
@@ -42,7 +43,26 @@ class MyApp extends StatelessWidget {
       ),
       debugShowCheckedModeBanner: false,
       themeMode: ThemeMode.light,
-      home: const Main(),
+      initialRoute: "/",
+      onGenerateRoute: (settings) {
+        return MaterialPageRoute(
+          settings: settings,
+          builder: (_) {
+            switch (settings.name) {
+              case "/":
+                return const Main();
+              case WebViewScreen.routeName:
+                final args = settings.arguments as Map;
+                return WebViewScreen(
+                  url: args["url"],
+                  title: args["title"],
+                );
+              default:
+                return Container();
+            }
+          },
+        );
+      },
     );
   }
 }
@@ -257,19 +277,6 @@ class _MainState extends State<Main> with TickerProviderStateMixin {
           ],
         ),
       ),
-      // Bottomnavigationbar(
-      //   items: [
-      //     BottomNavigationBarItem(
-      //       icon: Padding(
-      //         padding: const EdgeInsets.only(bottom: 12.0),
-      //         child: Image.asset("assets/icons/home.png"),
-      //       ),
-      //       label: "Home",
-
-      //     ),
-      //     const BottomNavigationBarItem(icon: Text("hi"), label: "Not Home"),
-      //   ],
-      // ),
       body: TabBarView(
         physics: const NeverScrollableScrollPhysics(),
         controller: _tabController,
