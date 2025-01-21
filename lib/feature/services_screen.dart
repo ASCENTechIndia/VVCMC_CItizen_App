@@ -1,10 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:vvcmc_citizen_app/models/ambulance.dart';
+import 'package:vvcmc_citizen_app/models/blood_bank.dart';
 import 'package:vvcmc_citizen_app/models/elected_member.dart';
+import 'package:vvcmc_citizen_app/models/eye_bank.dart';
+import 'package:vvcmc_citizen_app/models/fire_brigade.dart';
+import 'package:vvcmc_citizen_app/models/government_office.dart';
 import 'package:vvcmc_citizen_app/models/hospital.dart';
 import 'package:vvcmc_citizen_app/models/mayor_message.dart';
 import 'package:vvcmc_citizen_app/models/official_numbers.dart';
+import 'package:vvcmc_citizen_app/models/police.dart';
 import 'package:vvcmc_citizen_app/models/prabhag_samiti.dart';
 import 'package:vvcmc_citizen_app/utils/get_it.dart';
 import 'package:vvcmc_citizen_app/utils/soap_client.dart';
@@ -117,11 +123,17 @@ class _ServicesScreenState extends State<ServicesScreen> {
           case "Hospitals":
             return buildHospitals();
           case "Ambulance":
+            return buildAmbulance();
           case "Police Station":
+            return buildPolice();
           case "Fire Brigades":
+            return buildFireBrigades();
           case "Blood Banks":
+            return buildBloodBanks();
           case "Eye Banks":
+            return buildEyeBanks();
           case "Government Offices":
+            return buildGovernmentOffices();
           default:
             return Container();
         }
@@ -129,6 +141,228 @@ class _ServicesScreenState extends State<ServicesScreen> {
     );
   }
 
+  Widget buildGovernmentOffices() {
+    return FutureBuilder(
+      future: soapClient.getGovernmentOffices(),
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          final List<GovernmentOffice> governmentOffices = snapshot.data!;
+          return SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: governmentOffices
+                    .map(
+                      (governmentOffice) => OutlinedCardWidget(
+                        title: governmentOffice.name,
+                        description: [governmentOffice.address],
+                        contacts: [
+                          governmentOffice.mobile1,
+                          governmentOffice.mobile2,
+                          governmentOffice.phone1,
+                          governmentOffice.phone2,
+                        ],
+                      ),
+                    )
+                    .toList(),
+              ),
+            ),
+          );
+        }
+        if (snapshot.hasError) {
+          return const Center(child: Text("Failed to load data"));
+        }
+        return const Center(child: CircularProgressIndicator());
+      },
+    );
+  }
+
+  Widget buildEyeBanks() {
+    return FutureBuilder(
+      future: soapClient.getEyeBanks(),
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          final List<EyeBank> eyeBanks = snapshot.data!;
+          return SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: eyeBanks
+                    .map(
+                      (eyeBank) => OutlinedCardWidget(
+                        title: eyeBank.name,
+                        description: [eyeBank.address],
+                        contacts: [
+                          eyeBank.mobile1,
+                          eyeBank.mobile2,
+                          eyeBank.phone1,
+                          eyeBank.phone2,
+                        ],
+                      ),
+                    )
+                    .toList(),
+              ),
+            ),
+          );
+        }
+        if (snapshot.hasError) {
+          return const Center(child: Text("Failed to load data"));
+        }
+        return const Center(child: CircularProgressIndicator());
+      },
+    );
+  }
+
+  Widget buildBloodBanks() {
+    return FutureBuilder(
+      future: soapClient.getBloodBanks(),
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          final List<BloodBank> bloodBanks = snapshot.data!;
+          return SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: bloodBanks
+                    .map(
+                      (bloodBank) => OutlinedCardWidget(
+                        title: bloodBank.name,
+                        description: [bloodBank.address],
+                        contacts: [
+                          bloodBank.mobile1,
+                          bloodBank.mobile2,
+                          bloodBank.phone1,
+                          bloodBank.phone2,
+                        ],
+                      ),
+                    )
+                    .toList(),
+              ),
+            ),
+          );
+        }
+        if (snapshot.hasError) {
+          return const Center(child: Text("Failed to load data"));
+        }
+        return const Center(child: CircularProgressIndicator());
+      },
+    );
+  }
+
+  Widget buildFireBrigades() {
+    return FutureBuilder(
+      future: soapClient.getFireBrigades(),
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          final List<FireBrigade> fireBrigades = snapshot.data!;
+          return SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: fireBrigades
+                    .map(
+                      (fireBrigade) => OutlinedCardWidget(
+                        title: fireBrigade.department,
+                        description: [fireBrigade.type],
+                        contacts: [
+                          fireBrigade.mobile1,
+                          fireBrigade.mobile2,
+                          fireBrigade.phone1,
+                          fireBrigade.phone2,
+                        ],
+                      ),
+                    )
+                    .toList(),
+              ),
+            ),
+          );
+        }
+        if (snapshot.hasError) {
+          return const Center(child: Text("Failed to load data"));
+        }
+        return const Center(child: CircularProgressIndicator());
+      },
+    );
+  }
+
+  Widget buildPolice() {
+    return FutureBuilder(
+      future: soapClient.getPolice(),
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          final List<Police> polices = snapshot.data!;
+          return SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: polices
+                    .map(
+                      (police) => OutlinedCardWidget(
+                        title: police.department,
+                        description: const [],
+                        contacts: [
+                          police.mobile1,
+                          police.mobile2,
+                          police.phone1,
+                          police.phone2,
+                        ],
+                      ),
+                    )
+                    .toList(),
+              ),
+            ),
+          );
+        }
+        if (snapshot.hasError) {
+          return const Center(child: Text("Failed to load data"));
+        }
+        return const Center(child: CircularProgressIndicator());
+      },
+    );
+  }
+
+  Widget buildAmbulance() {
+    return FutureBuilder(
+      future: soapClient.getAmbulance(),
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          final List<Ambulance> hospitals = snapshot.data!;
+          return SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: hospitals
+                    .map(
+                      (hospital) => OutlinedCardWidget(
+                        title: hospital.organization,
+                        description: [hospital.address],
+                        contacts: [
+                          hospital.mobile1,
+                          hospital.mobile2,
+                          hospital.phone1,
+                          hospital.phone2,
+                        ],
+                      ),
+                    )
+                    .toList(),
+              ),
+            ),
+          );
+        }
+        if (snapshot.hasError) {
+          return const Center(child: Text("Failed to load data"));
+        }
+        return const Center(child: CircularProgressIndicator());
+      },
+    );
+  }
+  
   Widget buildHospitals() {
     return FutureBuilder(
       future: soapClient.getHospitals(),

@@ -1,10 +1,16 @@
 import 'dart:convert';
 
 import 'package:http/http.dart' as http;
+import 'package:vvcmc_citizen_app/models/ambulance.dart';
+import 'package:vvcmc_citizen_app/models/blood_bank.dart';
 import 'package:vvcmc_citizen_app/models/elected_member.dart';
+import 'package:vvcmc_citizen_app/models/eye_bank.dart';
+import 'package:vvcmc_citizen_app/models/fire_brigade.dart';
+import 'package:vvcmc_citizen_app/models/government_office.dart';
 import 'package:vvcmc_citizen_app/models/hospital.dart';
 import 'package:vvcmc_citizen_app/models/mayor_message.dart';
 import 'package:vvcmc_citizen_app/models/official_numbers.dart';
+import 'package:vvcmc_citizen_app/models/police.dart';
 import 'package:vvcmc_citizen_app/models/prabhag_samiti.dart';
 import 'package:xml/xml.dart';
 
@@ -138,7 +144,6 @@ class SoapClient {
       final xml = await post("GetMayorMessage", {});
       if (xml == null) return null;
       MayorMessage? mayorMessage;
-      print(xml.children);
       for (var child in xml.children) {
         if (child.children.isNotEmpty) {
           mayorMessage = MayorMessage.fromXML(child);
@@ -156,13 +161,118 @@ class SoapClient {
       final xml = await post("GetHospitalList", {});
       if (xml == null) return [];
       List<Hospital> hospitals = [];
-      print(xml.children);
       for (var child in xml.children) {
         if (child.children.isNotEmpty) {
           hospitals.add(Hospital.fromXML(child));
         }
       }
       return hospitals;
+    } catch (error) {
+      print(error);
+      return [];
+    }
+  }
+
+  Future<List<Ambulance>> getAmbulance() async {
+    try {
+      final xml = await post("GetAmbulanceList", {});
+      if (xml == null) return [];
+      List<Ambulance> ambulances = [];
+      for (var child in xml.children) {
+        if (child.children.isNotEmpty) {
+          ambulances.add(Ambulance.fromXML(child));
+        }
+      }
+      return ambulances;
+    } catch (error) {
+      print(error);
+      return [];
+    }
+  }
+
+  Future<List<Police>> getPolice() async {
+    try {
+      final xml = await post("GetPoliceDepartmentList", {});
+      if (xml == null) return [];
+      List<Police> police = [];
+      for (var child in xml.children) {
+        if (child.children.isNotEmpty) {
+          police.add(Police.fromXML(child));
+        }
+      }
+      return police;
+    } catch (error) {
+      print(error);
+      return [];
+    }
+  }
+
+  Future<List<FireBrigade>> getFireBrigades() async {
+    try {
+      final xml = await post("GetFireBrigadeList", {});
+      if (xml == null) return [];
+      List<FireBrigade> fireBrigades = [];
+      print(xml.children);
+      for (var child in xml.children) {
+        if (child.children.isNotEmpty) {
+          fireBrigades.add(FireBrigade.fromXML(child));
+        }
+      }
+      return fireBrigades;
+    } catch (error) {
+      print(error);
+      return [];
+    }
+  }
+
+  Future<List<BloodBank>> getBloodBanks() async {
+    try {
+      final xml = await post("GetBloodBankList", {});
+      if (xml == null) return [];
+      List<BloodBank> bloodBanks = [];
+      print(xml.children);
+      for (var child in xml.children) {
+        if (child.children.isNotEmpty) {
+          bloodBanks.add(BloodBank.fromXML(child));
+        }
+      }
+      return bloodBanks;
+    } catch (error) {
+      print(error);
+      return [];
+    }
+  }
+
+  Future<List<EyeBank>> getEyeBanks() async {
+    try {
+      final xml = await post("GetEyeBankList", {});
+      if (xml == null) return [];
+      List<EyeBank> eyeBanks = [];
+      print(xml.children);
+      for (var child in xml.children) {
+        if (child.children.isNotEmpty) {
+          eyeBanks.add(EyeBank.fromXML(child));
+        }
+      }
+      return eyeBanks;
+    } catch (error) {
+      print(error);
+      return [];
+    }
+  }
+
+  Future<List<GovernmentOffice>> getGovernmentOffices() async {
+    try {
+      final xml = await post("GetGovernmentOfficesList", {});
+      if (xml == null) return [];
+      List<GovernmentOffice> governmentOffices = [];
+      print(xml.children);
+      for (var child in xml.children) {
+        if (child.children.isNotEmpty) {
+          governmentOffices.add(GovernmentOffice.fromXML(child));
+        }
+      }
+      return governmentOffices;
     } catch (error) {
       print(error);
       return [];
