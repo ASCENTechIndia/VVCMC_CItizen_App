@@ -212,7 +212,6 @@ class SoapClient {
       final xml = await post("GetFireBrigadeList", {});
       if (xml == null) return [];
       List<FireBrigade> fireBrigades = [];
-      print(xml.children);
       for (var child in xml.children) {
         if (child.children.isNotEmpty) {
           fireBrigades.add(FireBrigade.fromXML(child));
@@ -230,7 +229,6 @@ class SoapClient {
       final xml = await post("GetBloodBankList", {});
       if (xml == null) return [];
       List<BloodBank> bloodBanks = [];
-      print(xml.children);
       for (var child in xml.children) {
         if (child.children.isNotEmpty) {
           bloodBanks.add(BloodBank.fromXML(child));
@@ -248,7 +246,6 @@ class SoapClient {
       final xml = await post("GetEyeBankList", {});
       if (xml == null) return [];
       List<EyeBank> eyeBanks = [];
-      print(xml.children);
       for (var child in xml.children) {
         if (child.children.isNotEmpty) {
           eyeBanks.add(EyeBank.fromXML(child));
@@ -266,13 +263,30 @@ class SoapClient {
       final xml = await post("GetGovernmentOfficesList", {});
       if (xml == null) return [];
       List<GovernmentOffice> governmentOffices = [];
-      print(xml.children);
       for (var child in xml.children) {
         if (child.children.isNotEmpty) {
           governmentOffices.add(GovernmentOffice.fromXML(child));
         }
       }
       return governmentOffices;
+    } catch (error) {
+      print(error);
+      return [];
+    }
+  }
+
+  Future<List<String>> getGallery() async {
+    try {
+      final xml = await post("GetGallery", {});
+      if (xml == null) return [];
+      print(xml.children);
+      List<String> gallery = [];
+      for (var child in xml.children) {
+        if (child.children.isNotEmpty) {
+          gallery.add(child.findElements("imageurl").first.innerText);
+        }
+      }
+      return gallery;
     } catch (error) {
       print(error);
       return [];

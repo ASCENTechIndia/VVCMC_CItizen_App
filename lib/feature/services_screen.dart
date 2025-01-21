@@ -79,6 +79,8 @@ class _ServicesScreenState extends State<ServicesScreen> {
               page = "Services";
             });
             return buildServices();
+          case "Gallery":
+            return buildGallery();
           case "VVMC Website":
             SchedulerBinding.instance.addPostFrameCallback(
               (_) => launchUrl(
@@ -138,6 +140,71 @@ class _ServicesScreenState extends State<ServicesScreen> {
             return Container();
         }
       }(),
+    );
+  }
+
+  Widget buildGallery() {
+    return FutureBuilder(
+      future: soapClient.getGallery(),
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          final List<String> gallery = snapshot.data!;
+          return Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: GridView.builder(
+              itemCount: gallery.length,
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 2),
+              itemBuilder: (context, index) => Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: GridTile(
+                  child: GestureDetector(
+                    onTap: () {
+                      showDialog(
+                        context: context,
+                        builder: (context) => AlertDialog(
+                          shape: const RoundedRectangleBorder(
+                            borderRadius: BorderRadius.all(Radius.zero),
+                          ),
+                          content: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            crossAxisAlignment: CrossAxisAlignment.stretch,
+                            children: [
+                              Image.network(gallery[index]),
+                              SizedBox(height: 10),
+                              OutlinedButton(
+                                style: OutlinedButton.styleFrom(
+                                  side: BorderSide(
+                                      color: Theme.of(context).primaryColor),
+                                  shape: const RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.all(Radius.zero),
+                                  ),
+                                ),
+                                child: const Text("Close"),
+                                onPressed: () {
+                                  Navigator.pop(context);
+                                },
+                              ),
+                            ],
+                          ),
+                        ),
+                      );
+                    },
+                    child: FittedBox(
+                      fit: BoxFit.fill,
+                      child: Image.network(gallery[index]),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          );
+        }
+        if (snapshot.hasError) {
+          return const Center(child: Text("Failed to load data"));
+        }
+        return const Center(child: CircularProgressIndicator());
+      },
     );
   }
 
@@ -362,7 +429,7 @@ class _ServicesScreenState extends State<ServicesScreen> {
       },
     );
   }
-  
+
   Widget buildHospitals() {
     return FutureBuilder(
       future: soapClient.getHospitals(),
