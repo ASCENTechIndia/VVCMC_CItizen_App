@@ -2,12 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:vvcmc_citizen_app/models/elected_member.dart';
+import 'package:vvcmc_citizen_app/models/hospital.dart';
 import 'package:vvcmc_citizen_app/models/mayor_message.dart';
 import 'package:vvcmc_citizen_app/models/official_numbers.dart';
 import 'package:vvcmc_citizen_app/models/prabhag_samiti.dart';
 import 'package:vvcmc_citizen_app/utils/get_it.dart';
 import 'package:vvcmc_citizen_app/utils/soap_client.dart';
 import 'package:vvcmc_citizen_app/widgets/card_widget.dart';
+import 'package:vvcmc_citizen_app/widgets/outlined_card_widget.dart';
 
 class ServicesScreen extends StatefulWidget {
   const ServicesScreen({super.key});
@@ -25,9 +27,23 @@ class _ServicesScreenState extends State<ServicesScreen> {
     return PopScope(
       canPop: false,
       onPopInvokedWithResult: (_, __) {
-        setState(() {
-          page = "Services";
-        });
+        switch (page) {
+          case "Hospitals":
+          case "Ambulance":
+          case "Police Station":
+          case "Fire Brigades":
+          case "Blood Banks":
+          case "Eye Banks":
+          case "Government Offices":
+            setState(() {
+              page = "Emergency Numbers";
+            });
+            break;
+          default:
+            setState(() {
+              page = "Services";
+            });
+        }
       },
       child: () {
         switch (page) {
@@ -35,7 +51,7 @@ class _ServicesScreenState extends State<ServicesScreen> {
             return buildServices();
           case "About VVMC":
             return buildAbout();
-          case "Emergency Number":
+          case "Emergency Numbers":
             return buildEmergency();
           case "Elected Member":
             return buildElected();
@@ -98,10 +114,55 @@ class _ServicesScreenState extends State<ServicesScreen> {
               page = "Services";
             });
             return buildServices();
+          case "Hospitals":
+            return buildHospitals();
+          case "Ambulance":
+          case "Police Station":
+          case "Fire Brigades":
+          case "Blood Banks":
+          case "Eye Banks":
+          case "Government Offices":
           default:
             return Container();
         }
       }(),
+    );
+  }
+
+  Widget buildHospitals() {
+    return FutureBuilder(
+      future: soapClient.getHospitals(),
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          final List<Hospital> hospitals = snapshot.data!;
+          return SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: hospitals
+                    .map(
+                      (hospital) => OutlinedCardWidget(
+                        title: hospital.doctorName,
+                        description: [hospital.address],
+                        contacts: [
+                          hospital.mobile1,
+                          hospital.mobile2,
+                          hospital.phone1,
+                          hospital.phone2,
+                        ],
+                      ),
+                    )
+                    .toList(),
+              ),
+            ),
+          );
+        }
+        if (snapshot.hasError) {
+          return const Center(child: Text("Failed to load data"));
+        }
+        return const Center(child: CircularProgressIndicator());
+      },
     );
   }
 
@@ -194,41 +255,16 @@ class _ServicesScreenState extends State<ServicesScreen> {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: officialNumbers
                   .map(
-                    (officialNumber) => Card.outlined(
-                      child: Padding(
-                        padding: const EdgeInsets.all(12.0),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              officialNumber.memberName,
-                              style: const TextStyle(
-                                  fontSize: 16, fontWeight: FontWeight.bold),
-                            ),
-                            Text(officialNumber.designation),
-                            Text(officialNumber.emailId),
-                            Text("Ward: ${officialNumber.wardName}"),
-                            const SizedBox(height: 10),
-                            InkWell(
-                              onTap: () {},
-                              child: Container(
-                                decoration: BoxDecoration(
-                                    color: Theme.of(context).primaryColor),
-                                width: MediaQuery.of(context).size.width,
-                                child: const Padding(
-                                  padding: EdgeInsets.all(8.0),
-                                  child: Center(
-                                    child: Text(
-                                      "7769049009",
-                                      style: TextStyle(color: Colors.white),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
+                    (officialNumber) => OutlinedCardWidget(
+                      title: officialNumber.memberName,
+                      description: [
+                        officialNumber.designation,
+                        officialNumber.emailId,
+                        "Ward: ${officialNumber.wardName}",
+                      ],
+                      contacts: [
+                        officialNumber.mobileNo,
+                      ],
                     ),
                   )
                   .toList(),
@@ -256,36 +292,14 @@ class _ServicesScreenState extends State<ServicesScreen> {
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: prabhagSamiti
                     .map(
-                      (member) => Card.outlined(
-                        child: Padding(
-                          padding: const EdgeInsets.all(12.0),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(member.memberName),
-                              Text(member.prabhagSamitiName),
-                              const SizedBox(height: 10),
-                              InkWell(
-                                onTap: () {},
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                      color: Theme.of(context).primaryColor),
-                                  width: MediaQuery.of(context).size.width,
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Center(
-                                      child: Text(
-                                        member.mobileNo,
-                                        style: const TextStyle(
-                                            color: Colors.white),
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
+                      (prabhagSamiti) => OutlinedCardWidget(
+                        title: prabhagSamiti.memberName,
+                        description: [
+                          prabhagSamiti.prabhagSamitiName,
+                        ],
+                        contacts: [
+                          prabhagSamiti.mobileNo,
+                        ],
                       ),
                     )
                     .toList(),
@@ -313,36 +327,10 @@ class _ServicesScreenState extends State<ServicesScreen> {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: electedMembers
                   .map(
-                    (member) => Card.outlined(
-                      child: Padding(
-                        padding: const EdgeInsets.all(12.0),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(member.wardNo),
-                            Text(member.memberName),
-                            const SizedBox(height: 10),
-                            InkWell(
-                              onTap: () {},
-                              child: Container(
-                                decoration: BoxDecoration(
-                                    color: Theme.of(context).primaryColor),
-                                width: MediaQuery.of(context).size.width,
-                                child: Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Center(
-                                    child: Text(
-                                      member.mobileNo,
-                                      style:
-                                          const TextStyle(color: Colors.white),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
+                    (member) => OutlinedCardWidget(
+                      title: member.wardNo,
+                      description: [member.memberName],
+                      contacts: [member.mobileNo],
                     ),
                   )
                   .toList(),
@@ -358,23 +346,86 @@ class _ServicesScreenState extends State<ServicesScreen> {
   }
 
   Widget buildEmergency() {
-    return const Padding(
-      padding: EdgeInsets.all(16.0),
+    return Padding(
+      padding: const EdgeInsets.all(16.0),
       child: Column(
         children: [
-          CardWidget(title: Text("Hospitals")),
-          SizedBox(height: 8),
-          CardWidget(title: Text("Ambulannce")),
-          SizedBox(height: 8),
-          CardWidget(title: Text("Police Station")),
-          SizedBox(height: 8),
-          CardWidget(title: Text("Fire Brigades")),
-          SizedBox(height: 8),
-          CardWidget(title: Text("Blood Banks")),
-          SizedBox(height: 8),
-          CardWidget(title: Text("Eye Banks")),
-          SizedBox(height: 8),
-          CardWidget(title: Text("Government Offices")),
+          CardWidget(
+            title: const Text("Hospitals"),
+            onTap: () {
+              setState(
+                () {
+                  page = "Hospitals";
+                },
+              );
+            },
+          ),
+          const SizedBox(height: 8),
+          CardWidget(
+            title: const Text("Ambulance"),
+            onTap: () {
+              setState(
+                () {
+                  page = "Ambulance";
+                },
+              );
+            },
+          ),
+          const SizedBox(height: 8),
+          CardWidget(
+            title: const Text("Police Station"),
+            onTap: () {
+              setState(
+                () {
+                  page = "Police Station";
+                },
+              );
+            },
+          ),
+          const SizedBox(height: 8),
+          CardWidget(
+            title: const Text("Fire Brigades"),
+            onTap: () {
+              setState(
+                () {
+                  page = "Fire Brigades";
+                },
+              );
+            },
+          ),
+          const SizedBox(height: 8),
+          CardWidget(
+            title: const Text("Blood Banks"),
+            onTap: () {
+              setState(
+                () {
+                  page = "Blood Banks";
+                },
+              );
+            },
+          ),
+          const SizedBox(height: 8),
+          CardWidget(
+            title: const Text("Eye Banks"),
+            onTap: () {
+              setState(
+                () {
+                  page = "Eye Banks";
+                },
+              );
+            },
+          ),
+          const SizedBox(height: 8),
+          CardWidget(
+            title: const Text("Government Offices"),
+            onTap: () {
+              setState(
+                () {
+                  page = "Government Offices";
+                },
+              );
+            },
+          ),
         ],
       ),
     );
@@ -420,7 +471,7 @@ class _ServicesScreenState extends State<ServicesScreen> {
     List cards = [
       [
         {"icon": "logo.png", "text": "About VVMC"},
-        {"icon": "emergency.png", "text": "Emergency Number"},
+        {"icon": "emergency.png", "text": "Emergency Numbers"},
       ],
       [
         {"icon": "elected.png", "text": "Elected Member"},

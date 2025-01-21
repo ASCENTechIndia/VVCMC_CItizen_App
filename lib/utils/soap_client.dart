@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:http/http.dart' as http;
 import 'package:vvcmc_citizen_app/models/elected_member.dart';
+import 'package:vvcmc_citizen_app/models/hospital.dart';
 import 'package:vvcmc_citizen_app/models/mayor_message.dart';
 import 'package:vvcmc_citizen_app/models/official_numbers.dart';
 import 'package:vvcmc_citizen_app/models/prabhag_samiti.dart';
@@ -147,6 +148,24 @@ class SoapClient {
     } catch (error) {
       print(error);
       return null;
+    }
+  }
+
+  Future<List<Hospital>> getHospitals() async {
+    try {
+      final xml = await post("GetHospitalList", {});
+      if (xml == null) return [];
+      List<Hospital> hospitals = [];
+      print(xml.children);
+      for (var child in xml.children) {
+        if (child.children.isNotEmpty) {
+          hospitals.add(Hospital.fromXML(child));
+        }
+      }
+      return hospitals;
+    } catch (error) {
+      print(error);
+      return [];
     }
   }
 }
