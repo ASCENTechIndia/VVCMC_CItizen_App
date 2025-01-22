@@ -56,6 +56,7 @@ class SoapClient {
     };
 
     try {
+      print(soapEnvelope);
       var response = await http.post(
         Uri.parse(url),
         headers: headers,
@@ -284,6 +285,27 @@ class SoapClient {
       for (var child in xml.children) {
         if (child.children.isNotEmpty) {
           gallery.add(child.findElements("imageurl").first.innerText);
+        }
+      }
+      return gallery;
+    } catch (error) {
+      print(error);
+      return [];
+    }
+  }
+
+  Future<List<String>> getPropertyTax(String propertyNo) async {
+    try {
+      final xml =
+          await post("GetHouseTaxDetailsAtom", {"PropertyNo": propertyNo});
+      if (xml == null) return [];
+      print("====================");
+      print(xml);
+      print("====================");
+      List<String> gallery = [];
+      for (var child in xml.children) {
+        if (child.children.isNotEmpty) {
+          // gallery.add(child.findElements("imageurl").first.innerText);
         }
       }
       return gallery;

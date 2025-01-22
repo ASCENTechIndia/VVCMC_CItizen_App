@@ -5,6 +5,7 @@ import 'package:vvcmc_citizen_app/feature/webview_screen.dart';
 import 'package:vvcmc_citizen_app/models/temperature.dart';
 import 'package:vvcmc_citizen_app/utils/get_it.dart';
 import 'package:vvcmc_citizen_app/utils/rest_client.dart';
+import 'package:vvcmc_citizen_app/utils/soap_client.dart';
 import 'package:vvcmc_citizen_app/widgets/card_widget.dart';
 import 'package:vvcmc_citizen_app/widgets/property_tax_receipt_widget.dart';
 import 'package:vvcmc_citizen_app/widgets/property_tax_widget.dart';
@@ -22,9 +23,11 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   String page = "Home";
   final restClient = getIt<RestClient>();
+  final soapClient = getIt<SoapClient>();
 
   @override
   Widget build(BuildContext context) {
+    soapClient.getPropertyTax("BL01/277/93");
     return PopScope(
       canPop: false,
       onPopInvokedWithResult: (_, __) {
@@ -41,84 +44,114 @@ class _HomeScreenState extends State<HomeScreen> {
           }
         });
       },
-      child: () {
-        switch (page) {
-          case "Home":
-            return buildHome();
-          case "View Your Tax":
-            return buildViewTax();
-          case "Register Your Complaint":
-            return const RegisterComplaintWidget();
-          case "Election":
-            SchedulerBinding.instance.addPostFrameCallback(
-              (_) => Navigator.of(context).pushNamed(
-                WebViewScreen.routeName,
-                arguments: {
-                  "url": "rests://vvcmc.Restr/election-page/",
-                  "title": "Election",
-                },
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          if (![
+            "Home",
+            "View Your Tax",
+            "News Update",
+            "Election",
+            "Temperature",
+            "Scheme",
+            "Disaster Management"
+          ].contains(page))
+            Container(
+              color: Theme.of(context).primaryColor,
+              padding: const EdgeInsets.all(16.0),
+              child: Text(
+                page,
+                textAlign: TextAlign.center,
+                style: const TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.w600,
+                    fontSize: 20),
               ),
-            );
-            setState(() {
-              page = "Home";
-            });
-            return buildHome();
-          case "Temperature":
-            return buildTemperature();
-          case "Scheme":
-            SchedulerBinding.instance.addPostFrameCallback(
-              (_) => Navigator.of(context).pushNamed(
-                WebViewScreen.routeName,
-                arguments: {
-                  "url": "rests://vvcmc.Restchemes",
-                  "title": "Scheme",
-                },
-              ),
-            );
-            setState(() {
-              page = "Home";
-            });
-            return buildHome();
-          case "Disaster Management":
-            SchedulerBinding.instance.addPostFrameCallback(
-              (_) => Navigator.of(context).pushNamed(
-                WebViewScreen.routeName,
-                arguments: {
-                  "url": "rests://vvcmc.Restmportant-contact",
-                  "title": "Disaster Management",
-                },
-              ),
-            );
-            setState(() {
-              page = "Home";
-            });
-            return buildHome();
-          case "News Update":
-            SchedulerBinding.instance.addPostFrameCallback(
-              (_) => Navigator.of(context).pushNamed(
-                WebViewScreen.routeName,
-                arguments: {
-                  "url": "rests://vvcmc.Restaccination-press-note",
-                  "title": "News Update",
-                },
-              ),
-            );
-            setState(() {
-              page = "Home";
-            });
-            return buildHome();
-          case "View Your Property Tax":
-            return const PropertyTaxWidget();
-          case "View Your Water Tax":
-            return const WaterTaxWidget();
-          case "Download Property Tax Receipt":
-            return const PropertyTaxReceiptWidget();
-          case "Download Water Tax Receipt":
-            return const WaterTaxReceiptWidget();
-          default:
-            return Container();
-        }
-      }(),
+            ),
+          Expanded(
+            child: SingleChildScrollView(
+              child: () {
+                switch (page) {
+                  case "Home":
+                    return buildHome();
+                  case "View Your Tax":
+                    return buildViewTax();
+                  case "Register Your Complaint":
+                    return const RegisterComplaintWidget();
+                  case "Election":
+                    SchedulerBinding.instance.addPostFrameCallback(
+                      (_) => Navigator.of(context).pushNamed(
+                        WebViewScreen.routeName,
+                        arguments: {
+                          "url": "rests://vvcmc.Restr/election-page/",
+                          "title": "Election",
+                        },
+                      ),
+                    );
+                    setState(() {
+                      page = "Home";
+                    });
+                    return buildHome();
+                  case "Temperature":
+                    return buildTemperature();
+                  case "Scheme":
+                    SchedulerBinding.instance.addPostFrameCallback(
+                      (_) => Navigator.of(context).pushNamed(
+                        WebViewScreen.routeName,
+                        arguments: {
+                          "url": "rests://vvcmc.Restchemes",
+                          "title": "Scheme",
+                        },
+                      ),
+                    );
+                    setState(() {
+                      page = "Home";
+                    });
+                    return buildHome();
+                  case "Disaster Management":
+                    SchedulerBinding.instance.addPostFrameCallback(
+                      (_) => Navigator.of(context).pushNamed(
+                        WebViewScreen.routeName,
+                        arguments: {
+                          "url": "rests://vvcmc.Restmportant-contact",
+                          "title": "Disaster Management",
+                        },
+                      ),
+                    );
+                    setState(() {
+                      page = "Home";
+                    });
+                    return buildHome();
+                  case "News Update":
+                    SchedulerBinding.instance.addPostFrameCallback(
+                      (_) => Navigator.of(context).pushNamed(
+                        WebViewScreen.routeName,
+                        arguments: {
+                          "url": "rests://vvcmc.Restaccination-press-note",
+                          "title": "News Update",
+                        },
+                      ),
+                    );
+                    setState(() {
+                      page = "Home";
+                    });
+                    return buildHome();
+                  case "View Your Property Tax":
+                    return const PropertyTaxWidget();
+                  case "View Your Water Tax":
+                    return const WaterTaxWidget();
+                  case "Download Property Tax Receipt":
+                    return const PropertyTaxReceiptWidget();
+                  case "Download Water Tax Receipt":
+                    return const WaterTaxReceiptWidget();
+                  default:
+                    return Container();
+                }
+              }(),
+            ),
+          ),
+        ],
+      ),
     );
   }
 
