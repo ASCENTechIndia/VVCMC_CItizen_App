@@ -744,7 +744,7 @@ class _ServicesScreenState extends State<ServicesScreen> {
   }
 
   Widget buildAbout() {
-    return Padding(
+    return const Padding(
       padding: EdgeInsets.all(16.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,

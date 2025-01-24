@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:vvcmc_citizen_app/feature/home/temperature_grid_widget.dart';
@@ -27,7 +29,6 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    soapClient.getPropertyTax("BL01/277/93");
     return PopScope(
       canPop: false,
       onPopInvokedWithResult: (_, __) {

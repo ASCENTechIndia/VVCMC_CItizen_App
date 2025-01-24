@@ -12,6 +12,7 @@ import 'package:vvcmc_citizen_app/models/mayor_message.dart';
 import 'package:vvcmc_citizen_app/models/official_numbers.dart';
 import 'package:vvcmc_citizen_app/models/police.dart';
 import 'package:vvcmc_citizen_app/models/prabhag_samiti.dart';
+import 'package:vvcmc_citizen_app/models/property_tax_details.dart';
 import 'package:xml/xml.dart';
 
 class SoapClient {
@@ -42,7 +43,7 @@ class SoapClient {
     return body.toString();
   }
 
-  Future<XmlElement?> post(
+  Future<List<XmlElement?>> post(
     String methodName,
     Map<String, String> params,
   ) async {
@@ -56,7 +57,6 @@ class SoapClient {
     };
 
     try {
-      print(soapEnvelope);
       var response = await http.post(
         Uri.parse(url),
         headers: headers,
@@ -71,14 +71,7 @@ class SoapClient {
             document.rootElement.findAllElements("ResponseHeader").first;
         var responseDetails =
             document.rootElement.findAllElements("ResponseDetails").first;
-        if (responseHeader
-                .findElements("SuccessCode")
-                .first
-                .firstChild!
-                .value ==
-            "9999") {
-          return responseDetails;
-        }
+        return [responseHeader, responseDetails];
       } else {
         print("Error: ${response.statusCode}");
         print("Error: ${response.body}");
@@ -86,15 +79,15 @@ class SoapClient {
     } catch (e) {
       print("Request failed: $e");
     }
-    return null;
+    return [];
   }
 
   Future<List<ElectedMember>> getElectedMembers() async {
     try {
-      final xml = await post("GetElectedMembers", {});
-      if (xml == null) return [];
+      final [header, body] = await post("GetElectedMembers", {});
+      if (body == null) return [];
       List<ElectedMember> electedMembers = [];
-      for (var child in xml.children) {
+      for (var child in body.children) {
         if (child.children.isNotEmpty) {
           electedMembers.add(ElectedMember.fromXML(child));
         }
@@ -108,10 +101,10 @@ class SoapClient {
 
   Future<List<PrabhagSamiti>> getPrabhagSamiti() async {
     try {
-      final xml = await post("GetPrabhagSamiti", {});
-      if (xml == null) return [];
+      final [header, body] = await post("GetPrabhagSamiti", {});
+      if (body == null) return [];
       List<PrabhagSamiti> prabhagSamiti = [];
-      for (var child in xml.children) {
+      for (var child in body.children) {
         if (child.children.isNotEmpty) {
           prabhagSamiti.add(PrabhagSamiti.fromXML(child));
         }
@@ -125,10 +118,10 @@ class SoapClient {
 
   Future<List<OfficialNumbers>> getOfficialNumbers() async {
     try {
-      final xml = await post("GetOfficialNumbers", {});
-      if (xml == null) return [];
+      final [header, body] = await post("GetOfficialNumbers", {});
+      if (body == null) return [];
       List<OfficialNumbers> officialNumbers = [];
-      for (var child in xml.children) {
+      for (var child in body.children) {
         if (child.children.isNotEmpty) {
           officialNumbers.add(OfficialNumbers.fromXML(child));
         }
@@ -142,10 +135,10 @@ class SoapClient {
 
   Future<MayorMessage?> getMayorMessage() async {
     try {
-      final xml = await post("GetMayorMessage", {});
-      if (xml == null) return null;
+      final [header, body] = await post("GetMayorMessage", {});
+      if (body == null) return null;
       MayorMessage? mayorMessage;
-      for (var child in xml.children) {
+      for (var child in body.children) {
         if (child.children.isNotEmpty) {
           mayorMessage = MayorMessage.fromXML(child);
         }
@@ -159,10 +152,10 @@ class SoapClient {
 
   Future<List<Hospital>> getHospitals() async {
     try {
-      final xml = await post("GetHospitalList", {});
-      if (xml == null) return [];
+      final [header, body] = await post("GetHospitalList", {});
+      if (body == null) return [];
       List<Hospital> hospitals = [];
-      for (var child in xml.children) {
+      for (var child in body.children) {
         if (child.children.isNotEmpty) {
           hospitals.add(Hospital.fromXML(child));
         }
@@ -176,10 +169,10 @@ class SoapClient {
 
   Future<List<Ambulance>> getAmbulance() async {
     try {
-      final xml = await post("GetAmbulanceList", {});
-      if (xml == null) return [];
+      final [header, body] = await post("GetAmbulanceList", {});
+      if (body == null) return [];
       List<Ambulance> ambulances = [];
-      for (var child in xml.children) {
+      for (var child in body.children) {
         if (child.children.isNotEmpty) {
           ambulances.add(Ambulance.fromXML(child));
         }
@@ -193,10 +186,10 @@ class SoapClient {
 
   Future<List<Police>> getPolice() async {
     try {
-      final xml = await post("GetPoliceDepartmentList", {});
-      if (xml == null) return [];
+      final [header, body] = await post("GetPoliceDepartmentList", {});
+      if (body == null) return [];
       List<Police> police = [];
-      for (var child in xml.children) {
+      for (var child in body.children) {
         if (child.children.isNotEmpty) {
           police.add(Police.fromXML(child));
         }
@@ -210,10 +203,10 @@ class SoapClient {
 
   Future<List<FireBrigade>> getFireBrigades() async {
     try {
-      final xml = await post("GetFireBrigadeList", {});
-      if (xml == null) return [];
+      final [header, body] = await post("GetFireBrigadeList", {});
+      if (body == null) return [];
       List<FireBrigade> fireBrigades = [];
-      for (var child in xml.children) {
+      for (var child in body.children) {
         if (child.children.isNotEmpty) {
           fireBrigades.add(FireBrigade.fromXML(child));
         }
@@ -227,10 +220,10 @@ class SoapClient {
 
   Future<List<BloodBank>> getBloodBanks() async {
     try {
-      final xml = await post("GetBloodBankList", {});
-      if (xml == null) return [];
+      final [header, body] = await post("GetBloodBankList", {});
+      if (body == null) return [];
       List<BloodBank> bloodBanks = [];
-      for (var child in xml.children) {
+      for (var child in body.children) {
         if (child.children.isNotEmpty) {
           bloodBanks.add(BloodBank.fromXML(child));
         }
@@ -244,10 +237,10 @@ class SoapClient {
 
   Future<List<EyeBank>> getEyeBanks() async {
     try {
-      final xml = await post("GetEyeBankList", {});
-      if (xml == null) return [];
+      final [header, body] = await post("GetEyeBankList", {});
+      if (body == null) return [];
       List<EyeBank> eyeBanks = [];
-      for (var child in xml.children) {
+      for (var child in body.children) {
         if (child.children.isNotEmpty) {
           eyeBanks.add(EyeBank.fromXML(child));
         }
@@ -261,10 +254,10 @@ class SoapClient {
 
   Future<List<GovernmentOffice>> getGovernmentOffices() async {
     try {
-      final xml = await post("GetGovernmentOfficesList", {});
-      if (xml == null) return [];
+      final [header, body] = await post("GetGovernmentOfficesList", {});
+      if (body == null) return [];
       List<GovernmentOffice> governmentOffices = [];
-      for (var child in xml.children) {
+      for (var child in body.children) {
         if (child.children.isNotEmpty) {
           governmentOffices.add(GovernmentOffice.fromXML(child));
         }
@@ -278,11 +271,11 @@ class SoapClient {
 
   Future<List<String>> getGallery() async {
     try {
-      final xml = await post("GetGallery", {});
-      if (xml == null) return [];
-      print(xml.children);
+      final [header, body] = await post("GetGallery", {});
+      if (body == null) return [];
+      print(body.children);
       List<String> gallery = [];
-      for (var child in xml.children) {
+      for (var child in body.children) {
         if (child.children.isNotEmpty) {
           gallery.add(child.findElements("imageurl").first.innerText);
         }
@@ -294,24 +287,18 @@ class SoapClient {
     }
   }
 
-  Future<List<String>> getPropertyTax(String propertyNo) async {
+  Future<PropertyTaxDetails?> getPropertyTax(String propertyNo) async {
     try {
-      final xml =
+      final [header, body] =
           await post("GetHouseTaxDetailsAtom", {"PropertyNo": propertyNo});
-      if (xml == null) return [];
-      print("====================");
-      print(xml);
-      print("====================");
-      List<String> gallery = [];
-      for (var child in xml.children) {
-        if (child.children.isNotEmpty) {
-          // gallery.add(child.findElements("imageurl").first.innerText);
-        }
-      }
-      return gallery;
+      if (header == null) return null;
+      if (body == null) return null;
+      PropertyTaxDetails? tax;
+      tax = PropertyTaxDetails.fromXML(header, body);
+      return tax;
     } catch (error) {
       print(error);
-      return [];
+      return null;
     }
   }
 }

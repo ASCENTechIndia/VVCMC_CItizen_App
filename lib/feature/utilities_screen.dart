@@ -237,7 +237,7 @@ class _UtilitiesScreenState extends State<UtilitiesScreen> {
                                       });
                                     },
                                   ),
-                                  Text("Yes"),
+                                  const Text("Yes"),
                                 ],
                               ),
                               Row(
@@ -251,7 +251,7 @@ class _UtilitiesScreenState extends State<UtilitiesScreen> {
                                       });
                                     },
                                   ),
-                                  Text("No"),
+                                  const Text("No"),
                                 ],
                               ),
                             ],

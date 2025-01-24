@@ -26,7 +26,7 @@ class WaterTaxReceiptWidget extends StatelessWidget {
               ),
             ),
           ),
-          const SizedBox(height: 20),
+          const SizedBox(height: 10),
           const Text(
             "Ward",
             style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),

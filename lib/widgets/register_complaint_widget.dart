@@ -41,7 +41,7 @@ class RegisterComplaintWidget extends StatelessWidget {
               ),
             ),
           ),
-          const SizedBox(height: 20),
+          const SizedBox(height: 10),
           const Text(
             "Complaint Details",
             style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
