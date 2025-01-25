@@ -1,7 +1,4 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
 import 'package:vvcmc_citizen_app/feature/home/temperature_grid_widget.dart';
 import 'package:vvcmc_citizen_app/feature/webview_screen.dart';
 import 'package:vvcmc_citizen_app/models/temperature.dart';
@@ -15,15 +12,10 @@ import 'package:vvcmc_citizen_app/widgets/register_complaint_widget.dart';
 import 'package:vvcmc_citizen_app/widgets/water_tax_receipt_widget.dart';
 import 'package:vvcmc_citizen_app/widgets/water_tax_widget.dart';
 
-class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key});
+class HomeScreen extends StatelessWidget {
+  HomeScreen({super.key});
 
-  @override
-  State<HomeScreen> createState() => _HomeScreenState();
-}
-
-class _HomeScreenState extends State<HomeScreen> {
-  String page = "Home";
+  final navigatorKey = GlobalKey<NavigatorState>();
   final restClient = getIt<RestClient>();
   final soapClient = getIt<SoapClient>();
 
@@ -32,131 +24,43 @@ class _HomeScreenState extends State<HomeScreen> {
     return PopScope(
       canPop: false,
       onPopInvokedWithResult: (_, __) {
-        setState(() {
-          switch (page) {
-            case "View Your Property Tax":
-            case "View Your Water Tax":
-            case "Download Property Tax Receipt":
-            case "Download Water Tax Receipt":
-              page = "View Your Tax";
-              break;
-            default:
-              page = "Home";
-          }
-        });
+        if (navigatorKey.currentState == null) return;
+        if (navigatorKey.currentState!.canPop()) {
+          navigatorKey.currentState!.pop();
+        } else {
+          Navigator.of(context).pop();
+        }
       },
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          if (![
-            "Home",
-            "View Your Tax",
-            "News Update",
-            "Election",
-            "Temperature",
-            "Scheme",
-            "Disaster Management"
-          ].contains(page))
-            Container(
-              color: Theme.of(context).primaryColor,
-              padding: const EdgeInsets.all(16.0),
-              child: Text(
-                page,
-                textAlign: TextAlign.center,
-                style: const TextStyle(
-                    color: Colors.white,
-                    fontWeight: FontWeight.w600,
-                    fontSize: 20),
-              ),
-            ),
-          Expanded(
-            child: SingleChildScrollView(
-              child: () {
-                switch (page) {
-                  case "Home":
-                    return buildHome();
-                  case "View Your Tax":
-                    return buildViewTax();
-                  case "Register Your Complaint":
-                    return const RegisterComplaintWidget();
-                  case "Election":
-                    SchedulerBinding.instance.addPostFrameCallback(
-                      (_) => Navigator.of(context).pushNamed(
-                        WebViewScreen.routeName,
-                        arguments: {
-                          "url": "rests://vvcmc.Restr/election-page/",
-                          "title": "Election",
-                        },
-                      ),
-                    );
-                    setState(() {
-                      page = "Home";
-                    });
-                    return buildHome();
-                  case "Temperature":
-                    return buildTemperature();
-                  case "Scheme":
-                    SchedulerBinding.instance.addPostFrameCallback(
-                      (_) => Navigator.of(context).pushNamed(
-                        WebViewScreen.routeName,
-                        arguments: {
-                          "url": "rests://vvcmc.Restchemes",
-                          "title": "Scheme",
-                        },
-                      ),
-                    );
-                    setState(() {
-                      page = "Home";
-                    });
-                    return buildHome();
-                  case "Disaster Management":
-                    SchedulerBinding.instance.addPostFrameCallback(
-                      (_) => Navigator.of(context).pushNamed(
-                        WebViewScreen.routeName,
-                        arguments: {
-                          "url": "rests://vvcmc.Restmportant-contact",
-                          "title": "Disaster Management",
-                        },
-                      ),
-                    );
-                    setState(() {
-                      page = "Home";
-                    });
-                    return buildHome();
-                  case "News Update":
-                    SchedulerBinding.instance.addPostFrameCallback(
-                      (_) => Navigator.of(context).pushNamed(
-                        WebViewScreen.routeName,
-                        arguments: {
-                          "url": "rests://vvcmc.Restaccination-press-note",
-                          "title": "News Update",
-                        },
-                      ),
-                    );
-                    setState(() {
-                      page = "Home";
-                    });
-                    return buildHome();
-                  case "View Your Property Tax":
-                    return const PropertyTaxWidget();
-                  case "View Your Water Tax":
-                    return const WaterTaxWidget();
-                  case "Download Property Tax Receipt":
-                    return const PropertyTaxReceiptWidget();
-                  case "Download Water Tax Receipt":
-                    return const WaterTaxReceiptWidget();
-                  default:
-                    return Container();
-                }
-              }(),
-            ),
-          ),
-        ],
+      child: Navigator(
+        key: navigatorKey,
+        onGenerateRoute: (RouteSettings settings) {
+          final Map<String, WidgetBuilder> routes = {
+            "/": buildHome,
+            "view_your_tax": buildViewTax,
+            "view_your_tax/view_your_property_tax": (context) =>
+                PropertyTaxWidget(),
+            "view_your_tax/download_your_property_tax": (context) =>
+                const PropertyTaxReceiptWidget(),
+            "view_your_tax/view_your_water_tax": (context) => WaterTaxWidget(),
+            "view_your_tax/download_your_water_tax": (context) =>
+                const WaterTaxReceiptWidget(),
+            "register_your_complaint": (context) =>
+                const RegisterComplaintWidget(),
+            "temperature": buildTemperature,
+          };
+          var builder = routes[settings.name];
+          builder ??= (context) => const Center(child: Text("No route"));
+          return PageRouteBuilder(
+            pageBuilder: (context, _, __) => builder!(context),
+            transitionDuration: Duration.zero,
+            reverseTransitionDuration: Duration.zero,
+          );
+        },
       ),
     );
   }
 
-  Widget buildTemperature() {
+  Widget buildTemperature(context) {
     return FutureBuilder(
       future: restClient.getTemperature(),
       builder: (context, AsyncSnapshot snapshot) {
@@ -182,7 +86,9 @@ class _HomeScreenState extends State<HomeScreen> {
                 Text(
                   "${temperature.temp}°C",
                   style: const TextStyle(
-                      fontSize: 38, fontWeight: FontWeight.w200),
+                    fontSize: 38,
+                    fontWeight: FontWeight.w200,
+                  ),
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -211,20 +117,30 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Widget buildViewTax() {
+  Widget buildViewTax(context) {
     List cards = [
       [
-        {"icon": "property-tax.png", "text": "View Your Property Tax"},
+        {
+          "icon": "property-tax.png",
+          "text": "View Your Property Tax",
+          "route": "view_your_property_tax",
+        },
         {
           "icon": "water-tax.png",
           "text": "View Your Water Tax",
+          "route": "view_your_water_tax",
         },
       ],
       [
-        {"icon": "property-tax.png", "text": "Download Property Tax Receipt"},
+        {
+          "icon": "property-tax.png",
+          "text": "Download Property Tax Receipt",
+          "route": "download_your_property_tax",
+        },
         {
           "icon": "water-tax.png",
           "text": "Download Water Tax Receipt",
+          "route": "download_your_water_tax",
         },
       ],
     ];
@@ -249,9 +165,8 @@ class _HomeScreenState extends State<HomeScreen> {
                           ),
                         ),
                         onTap: () {
-                          setState(() {
-                            page = row[0]["text"];
-                          });
+                          Navigator.of(context)
+                              .pushNamed("view_your_tax/${row[0]["route"]}");
                         },
                       ),
                     ),
@@ -267,9 +182,8 @@ class _HomeScreenState extends State<HomeScreen> {
                           ),
                         ),
                         onTap: () {
-                          setState(() {
-                            page = row[1]["text"];
-                          });
+                          Navigator.of(context)
+                              .pushNamed("view_your_tax/${row[1]["route"]}");
                         },
                       ),
                     ),
@@ -282,24 +196,61 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Widget buildHome() {
+  Widget buildHome(context) {
     List cards = [
       [
-        {"icon": "property-tax.png", "text": "View Your Tax"},
+        {
+          "icon": "property-tax.png",
+          "text": "View Your Tax",
+          "onTap": () => Navigator.of(context).pushNamed("view_your_tax"),
+        },
         {
           "icon": "complaint.png",
           "text": "Register Your Complaint",
+          "onTap": () =>
+              Navigator.of(context).pushNamed("register_your_complaint"),
         },
       ],
       [
-        {"icon": "news.png", "text": "News Update"},
-        {"icon": "vote.png", "text": "Election"},
+        {
+          "icon": "news.png",
+          "text": "News Update",
+          "onTap": () => Navigator.of(context, rootNavigator: true).pushNamed(
+                WebViewScreen.routeName,
+                arguments: {
+                  "url": "https://vvcmc.in/vaccination-press-note",
+                  "title": "News Update",
+                },
+              ),
+        },
+        {
+          "icon": "vote.png",
+          "text": "Election",
+          "onTap": () => Navigator.of(context, rootNavigator: true).pushNamed(
+                WebViewScreen.routeName,
+                arguments: {
+                  "url": "https://vvcmc.in/election-page",
+                  "title": "Election",
+                },
+              ),
+        },
       ],
       [
-        {"icon": "temperature.png", "text": "Temperature"},
+        {
+          "icon": "temperature.png",
+          "text": "Temperature",
+          "onTap": () => Navigator.of(context).pushNamed("temperature"),
+        },
         {
           "icon": "scheme.png",
           "text": "Scheme",
+          "onTap": () => Navigator.of(context, rootNavigator: true).pushNamed(
+                WebViewScreen.routeName,
+                arguments: {
+                  "url": "https://vvcmc.in/scheme",
+                  "title": "Scheme",
+                },
+              ),
         }
       ],
     ];
@@ -331,7 +282,8 @@ class _HomeScreenState extends State<HomeScreen> {
                             Expanded(
                               child: CardWidget(
                                 icon: Image.asset(
-                                    "assets/icons/${row[0]["icon"]}"),
+                                  "assets/icons/${row[0]["icon"]}",
+                                ),
                                 title: Text(
                                   row[0]["text"],
                                   style: const TextStyle(
@@ -339,18 +291,15 @@ class _HomeScreenState extends State<HomeScreen> {
                                     fontWeight: FontWeight.w500,
                                   ),
                                 ),
-                                onTap: () {
-                                  setState(() {
-                                    page = row[0]["text"];
-                                  });
-                                },
+                                onTap: row[0]["onTap"],
                               ),
                             ),
                             const SizedBox(width: 8),
                             Expanded(
                               child: CardWidget(
                                 icon: Image.asset(
-                                    "assets/icons/${row[1]["icon"]}"),
+                                  "assets/icons/${row[1]["icon"]}",
+                                ),
                                 title: Text(
                                   row[1]["text"],
                                   style: const TextStyle(
@@ -358,11 +307,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                     fontWeight: FontWeight.w500,
                                   ),
                                 ),
-                                onTap: () {
-                                  setState(() {
-                                    page = row[1]["text"];
-                                  });
-                                },
+                                onTap: row[1]["onTap"],
                               ),
                             ),
                           ],
@@ -379,9 +324,13 @@ class _HomeScreenState extends State<HomeScreen> {
                     style: TextStyle(fontSize: 12, fontWeight: FontWeight.w500),
                   ),
                   onTap: () {
-                    setState(() {
-                      page = "Disaster Management";
-                    });
+                    Navigator.of(context, rootNavigator: true).pushNamed(
+                      WebViewScreen.routeName,
+                      arguments: {
+                        "url": "https://vvcmc.in/important-contact",
+                        "title": "Disaster Management",
+                      },
+                    );
                   },
                 ),
               ),

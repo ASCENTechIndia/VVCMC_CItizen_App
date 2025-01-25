@@ -45,6 +45,7 @@ class _WebViewState extends State<WebView> {
           onWebResourceError: (WebResourceError err) {
             final noInternet =
                 err.description == "net::ERR_INTERNET_DISCONNECTED";
+            print(err.description);
             Navigator.of(context).pop();
             showDialog(
               context: context,

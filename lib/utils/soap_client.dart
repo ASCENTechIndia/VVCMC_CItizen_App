@@ -13,6 +13,7 @@ import 'package:vvcmc_citizen_app/models/official_numbers.dart';
 import 'package:vvcmc_citizen_app/models/police.dart';
 import 'package:vvcmc_citizen_app/models/prabhag_samiti.dart';
 import 'package:vvcmc_citizen_app/models/property_tax_details.dart';
+import 'package:vvcmc_citizen_app/models/zone.dart';
 import 'package:xml/xml.dart';
 
 class SoapClient {
@@ -78,6 +79,7 @@ class SoapClient {
       }
     } catch (e) {
       print("Request failed: $e");
+      rethrow;
     }
     return [];
   }
@@ -95,7 +97,7 @@ class SoapClient {
       return electedMembers;
     } catch (error) {
       print(error);
-      return [];
+      rethrow;
     }
   }
 
@@ -112,7 +114,7 @@ class SoapClient {
       return prabhagSamiti;
     } catch (error) {
       print(error);
-      return [];
+      rethrow;
     }
   }
 
@@ -129,7 +131,7 @@ class SoapClient {
       return officialNumbers;
     } catch (error) {
       print(error);
-      return [];
+      rethrow;
     }
   }
 
@@ -146,7 +148,7 @@ class SoapClient {
       return mayorMessage;
     } catch (error) {
       print(error);
-      return null;
+      rethrow;
     }
   }
 
@@ -163,7 +165,7 @@ class SoapClient {
       return hospitals;
     } catch (error) {
       print(error);
-      return [];
+      rethrow;
     }
   }
 
@@ -180,7 +182,7 @@ class SoapClient {
       return ambulances;
     } catch (error) {
       print(error);
-      return [];
+      rethrow;
     }
   }
 
@@ -197,7 +199,7 @@ class SoapClient {
       return police;
     } catch (error) {
       print(error);
-      return [];
+      rethrow;
     }
   }
 
@@ -214,7 +216,7 @@ class SoapClient {
       return fireBrigades;
     } catch (error) {
       print(error);
-      return [];
+      rethrow;
     }
   }
 
@@ -231,7 +233,7 @@ class SoapClient {
       return bloodBanks;
     } catch (error) {
       print(error);
-      return [];
+      rethrow;
     }
   }
 
@@ -248,7 +250,7 @@ class SoapClient {
       return eyeBanks;
     } catch (error) {
       print(error);
-      return [];
+      rethrow;
     }
   }
 
@@ -265,7 +267,7 @@ class SoapClient {
       return governmentOffices;
     } catch (error) {
       print(error);
-      return [];
+      rethrow;
     }
   }
 
@@ -283,7 +285,7 @@ class SoapClient {
       return gallery;
     } catch (error) {
       print(error);
-      return [];
+      rethrow;
     }
   }
 
@@ -298,7 +300,25 @@ class SoapClient {
       return tax;
     } catch (error) {
       print(error);
-      return null;
+      rethrow;
+    }
+  }
+
+  Future<List<Zone>> getZones() async {
+    try {
+      final [header, body] = await post("GetZoneList", {});
+      if (body == null) return [];
+      print(body.children);
+      List<Zone> gallery = [];
+      for (var child in body.children) {
+        if (child.children.isNotEmpty) {
+          gallery.add(Zone.fromXML(child));
+        }
+      }
+      return gallery;
+    } catch (error) {
+      print(error);
+      rethrow;
     }
   }
 }

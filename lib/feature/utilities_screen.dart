@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
 import 'package:vvcmc_citizen_app/widgets/card_widget.dart';
+import 'package:vvcmc_citizen_app/widgets/header_widget.dart';
 import 'package:vvcmc_citizen_app/widgets/property_tax_receipt_widget.dart';
 import 'package:vvcmc_citizen_app/widgets/property_tax_widget.dart';
 import 'package:vvcmc_citizen_app/widgets/register_complaint_widget.dart';
@@ -17,21 +17,49 @@ class UtilitiesScreen extends StatefulWidget {
 }
 
 class _UtilitiesScreenState extends State<UtilitiesScreen> {
-  String page = "Utilities";
-  Map questions = {
-    "Do you find your area clean": "Yes",
-    "Are you able to easily locate dust bins in your area": "Yes",
-    "Door to door waste collection done and transported by municipal corporation people from your household daily":
-        "Yes",
-    "Acces to toiler public community toilet available": "Yes",
-    "Basic information in the public/community toilet available and functional":
-        "Yes",
-    "Does your household have a toilet": "Yes",
-    "Are there any unattended garbage heaps in your area": "Yes",
-  };
+  final navigatorKey = GlobalKey<NavigatorState>();
 
   @override
-  Widget build(BuildContext build) {
+  Widget build(BuildContext context) {
+    return PopScope(
+      canPop: false,
+      onPopInvokedWithResult: (_, __) {
+        if (navigatorKey.currentState == null) return;
+        if (navigatorKey.currentState!.canPop()) {
+          navigatorKey.currentState!.pop();
+        } else {
+          Navigator.of(context).pop();
+        }
+      },
+      child: Navigator(
+        key: navigatorKey,
+        onGenerateRoute: (RouteSettings settings) {
+          final Map<String, WidgetBuilder> routes = {
+            "/": buildUtilities,
+            "view_your_property_tax": (context) => PropertyTaxWidget(),
+            "view_your_water_tax": (context) => WaterTaxWidget(),
+            "register_your_complaint": (context) =>
+                const RegisterComplaintWidget(),
+            "clean_vvmc": buildClean,
+            "download_your_property_tax": (context) =>
+                const PropertyTaxReceiptWidget(),
+            "download_your_water_tax": (context) =>
+                const WaterTaxReceiptWidget(),
+          };
+          var builder = routes[settings.name];
+          builder ??= (context) => const Center(child: Text("No route"));
+          return PageRouteBuilder(
+            pageBuilder: (context, _, __) => builder!(context),
+            transitionDuration: Duration.zero,
+            reverseTransitionDuration: Duration.zero,
+          );
+        },
+      ),
+    );
+  }
+
+  /*
+  Widget build2(BuildContext build) {
     return PopScope(
       canPop: false,
       onPopInvokedWithResult: (_, __) {
@@ -115,6 +143,7 @@ class _UtilitiesScreenState extends State<UtilitiesScreen> {
       ),
     );
   }
+*/
 
   Widget buildVVMT() {
     return Padding(
@@ -155,154 +184,222 @@ class _UtilitiesScreenState extends State<UtilitiesScreen> {
     );
   }
 
-  Widget buildClean() {
-    return Padding(
-      padding: const EdgeInsets.all(16.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          const Center(
-            child: Text(
-              "Citizen Feedback",
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-            ),
-          ),
-          const SizedBox(height: 10),
-          const TextField(
-            decoration: InputDecoration(
-              hintText: "Name",
-              border: OutlineInputBorder(
-                borderSide: BorderSide(color: Colors.black),
-              ),
-            ),
-          ),
-          const SizedBox(height: 10),
-          const TextField(
-            decoration: InputDecoration(
-              hintText: "Mobile No.",
-              border: OutlineInputBorder(
-                borderSide: BorderSide(color: Colors.black),
-              ),
-            ),
-          ),
-          const SizedBox(height: 10),
-          const TextField(
-            decoration: InputDecoration(
-              hintText: "Area",
-              border: OutlineInputBorder(
-                borderSide: BorderSide(color: Colors.black),
-              ),
-            ),
-          ),
-          const SizedBox(height: 10),
-          const TextField(
-            decoration: InputDecoration(
-              hintText: "Landmark",
-              border: OutlineInputBorder(
-                borderSide: BorderSide(color: Colors.black),
-              ),
-            ),
-          ),
-          const SizedBox(height: 10),
-          const TextField(
-            decoration: InputDecoration(
-              hintText: "Address",
-              border: OutlineInputBorder(
-                borderSide: BorderSide(color: Colors.black),
-              ),
-            ),
-          ),
-          const SizedBox(height: 10),
-          Column(
-            children: questions.entries
-                .map(
-                  (question) => Card(
-                    child: Padding(
-                      padding: const EdgeInsets.all(12.0),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        children: [
-                          Text(question.key),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            children: [
-                              Row(
-                                children: [
-                                  Radio(
-                                    value: "Yes",
-                                    groupValue: question.value,
-                                    onChanged: (value) {
-                                      setState(() {
-                                        questions[question.key] = value;
-                                      });
-                                    },
-                                  ),
-                                  const Text("Yes"),
-                                ],
-                              ),
-                              Row(
-                                children: [
-                                  Radio(
-                                    value: "No",
-                                    groupValue: question.value,
-                                    onChanged: (value) {
-                                      setState(() {
-                                        questions[question.key] = value;
-                                      });
-                                    },
-                                  ),
-                                  const Text("No"),
-                                ],
-                              ),
-                            ],
-                          ),
-                        ],
+  Widget buildClean(context) {
+    Map questions = {
+      "Do you find your area clean": "Yes",
+      "Are you able to easily locate dust bins in your area": "Yes",
+      "Door to door waste collection done and transported by municipal corporation people from your household daily":
+          "Yes",
+      "Acces to toiler public community toilet available": "Yes",
+      "Basic information in the public/community toilet available and functional":
+          "Yes",
+      "Does your household have a toilet": "Yes",
+      "Are there any unattended garbage heaps in your area": "Yes",
+    };
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        const HeaderWidget(title: "Citizen Feedback"),
+        Expanded(
+          child: SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  const TextField(
+                    decoration: InputDecoration(
+                      hintText: "Name",
+                      border: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.black),
                       ),
                     ),
                   ),
-                )
-                .toList(),
-          ),
-          const SizedBox(height: 20),
-          OutlinedButton(
-            onPressed: () {},
-            style: OutlinedButton.styleFrom(
-              side: BorderSide(color: Theme.of(context).primaryColor),
-              shape: const RoundedRectangleBorder(
-                borderRadius: BorderRadius.all(Radius.zero),
+                  const SizedBox(height: 10),
+                  const TextField(
+                    decoration: InputDecoration(
+                      hintText: "Mobile No.",
+                      border: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.black),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 10),
+                  const TextField(
+                    decoration: InputDecoration(
+                      hintText: "Area",
+                      border: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.black),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 10),
+                  const TextField(
+                    decoration: InputDecoration(
+                      hintText: "Landmark",
+                      border: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.black),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 10),
+                  const TextField(
+                    decoration: InputDecoration(
+                      hintText: "Address",
+                      border: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.black),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 10),
+                  Column(
+                    children: questions.entries
+                        .map(
+                          (question) => Card(
+                            child: Padding(
+                              padding: const EdgeInsets.all(12.0),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.stretch,
+                                children: [
+                                  Text(question.key),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.end,
+                                    children: [
+                                      Row(
+                                        children: [
+                                          Radio(
+                                            value: "Yes",
+                                            groupValue: question.value,
+                                            onChanged: (value) {
+                                              setState(() {
+                                                questions[question.key] = value;
+                                              });
+                                            },
+                                          ),
+                                          const Text("Yes"),
+                                        ],
+                                      ),
+                                      Row(
+                                        children: [
+                                          Radio(
+                                            value: "No",
+                                            groupValue: question.value,
+                                            onChanged: (value) {
+                                              setState(() {
+                                                questions[question.key] = value;
+                                              });
+                                            },
+                                          ),
+                                          const Text("No"),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        )
+                        .toList(),
+                  ),
+                  const SizedBox(height: 20),
+                  OutlinedButton(
+                    onPressed: () {},
+                    style: OutlinedButton.styleFrom(
+                      side: BorderSide(color: Theme.of(context).primaryColor),
+                      shape: const RoundedRectangleBorder(
+                        borderRadius: BorderRadius.all(Radius.zero),
+                      ),
+                    ),
+                    child: const Text("Submit"),
+                  ),
+                ],
               ),
             ),
-            child: const Text("Submit"),
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 
-  Widget buildUtilities() {
+  Widget buildUtilities(context) {
     List cards = [
       [
-        {"icon": "property-tax.png", "text": "View Your Property Tax"},
-        {"icon": "water-tax.png", "text": "View Your Water Tax"},
+        {
+          "icon": "property-tax.png",
+          "text": "View Your Property Tax",
+          "onTap": () =>
+              Navigator.of(context).pushNamed("view_your_property_tax"),
+        },
+        {
+          "icon": "water-tax.png",
+          "text": "View Your Water Tax",
+          "onTap": () => Navigator.of(context).pushNamed("view_your_water_tax"),
+        },
       ],
       [
-        {"icon": "complaint.png", "text": "Register Your Complaint"},
-        {"icon": "clean.png", "text": "Clean VVMC"},
+        {
+          "icon": "complaint.png",
+          "text": "Register Your Complaint",
+          "onTap": () =>
+              Navigator.of(context).pushNamed("register_your_complaint"),
+        },
+        {
+          "icon": "clean.png",
+          "text": "Clean VVMC",
+          "onTap": () => Navigator.of(context).pushNamed("clean_vvmc"),
+        },
       ],
       [
-        {"icon": "news.png", "text": "News Update"},
-        {"icon": "track.png", "text": "Track My Complaint"},
+        {
+          "icon": "news.png",
+          "text": "News Update",
+          "onTap": () => Navigator.of(context, rootNavigator: true).pushNamed(
+                WebViewScreen.routeName,
+                arguments: {
+                  "url": "https://vvcmc.in/vaccination-press-note",
+                  "title": "News Update",
+                },
+              ),
+        },
+        {
+          "icon": "track.png",
+          "text": "Track My Complaint",
+          "onTap": () => Navigator.of(context).pushNamed("track_my_complaint"),
+        },
       ],
       [
-        {"icon": "vvmt.png", "text": "VVMT"},
-        {"icon": "tax.png", "text": "Tax Calculator"},
+        {
+          "icon": "vvmt.png",
+          "text": "VVMT",
+          "onTap": () => Navigator.of(context).pushNamed("vvmt"),
+        },
+        {
+          "icon": "tax.png",
+          "text": "Tax Calculator",
+          "onTap": () => Navigator.of(context, rootNavigator: true).pushNamed(
+                WebViewScreen.routeName,
+                arguments: {
+                  "url":
+                      "https://onlinevvcmc.in/VVCMCCitizenDashboard/FrmTaxCalculatorWeb.aspx",
+                  "title": "Tax Calculator",
+                },
+              ),
+        },
       ],
       [
         {
           "icon": "property-receipt.png",
-          "text": "Download Property Tax Receipt"
+          "text": "Download Property Tax Receipt",
+          "onTap": () =>
+              Navigator.of(context).pushNamed("download_property_tax_receipt"),
         },
-        {"icon": "water-receipt.png", "text": "Download Water Tax Receipt"},
+        {
+          "icon": "water-receipt.png",
+          "text": "Download Water Tax Receipt",
+          "onTap": () => Navigator.of(context)
+              .pushNamed("download_property_water_receipt"),
+        },
       ],
     ];
     return SizedBox(
@@ -342,11 +439,7 @@ class _UtilitiesScreenState extends State<UtilitiesScreen> {
                                       fontWeight: FontWeight.w500,
                                     ),
                                   ),
-                                  onTap: () {
-                                    setState(() {
-                                      page = row[0]["text"];
-                                    });
-                                  },
+                                  onTap: row[0]["onTap"],
                                 ),
                               ),
                               const SizedBox(width: 8),
@@ -361,11 +454,7 @@ class _UtilitiesScreenState extends State<UtilitiesScreen> {
                                       fontWeight: FontWeight.w500,
                                     ),
                                   ),
-                                  onTap: () {
-                                    setState(() {
-                                      page = row[1]["text"];
-                                    });
-                                  },
+                                  onTap: row[1]["onTap"],
                                 ),
                               ),
                             ],

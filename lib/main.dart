@@ -282,7 +282,7 @@ class _MainState extends State<Main> with TickerProviderStateMixin {
       body: TabBarView(
         physics: const NeverScrollableScrollPhysics(),
         controller: _tabController,
-        children: const [
+        children: [
           HomeScreen(),
           ServicesScreen(),
           UtilitiesScreen(),
