@@ -13,6 +13,8 @@ import 'package:vvcmc_citizen_app/models/official_numbers.dart';
 import 'package:vvcmc_citizen_app/models/police.dart';
 import 'package:vvcmc_citizen_app/models/prabhag_samiti.dart';
 import 'package:vvcmc_citizen_app/models/property_tax_details.dart';
+import 'package:vvcmc_citizen_app/models/ward.dart';
+import 'package:vvcmc_citizen_app/models/water_tax_details.dart';
 import 'package:vvcmc_citizen_app/models/zone.dart';
 import 'package:xml/xml.dart';
 
@@ -275,7 +277,6 @@ class SoapClient {
     try {
       final [header, body] = await post("GetGallery", {});
       if (body == null) return [];
-      print(body.children);
       List<String> gallery = [];
       for (var child in body.children) {
         if (child.children.isNotEmpty) {
@@ -308,14 +309,60 @@ class SoapClient {
     try {
       final [header, body] = await post("GetZoneList", {});
       if (body == null) return [];
-      print(body.children);
-      List<Zone> gallery = [];
+      List<Zone> zones = [];
       for (var child in body.children) {
         if (child.children.isNotEmpty) {
-          gallery.add(Zone.fromXML(child));
+          zones.add(Zone.fromXML(child));
         }
       }
-      return gallery;
+      return zones;
+    } catch (error) {
+      print(error);
+      rethrow;
+    }
+  }
+
+  Future<List<Ward>> getWards(int zoneId) async {
+    try {
+      final [header, body] =
+          await post("GetWardList", {"ZoneId": zoneId.toString()});
+      if (body == null) return [];
+      List<Ward> wards = [];
+      for (var child in body.children) {
+        if (child.children.isNotEmpty) {
+          wards.add(Ward.fromXML(child));
+        }
+      }
+      print("==========");
+      for (var w in wards) {
+        print(w.id);
+      }
+      return wards;
+    } catch (error) {
+      print(error);
+      rethrow;
+    }
+  }
+
+  Future<WaterTaxDetails?> getWaterTaxDetails(
+    String zoneId,
+    String wardId,
+    String taxNo,
+  ) async {
+    try {
+      final [header, body] = await post(
+        "GetWaterTaxDetails",
+        {
+          "ZoneId": zoneId,
+          "WardNo": wardId,
+          "ConnectionNo": taxNo,
+        },
+      );
+      if (body == null) return null;
+      print(body.children);
+      WaterTaxDetails? tax;
+      tax = WaterTaxDetails.fromXML(body);
+      return tax;
     } catch (error) {
       print(error);
       rethrow;
