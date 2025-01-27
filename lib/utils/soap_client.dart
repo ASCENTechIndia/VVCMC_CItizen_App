@@ -3,6 +3,8 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:vvcmc_citizen_app/models/ambulance.dart';
 import 'package:vvcmc_citizen_app/models/blood_bank.dart';
+import 'package:vvcmc_citizen_app/models/complaint_type.dart';
+import 'package:vvcmc_citizen_app/models/department.dart';
 import 'package:vvcmc_citizen_app/models/elected_member.dart';
 import 'package:vvcmc_citizen_app/models/eye_bank.dart';
 import 'package:vvcmc_citizen_app/models/fire_brigade.dart';
@@ -11,6 +13,7 @@ import 'package:vvcmc_citizen_app/models/hospital.dart';
 import 'package:vvcmc_citizen_app/models/mayor_message.dart';
 import 'package:vvcmc_citizen_app/models/official_numbers.dart';
 import 'package:vvcmc_citizen_app/models/police.dart';
+import 'package:vvcmc_citizen_app/models/prabhag.dart';
 import 'package:vvcmc_citizen_app/models/prabhag_samiti.dart';
 import 'package:vvcmc_citizen_app/models/property_tax_details.dart';
 import 'package:vvcmc_citizen_app/models/ward.dart';
@@ -58,20 +61,41 @@ class SoapClient {
       "SOAPAction": soapAction + methodName,
       "Host": host,
     };
-
+/*
+        String xmlString =
+            response.body.replaceAll("&lt;", "<").replaceAll("&gt;", ">");
+        XmlElement? responseHeader;
+        XmlElement? responseDetails;
+        RegExp headerRegex =
+            RegExp(r'<ResponseHeader>(.*?)</ResponseHeader>', dotAll: true);
+        var header = headerRegex.firstMatch(xmlString);
+        if (header != null) {
+          responseHeader = XmlDocument.parse(header.group(0)!).rootElement;
+        }
+        print(responseHeader);
+        RegExp detailsRegex =
+            RegExp(r'<ResponseDetails>(.*?)</ResponseDetails>', dotAll: true);
+        var details = detailsRegex.firstMatch(xmlString);
+        if (details != null) {
+          responseDetails = XmlDocument.parse(details.group(0)!).rootElement;
+        }
+        return [responseHeader, responseDetails];
+*/
     try {
+      print(soapEnvelope);
       var response = await http.post(
         Uri.parse(url),
         headers: headers,
         body: soapEnvelope,
       );
-
+        print(response.body);
       if (response.statusCode == 200) {
         String xmlString =
             response.body.replaceAll("&lt;", "<").replaceAll("&gt;", ">");
         var document = XmlDocument.parse(xmlString);
         var responseHeader =
             document.rootElement.findAllElements("ResponseHeader").first;
+        print(responseHeader);
         var responseDetails =
             document.rootElement.findAllElements("ResponseDetails").first;
         return [responseHeader, responseDetails];
@@ -333,10 +357,6 @@ class SoapClient {
           wards.add(Ward.fromXML(child));
         }
       }
-      print("==========");
-      for (var w in wards) {
-        print(w.id);
-      }
       return wards;
     } catch (error) {
       print(error);
@@ -345,24 +365,104 @@ class SoapClient {
   }
 
   Future<WaterTaxDetails?> getWaterTaxDetails(
-    String zoneId,
-    String wardId,
+    int? zoneId,
+    int? wardId,
     String taxNo,
   ) async {
     try {
       final [header, body] = await post(
-        "GetWaterTaxDetails",
+        "GetWaterTaxDetailsAtom",
         {
-          "ZoneId": zoneId,
-          "WardNo": wardId,
+          "ZoneId": zoneId.toString(),
+          "WardNo": wardId.toString(),
           "ConnectionNo": taxNo,
         },
       );
       if (body == null) return null;
-      print(body.children);
       WaterTaxDetails? tax;
       tax = WaterTaxDetails.fromXML(body);
       return tax;
+    } catch (error) {
+      print(error);
+      rethrow;
+    }
+  }
+
+  Future<List<Prabhag>> getPrabhags() async {
+    try {
+      final [header, body] = await post("GetPrabhagList", {});
+      if (body == null) return [];
+      List<Prabhag> prabhags = [];
+      for (var child in body.children) {
+        if (child.children.isNotEmpty) {
+          prabhags.add(Prabhag.fromXML(child));
+        }
+      }
+      return prabhags;
+    } catch (error) {
+      print(error);
+      rethrow;
+    }
+  }
+
+  Future<List<Department>> getDepartments() async {
+    try {
+      final [header, body] = await post("GetCRMDepartmentList", {});
+      if (body == null) return [];
+      List<Department> departments = [];
+      for (var child in body.children) {
+        if (child.children.isNotEmpty) {
+          departments.add(Department.fromXML(child));
+        }
+      }
+      return departments;
+    } catch (error) {
+      print(error);
+      rethrow;
+    }
+  }
+
+  Future<List<ComplaintType>> getComplaintTypes(int deptId) async {
+    try {
+      final [header, body] = await post(
+          "GetCRMComplaintSubTypeDeptwise", {"DeptId": deptId.toString()});
+      if (body == null) return [];
+      List<ComplaintType> complaintTypes = [];
+      for (var child in body.children) {
+        if (child.children.isNotEmpty) {
+          complaintTypes.add(ComplaintType.fromXML(child));
+        }
+      }
+      return complaintTypes;
+    } catch (error) {
+      print(error);
+      rethrow;
+    }
+  }
+
+  Future<bool> register(
+    String firstName,
+    String lastName,
+    String email,
+    String mobile,
+    String aadharNo,
+    String bloodGroup,
+  ) async {
+    try {
+      final [header, body] = await post(
+        "Registration",
+        {
+          "FirstName": firstName,
+          "LastName": lastName,
+          "Email": email,
+          "MobileNo": mobile,
+          "AdharNo": aadharNo,
+          "BloodGroup": bloodGroup,
+        },
+      );
+      if (header == null) return false;
+      print(header.findElements("SuccessCode").first.innerText);
+      return header.findElements("SuccessCode").first.innerText == "9999";
     } catch (error) {
       print(error);
       rethrow;

@@ -22,11 +22,11 @@ class WaterTaxDetails {
       name: body.findElements("Name").first.innerText,
       roadName: body.findElements("RoadName").first.innerText,
       previousBillAmount:
-          body.findElements("PreviousBillAmount").first.innerText,
-      currentBillAmount: body.findElements("CurrentBillAmount").first.innerText,
+          body.findElements("PreviousBillAmt").first.innerText,
+      currentBillAmount: body.findElements("CurrentBillAmt").first.innerText,
       total: (int.parse(
-                  body.findElements("PreviousBillAmount").first.innerText) +
-              int.parse(body.findElements("CurrentBillAmount").first.innerText))
+                  body.findElements("PreviousBillAmt").first.innerText) +
+              int.parse(body.findElements("CurrentBillAmt").first.innerText))
           .toString(),
       allowPayment: body.findElements("AllowPayment").first.innerText == "Y",
     );

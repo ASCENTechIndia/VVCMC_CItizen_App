@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:vvcmc_citizen_app/feature/auth_screen.dart';
 import 'package:vvcmc_citizen_app/feature/home/home_screen.dart';
 import 'package:vvcmc_citizen_app/feature/services_screen.dart';
 import 'package:vvcmc_citizen_app/feature/sos_screen.dart';
@@ -52,6 +53,8 @@ class MyApp extends StatelessWidget {
           builder: (_) {
             switch (settings.name) {
               case "/":
+                return const AuthScreen();
+              case "/main":
                 return const Main();
               case WebViewScreen.routeName:
                 final args = settings.arguments as Map;
@@ -285,8 +288,8 @@ class _MainState extends State<Main> with TickerProviderStateMixin {
         children: [
           HomeScreen(),
           ServicesScreen(),
-          UtilitiesScreen(),
-          SosScreen(),
+          const UtilitiesScreen(),
+          const SosScreen(),
         ],
       ),
     );

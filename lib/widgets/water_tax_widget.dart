@@ -18,8 +18,8 @@ class WaterTaxWidget extends StatefulWidget {
 class _WaterTaxWidgetState extends State<WaterTaxWidget> {
   final soapClient = getIt<SoapClient>();
   final formKey = GlobalKey<FormState>();
-  String zoneId = "";
-  String wardId = "";
+  int? zoneId;
+  int? wardId;
   final taxNoController = TextEditingController();
   List<Ward> wards = [];
 
@@ -49,12 +49,14 @@ class _WaterTaxWidgetState extends State<WaterTaxWidget> {
                         ),
                         const SizedBox(height: 10),
                         DropdownButtonFormField(
+                          value: zoneId,
                           onChanged: (zid) async {
                             if (zid == null) return;
                             List<Ward> data = await soapClient.getWards(zid);
                             setState(() {
                               wards = data;
-                              zoneId = zid.toString();
+                              wardId = null;
+                              zoneId = zid;
                             });
                           },
                           items: data
@@ -80,9 +82,10 @@ class _WaterTaxWidgetState extends State<WaterTaxWidget> {
                         ),
                         const SizedBox(height: 10),
                         DropdownButtonFormField(
+                          value: wardId,
                           onChanged: (wid) {
                             setState(() {
-                              wardId = wid?.toString() ?? "";
+                              wardId = wid;
                             });
                           },
                           items: wards

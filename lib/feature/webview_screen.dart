@@ -14,7 +14,7 @@ class WebViewScreen extends StatelessWidget {
     final colorScheme = Theme.of(context).colorScheme;
     return Scaffold(
       appBar: AppBar(
-        iconTheme: Theme.of(context).iconTheme,
+        iconTheme: const IconThemeData(color: Colors.white),
         backgroundColor: colorScheme.primary,
         title: Text(
           title,

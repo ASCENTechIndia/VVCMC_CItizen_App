@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:vvcmc_citizen_app/feature/home/temperature_grid_widget.dart';
 import 'package:vvcmc_citizen_app/feature/webview_screen.dart';
 import 'package:vvcmc_citizen_app/models/temperature.dart';
@@ -28,7 +29,7 @@ class HomeScreen extends StatelessWidget {
         if (navigatorKey.currentState!.canPop()) {
           navigatorKey.currentState!.pop();
         } else {
-          Navigator.of(context).pop();
+          SystemNavigator.pop();
         }
       },
       child: Navigator(
