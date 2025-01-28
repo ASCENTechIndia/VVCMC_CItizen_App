@@ -42,7 +42,7 @@ class HomeScreen extends StatelessWidget {
                 PropertyTaxWidget(),
             "view_your_tax/download_your_property_tax": (context) =>
                 const PropertyTaxReceiptWidget(),
-            "view_your_tax/view_your_water_tax": (context) => WaterTaxWidget(),
+            "view_your_tax/view_your_water_tax": (context) => const WaterTaxWidget(),
             "view_your_tax/download_your_water_tax": (context) =>
                 const WaterTaxReceiptWidget(),
             "register_your_complaint": (context) =>

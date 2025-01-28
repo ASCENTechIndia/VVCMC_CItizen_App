@@ -29,7 +29,8 @@ class OutlinedCardWidget extends StatelessWidget {
             List<Widget> data = [
               Text(
                 title,
-                style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                style:
+                    const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               ),
             ];
             for (String text in description) {
@@ -58,6 +59,7 @@ class OutlinedCardWidget extends StatelessWidget {
                                 child: const Text("Yes"),
                                 onPressed: () {
                                   launchUrl(Uri.parse("tel:+91$mobile"));
+                                  Navigator.pop(context);
                                 },
                               ),
                             ],

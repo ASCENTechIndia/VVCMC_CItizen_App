@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:vvcmc_citizen_app/widgets/card_widget.dart';
 
 class SosScreen extends StatelessWidget {
@@ -7,10 +8,26 @@ class SosScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     List cards = [
-      {"icon": "police.png", "text": "Police"},
-      {"icon": "ambulance.png", "text": "Ambulance"},
-      {"icon": "fire-brigade.png", "text": "Fire Brigade"},
-      {"icon": "emergency-number.png", "text": "Emergency Number"},
+      {
+        "icon": "police.png",
+        "text": "Police",
+        "contact": "100",
+      },
+      {
+        "icon": "ambulance.png",
+        "text": "Ambulance",
+        "contact": "108",
+      },
+      {
+        "icon": "fire-brigade.png",
+        "text": "Fire Brigade",
+        "contact": "101",
+      },
+      {
+        "icon": "emergency-number.png",
+        "text": "Emergency Number",
+        "contact": "+9118002334353",
+      },
     ];
     return SingleChildScrollView(
       child: SizedBox(
@@ -45,6 +62,34 @@ class SosScreen extends StatelessWidget {
                           (card) => Padding(
                             padding: const EdgeInsets.symmetric(vertical: 4.0),
                             child: CardWidget(
+                              onTap: () {
+                                showDialog(
+                                  context: context,
+                                  builder: (context) {
+                                    return AlertDialog(
+                                      title: const Text("Confirm Phone Call"),
+                                      content: Text(
+                                          "Do you wish to call ${card["text"]}?"),
+                                      actions: [
+                                        TextButton(
+                                          child: const Text("No"),
+                                          onPressed: () {
+                                            Navigator.pop(context);
+                                          },
+                                        ),
+                                        TextButton(
+                                          child: const Text("Yes"),
+                                          onPressed: () {
+                                            launchUrl(Uri.parse(
+                                                "tel:${card["contact"]}"));
+                                            Navigator.pop(context);
+                                          },
+                                        ),
+                                      ],
+                                    );
+                                  },
+                                );
+                              },
                               icon: Image.asset("assets/icons/${card["icon"]}"),
                               title: Text(
                                 card["text"],
