@@ -3,7 +3,7 @@ import 'package:vvcmc_citizen_app/feature/auth_screen.dart';
 import 'package:vvcmc_citizen_app/feature/home/home_screen.dart';
 import 'package:vvcmc_citizen_app/feature/services_screen.dart';
 import 'package:vvcmc_citizen_app/feature/sos_screen.dart';
-import 'package:vvcmc_citizen_app/feature/utilities_screen.dart';
+import 'package:vvcmc_citizen_app/feature/utilities/utilities_screen.dart';
 import 'package:vvcmc_citizen_app/feature/webview_screen.dart';
 import 'package:vvcmc_citizen_app/utils/get_it.dart' as sl;
 
@@ -288,7 +288,7 @@ class _MainState extends State<Main> with TickerProviderStateMixin {
         children: [
           HomeScreen(),
           ServicesScreen(),
-          const UtilitiesScreen(),
+          UtilitiesScreen(),
           const SosScreen(),
         ],
       ),

@@ -181,7 +181,6 @@ class _AuthScreenState extends State<AuthScreen> {
           padding: const EdgeInsets.all(16),
           child: Form(
             key: formKey,
-            autovalidateMode: AutovalidateMode.onUserInteraction,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [

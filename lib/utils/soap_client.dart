@@ -61,7 +61,15 @@ class SoapClient {
       "SOAPAction": soapAction + methodName,
       "Host": host,
     };
-/*
+    try {
+      print(soapEnvelope);
+      var response = await http.post(
+        Uri.parse(url),
+        headers: headers,
+        body: soapEnvelope,
+      );
+      print(response.body);
+      if (response.statusCode == 200) {
         String xmlString =
             response.body.replaceAll("&lt;", "<").replaceAll("&gt;", ">");
         XmlElement? responseHeader;
@@ -80,7 +88,16 @@ class SoapClient {
           responseDetails = XmlDocument.parse(details.group(0)!).rootElement;
         }
         return [responseHeader, responseDetails];
-*/
+      } else {
+        print("Error: ${response.statusCode}");
+        print("Error: ${response.body}");
+      }
+    } catch (e) {
+      print("Request failed: $e");
+      rethrow;
+    }
+    return [];
+/*
     try {
       print(soapEnvelope);
       var response = await http.post(
@@ -88,7 +105,7 @@ class SoapClient {
         headers: headers,
         body: soapEnvelope,
       );
-        print(response.body);
+      print(response.body);
       if (response.statusCode == 200) {
         String xmlString =
             response.body.replaceAll("&lt;", "<").replaceAll("&gt;", ">");
@@ -108,6 +125,7 @@ class SoapClient {
       rethrow;
     }
     return [];
+*/
   }
 
   Future<List<ElectedMember>> getElectedMembers() async {
@@ -466,6 +484,55 @@ class SoapClient {
     } catch (error) {
       print(error);
       rethrow;
+    }
+  }
+
+  Future<String?> submitCitizenFeedback(
+    String username,
+    String mobNo,
+    String area,
+    String landmark,
+    String address,
+    bool opt1,
+    bool opt2,
+    bool opt3,
+    bool opt4,
+    bool opt5,
+    bool opt6,
+    bool opt7,
+  ) async {
+    try {
+      final [header, body] = await post(
+        "CitizenFeedback",
+        {
+          "_Username": username,
+          "_mobno": mobNo,
+          "_area": area,
+          "_landmark": landmark,
+          "_address": address,
+          "_opt1": opt1 ? "Y" : "N",
+          "_opt1_Image": "",
+          "_opt2": opt2 ? "Y" : "N",
+          "_dustbintype": "0",
+          "_noofdustbin": "0",
+          "_opt3": opt3 ? "Y" : "N",
+          "_opt3comm": "",
+          "_opt4": opt4 ? "Y" : "N",
+          "_opt4comm": "",
+          "_opt5": opt5 ? "Y" : "N",
+          "_opt5comm": "",
+          "_opt6": opt6 ? "Y" : "N",
+          "_opt6comm": "",
+          "_opt7": opt7 ? "Y" : "N",
+          "_opt7comm": "",
+        },
+      );
+      if (header == null) return null;
+      print(header.findElements("SuccessCode").first.innerText);
+      return header.findElements("SuccessMessage").first.innerText;
+    } catch (error) {
+      print(error);
+      return null;
     }
   }
 }
