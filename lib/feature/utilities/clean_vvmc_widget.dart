@@ -18,7 +18,6 @@ class _CleanVVMCWidgetState extends State<CleanVVMCWidget> {
   final areaController = TextEditingController();
   final landmarkController = TextEditingController();
   final addressController = TextEditingController();
-  bool loading = false;
 
   Map questions = {
     "Do you find your area clean": "Yes",
@@ -34,7 +33,6 @@ class _CleanVVMCWidgetState extends State<CleanVVMCWidget> {
 
   @override
   Widget build(context) {
-    if (loading) return const Center(child: CircularProgressIndicator());
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
@@ -69,6 +67,9 @@ class _CleanVVMCWidgetState extends State<CleanVVMCWidget> {
                       validator: (value) {
                         if (value == null || value.isEmpty) {
                           return "Mobile No. is required";
+                        }
+                        if (!RegExp(r"^[0-9]{10}").hasMatch(value)) {
+                          return "Mobile is invalid";
                         }
                         return null;
                       },
@@ -184,11 +185,8 @@ class _CleanVVMCWidgetState extends State<CleanVVMCWidget> {
                     const SizedBox(height: 20),
                     OutlinedButton(
                       onPressed: () async {
-                        setState(() {
-                          loading = true;
-                        });
                         List options = questions.values.toList();
-                        String? message =
+                        bool success =
                             await soapClient.submitCitizenFeedback(
                           nameController.text,
                           mobileController.text,
@@ -204,10 +202,10 @@ class _CleanVVMCWidgetState extends State<CleanVVMCWidget> {
                           options[6] == "Yes",
                         );
                         if (context.mounted) {
-                          if (message != null) {
+                          if (success) {
                             ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
-                                content: Text(message),
+                              const SnackBar(
+                                content: Text("Feedback submitted successfully"),
                               ),
                             );
                             Navigator.of(context).pop();

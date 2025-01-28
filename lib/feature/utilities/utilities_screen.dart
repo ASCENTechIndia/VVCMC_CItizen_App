@@ -40,6 +40,8 @@ class UtilitiesScreen extends StatelessWidget {
             "download_your_water_tax": (context) =>
                 const WaterTaxReceiptWidget(),
             "vvmt": buildVVMT,
+            "download_property_tax_receipt": (context) => const PropertyTaxReceiptWidget(),
+            "download_water_tax_receipt": (context) => const WaterTaxReceiptWidget(),
           };
           var builder = routes[settings.name];
           builder ??= (context) => const Center(child: Text("No route"));
@@ -168,7 +170,7 @@ class UtilitiesScreen extends StatelessWidget {
           "icon": "water-receipt.png",
           "text": "Download Water Tax Receipt",
           "onTap": () => Navigator.of(context)
-              .pushNamed("download_property_water_receipt"),
+              .pushNamed("download_water_tax_receipt"),
         },
       ],
     ];

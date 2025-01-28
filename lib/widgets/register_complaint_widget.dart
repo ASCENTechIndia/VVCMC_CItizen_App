@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:location/location.dart';
 import 'package:vvcmc_citizen_app/models/complaint_type.dart';
 import 'package:vvcmc_citizen_app/models/department.dart';
 import 'package:vvcmc_citizen_app/models/prabhag.dart';
 import 'package:vvcmc_citizen_app/utils/get_it.dart';
 import 'package:vvcmc_citizen_app/utils/soap_client.dart';
 import 'package:vvcmc_citizen_app/widgets/header_widget.dart';
+import 'dart:io';
 
 class RegisterComplaintWidget extends StatefulWidget {
   const RegisterComplaintWidget({
@@ -25,10 +28,18 @@ class _RegisterComplaintWidgetState extends State<RegisterComplaintWidget> {
   final addressController = TextEditingController();
   final subjectController = TextEditingController();
   final detailsController = TextEditingController();
+  final location = Location();
+  File? imgFile;
   int? prabhagId;
   int? departmentId;
   int? complaintId;
   List<ComplaintType> complaintTypes = [];
+
+  @override
+  void initState() {
+    requestLocation();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -53,6 +64,12 @@ class _RegisterComplaintWidgetState extends State<RegisterComplaintWidget> {
                         crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: [
                           DropdownButtonFormField(
+                            validator: (value) {
+                              if (value == null) {
+                                return "Prabhag is required";
+                              }
+                              return null;
+                            },
                             value: prabhagId,
                             onChanged: (pid) {
                               if (pid == null) return;
@@ -77,6 +94,12 @@ class _RegisterComplaintWidgetState extends State<RegisterComplaintWidget> {
                           ),
                           const SizedBox(height: 10),
                           DropdownButtonFormField(
+                            validator: (value) {
+                              if (value == null) {
+                                return "Department is required";
+                              }
+                              return null;
+                            },
                             value: departmentId,
                             onChanged: (did) async {
                               if (did == null) return;
@@ -105,6 +128,12 @@ class _RegisterComplaintWidgetState extends State<RegisterComplaintWidget> {
                           ),
                           const SizedBox(height: 10),
                           DropdownButtonFormField(
+                            validator: (value) {
+                              if (value == null) {
+                                return "Complaint type is required";
+                              }
+                              return null;
+                            },
                             value: complaintId,
                             onChanged: (cid) {
                               if (cid == null) return;
@@ -137,6 +166,12 @@ class _RegisterComplaintWidgetState extends State<RegisterComplaintWidget> {
                           ),
                           const SizedBox(height: 10),
                           TextFormField(
+                            validator: (value) {
+                              if (value == null || value.isEmpty) {
+                                return "Email is required";
+                              }
+                              return null;
+                            },
                             controller: nameController,
                             decoration: const InputDecoration(
                               hintText: "Name",
@@ -147,6 +182,15 @@ class _RegisterComplaintWidgetState extends State<RegisterComplaintWidget> {
                           ),
                           const SizedBox(height: 10),
                           TextFormField(
+                            validator: (value) {
+                              if (value == null || value.isEmpty) {
+                                return "Mobile is required";
+                              }
+                              if (!RegExp(r"^[0-9]{10}").hasMatch(value)) {
+                                return "Mobile is invalid";
+                              }
+                              return null;
+                            },
                             controller: mobileNoController,
                             decoration: const InputDecoration(
                               hintText: "Mobile No.",
@@ -157,6 +201,17 @@ class _RegisterComplaintWidgetState extends State<RegisterComplaintWidget> {
                           ),
                           const SizedBox(height: 10),
                           TextFormField(
+                            validator: (value) {
+                              if (value == null || value.isEmpty) {
+                                return "Email is required";
+                              }
+                              if (!RegExp(
+                                      r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
+                                  .hasMatch(value)) {
+                                return "Email is invalid";
+                              }
+                              return null;
+                            },
                             controller: emailController,
                             decoration: const InputDecoration(
                               hintText: "Email",
@@ -167,6 +222,12 @@ class _RegisterComplaintWidgetState extends State<RegisterComplaintWidget> {
                           ),
                           const SizedBox(height: 10),
                           TextFormField(
+                            validator: (value) {
+                              if (value == null || value.isEmpty) {
+                                return "Complainant's address is required";
+                              }
+                              return null;
+                            },
                             controller: addressController,
                             decoration: const InputDecoration(
                               hintText: "Complainant's Address",
@@ -177,6 +238,12 @@ class _RegisterComplaintWidgetState extends State<RegisterComplaintWidget> {
                           ),
                           const SizedBox(height: 10),
                           TextFormField(
+                            validator: (value) {
+                              if (value == null || value.isEmpty) {
+                                return "Complaint subject is required";
+                              }
+                              return null;
+                            },
                             controller: subjectController,
                             decoration: const InputDecoration(
                               hintText: "Complaint Subject",
@@ -187,6 +254,12 @@ class _RegisterComplaintWidgetState extends State<RegisterComplaintWidget> {
                           ),
                           const SizedBox(height: 10),
                           TextFormField(
+                            validator: (value) {
+                              if (value == null || value.isEmpty) {
+                                return "Complaint details are required";
+                              }
+                              return null;
+                            },
                             controller: detailsController,
                             decoration: const InputDecoration(
                               hintText:
@@ -202,13 +275,60 @@ class _RegisterComplaintWidgetState extends State<RegisterComplaintWidget> {
                               CircleAvatar(
                                 child: IconButton(
                                   icon: const Icon(Icons.camera_alt_outlined),
-                                  onPressed: () {},
+                                  onPressed: pickImage,
                                 ),
                               ),
                               const SizedBox(width: 10),
                               Expanded(
                                 child: OutlinedButton(
-                                  onPressed: () {},
+                                  onPressed: () async {
+                                    if (!formKey.currentState!.validate()) return;
+                                    String? location = await getLocation();
+                                    if (location == null) {
+                                      if (context.mounted) {
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(
+                                          const SnackBar(
+                                            content: Text(
+                                                "Unable to fetch location"),
+                                          ),
+                                        );
+                                        return;
+                                      }
+                                    }
+                                    bool success =
+                                        await soapClient.registerComplaint(
+                                      departmentId.toString(),
+                                      nameController.text,
+                                      mobileNoController.text,
+                                      detailsController.text,
+                                      imgFile,
+                                      emailController.text,
+                                      location!,
+                                      prabhagId.toString(),
+                                      addressController.text,
+                                      subjectController.text,
+                                    );
+                                    if (context.mounted) {
+                                      if (success) {
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(
+                                          const SnackBar(
+                                            content: Text("Complaint registered sucessfully"),
+                                          ),
+                                        );
+                                        Navigator.of(context).pop();
+                                      } else {
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(
+                                          const SnackBar(
+                                            content:
+                                                Text("Something went wrong"),
+                                          ),
+                                        );
+                                      }
+                                    }
+                                  },
                                   style: OutlinedButton.styleFrom(
                                     side: BorderSide(
                                         color: Theme.of(context).primaryColor),
@@ -247,5 +367,42 @@ class _RegisterComplaintWidgetState extends State<RegisterComplaintWidget> {
         ),
       ],
     );
+  }
+
+  void pickImage() async {
+    final ImagePicker picker = ImagePicker();
+    final XFile? img = await picker.pickImage(
+      source: ImageSource.camera,
+    );
+    if (img == null) return;
+    setState(() {
+      imgFile = File(img.path);
+    });
+  }
+
+  Future<bool> requestLocation() async {
+    var serviceEnabled = await location.serviceEnabled();
+    if (!serviceEnabled) {
+      serviceEnabled = await location.requestService();
+      if (!serviceEnabled) {
+        return false;
+      }
+    }
+    var permissionGranted = await location.hasPermission();
+    if (permissionGranted == PermissionStatus.denied) {
+      permissionGranted = await location.requestPermission();
+      if (permissionGranted != PermissionStatus.granted) {
+        return false;
+      }
+    }
+    return true;
+  }
+
+  Future<String?> getLocation() async {
+    if (await requestLocation()) {
+      var currentLocation = await location.getLocation();
+      return '${currentLocation.latitude!},${currentLocation.longitude!}';
+    }
+    return null;
   }
 }

@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:http/http.dart' as http;
 import 'package:vvcmc_citizen_app/models/ambulance.dart';
@@ -487,7 +488,7 @@ class SoapClient {
     }
   }
 
-  Future<String?> submitCitizenFeedback(
+  Future<bool> submitCitizenFeedback(
     String username,
     String mobNo,
     String area,
@@ -527,12 +528,52 @@ class SoapClient {
           "_opt7comm": "",
         },
       );
-      if (header == null) return null;
+      if (header == null) return false;
       print(header.findElements("SuccessCode").first.innerText);
-      return header.findElements("SuccessMessage").first.innerText;
+      return header.findElements("SuccessCode").first.innerText == "9999";
     } catch (error) {
       print(error);
-      return null;
+      return false;
+    }
+  }
+
+  Future<bool> registerComplaint(
+    String departmentId,
+    String customerName,
+    String mobileNo,
+    String complaint,
+    File? image,
+    String email,
+    String location,
+    String prabhagId,
+    String address,
+    String subject,
+  ) async {
+    try {
+      String encodedImage = "";
+      if (image != null) encodedImage = base64Encode(await image.readAsBytes());
+      final [header, body] = await post(
+        "RegisterComplaint_subject",
+        {
+          "DepartmentId": departmentId,
+          "ComplaintSubTypeId": "-1",
+          "CustomerName": customerName,
+          "MobileNo": mobileNo,
+          "Complaint": complaint,
+          "Image": encodedImage,
+          "Email": email,
+          "Location": location,
+          "PrabhagID": prabhagId,
+          "Address": address,
+          "subject": subject,
+        },
+      );
+      if (header == null) return false;
+      print(header.findElements("SuccessCode").first.innerText);
+      return header.findElements("SuccessCode").first.innerText == "9999";
+    } catch (error) {
+      print(error);
+      return false;
     }
   }
 }

@@ -150,7 +150,6 @@ class _AuthScreenState extends State<AuthScreen> {
               const SizedBox(height: 10),
               OutlinedButton(
                 onPressed: () async {
-                  await Future.delayed(const Duration(seconds: 2));
                   setState(() {
                     Navigator.of(context, rootNavigator: true)
                         .pushReplacementNamed("/main");
