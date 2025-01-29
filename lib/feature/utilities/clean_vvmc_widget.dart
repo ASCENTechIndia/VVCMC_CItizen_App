@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:vvcmc_citizen_app/utils/get_it.dart';
 import 'package:vvcmc_citizen_app/utils/soap_client.dart';
 import 'package:vvcmc_citizen_app/widgets/header_widget.dart';
@@ -12,6 +13,7 @@ class CleanVVMCWidget extends StatefulWidget {
 
 class _CleanVVMCWidgetState extends State<CleanVVMCWidget> {
   final soapClient = getIt<SoapClient>();
+  final prefs = getIt<SharedPreferences>();
   final formKey = GlobalKey<FormState>();
   final nameController = TextEditingController();
   final mobileController = TextEditingController();
@@ -30,6 +32,14 @@ class _CleanVVMCWidgetState extends State<CleanVVMCWidget> {
     "Does your household have a toilet": "Yes",
     "Are there any unattended garbage heaps in your area": "Yes",
   };
+
+  @override
+  void initState() {
+    nameController.text =
+        "${prefs.getString("firstName")!} ${prefs.getString("lastName")!}";
+    mobileController.text = prefs.getString("mobile")!;
+    super.initState();
+  }
 
   @override
   Widget build(context) {
@@ -186,8 +196,7 @@ class _CleanVVMCWidgetState extends State<CleanVVMCWidget> {
                     OutlinedButton(
                       onPressed: () async {
                         List options = questions.values.toList();
-                        bool success =
-                            await soapClient.submitCitizenFeedback(
+                        bool success = await soapClient.submitCitizenFeedback(
                           nameController.text,
                           mobileController.text,
                           areaController.text,
@@ -205,7 +214,8 @@ class _CleanVVMCWidgetState extends State<CleanVVMCWidget> {
                           if (success) {
                             ScaffoldMessenger.of(context).showSnackBar(
                               const SnackBar(
-                                content: Text("Feedback submitted successfully"),
+                                content:
+                                    Text("Feedback submitted successfully"),
                               ),
                             );
                             Navigator.of(context).pop();

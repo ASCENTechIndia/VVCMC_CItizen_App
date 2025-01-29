@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:vvcmc_citizen_app/widgets/webview_widget.dart';
 
 class WebViewScreen extends StatelessWidget {
-  static const String routeName = "/web_view";
-
   final String url;
   final String title;
 

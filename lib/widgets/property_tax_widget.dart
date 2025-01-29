@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:vvcmc_citizen_app/models/property_tax.dart';
 import 'package:vvcmc_citizen_app/models/property_tax_details.dart';
 import 'package:vvcmc_citizen_app/utils/get_it.dart';
@@ -10,9 +11,14 @@ class PropertyTaxWidget extends StatelessWidget {
     super.key,
   });
 
-  final SoapClient soapClient = getIt<SoapClient>();
-  final GlobalKey<FormState> formKey = GlobalKey();
-  final TextEditingController propertyNoController = TextEditingController();
+  final soapClient = getIt<SoapClient>();
+  final prefs = getIt<SharedPreferences>();
+  final formKey = GlobalKey<FormState>();
+  final detailsFormKey = GlobalKey<FormState>();
+  final propertyNoController = TextEditingController();
+  final mobileController = TextEditingController();
+  final emailController = TextEditingController();
+  final amountController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -89,6 +95,8 @@ class PropertyTaxWidget extends StatelessWidget {
               String propertyNo = propertyNoController.text;
               if (snapshot.hasData) {
                 PropertyTaxDetails data = snapshot.data!;
+                mobileController.text = prefs.getString("mobile")!;
+                emailController.text = prefs.getString("email")!;
                 if (data.taxes.isEmpty || data.taxes[0].isEmpty) {
                   WidgetsBinding.instance.addPostFrameCallback(
                     (_) => ScaffoldMessenger.of(context).showSnackBar(
@@ -295,9 +303,21 @@ class PropertyTaxWidget extends StatelessWidget {
                         ),
                         if (data.allowPayment)
                           Form(
+                            key: detailsFormKey,
                             child: Column(
                               children: [
                                 TextFormField(
+                                  validator: (value) {
+                                    if (value == null || value.isEmpty) {
+                                      return "Mobile is required";
+                                    }
+                                    if (!RegExp(r"^[0-9]{10}")
+                                        .hasMatch(value)) {
+                                      return "Mobile is invalid";
+                                    }
+                                    return null;
+                                  },
+                                  controller: mobileController,
                                   decoration: const InputDecoration(
                                     hintText: "Mobile No.",
                                     border: OutlineInputBorder(
@@ -308,6 +328,18 @@ class PropertyTaxWidget extends StatelessWidget {
                                 ),
                                 const SizedBox(height: 10),
                                 TextFormField(
+                                  validator: (value) {
+                                    if (value == null || value.isEmpty) {
+                                      return "Email is required";
+                                    }
+                                    if (!RegExp(
+                                            r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
+                                        .hasMatch(value)) {
+                                      return "Email is invalid";
+                                    }
+                                    return null;
+                                  },
+                                  controller: emailController,
                                   decoration: const InputDecoration(
                                     hintText: "Email",
                                     border: OutlineInputBorder(
@@ -318,6 +350,15 @@ class PropertyTaxWidget extends StatelessWidget {
                                 ),
                                 const SizedBox(height: 10),
                                 TextFormField(
+                                  validator: (value) {
+                                    if (value == null || value.isEmpty) {
+                                      return "Amount is required";
+                                    }
+                                    if (!RegExp(r"^\d+$").hasMatch(value)) {
+                                      return "Amount is invalid";
+                                    }
+                                    return null;
+                                  },
                                   decoration: const InputDecoration(
                                     hintText: "Amount to Pay",
                                     border: OutlineInputBorder(
@@ -331,7 +372,9 @@ class PropertyTaxWidget extends StatelessWidget {
                           ),
                         const SizedBox(height: 10),
                         OutlinedButton(
-                          onPressed: () {},
+                          onPressed: () {
+                            if (detailsFormKey.currentState!.validate()) {}
+                          },
                           style: OutlinedButton.styleFrom(
                             side: BorderSide(
                                 color: Theme.of(context).primaryColor),

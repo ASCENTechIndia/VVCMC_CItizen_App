@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:vvcmc_citizen_app/utils/get_it.dart';
 import 'package:vvcmc_citizen_app/utils/soap_client.dart';
 import 'package:vvcmc_citizen_app/widgets/header_widget.dart';
@@ -13,6 +14,7 @@ class AuthScreen extends StatefulWidget {
 
 class _AuthScreenState extends State<AuthScreen> {
   final soapClient = getIt<SoapClient>();
+  final prefs = getIt<SharedPreferences>();
   final formKey = GlobalKey<FormState>();
   final navigatorKey = GlobalKey<NavigatorState>();
   final firstNameController = TextEditingController();
@@ -95,11 +97,34 @@ class _AuthScreenState extends State<AuthScreen> {
                   setState(() {
                     loading = true;
                   });
-                  await Future.delayed(const Duration(seconds: 2));
+                  bool result = await soapClient.verifyOTP(
+                    mobileController.text,
+                    otpController.text,
+                  );
+                  if (result) {
+                    final prefs = await SharedPreferences.getInstance();
+                    await Future.wait([
+                      prefs.setString("firstName", firstNameController.text),
+                      prefs.setString("lastName", lastNameController.text),
+                      prefs.setString("mobile", mobileController.text),
+                      prefs.setString("email", emailController.text),
+                      prefs.setBool("loggedIn", true),
+                    ]);
+                  }
                   setState(() {
-                    Navigator.of(context, rootNavigator: true)
-                        .pushReplacementNamed("/main");
+                    loading = false;
                   });
+                  if (context.mounted) {
+                    if (result) {
+                      Navigator.of(context, rootNavigator: true).pushReplacementNamed("/main");
+                    } else {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text("Invalid OTP"),
+                        ),
+                      );
+                    }
+                  }
                 },
                 style: OutlinedButton.styleFrom(
                   side: BorderSide(color: Theme.of(context).primaryColor),
@@ -150,10 +175,16 @@ class _AuthScreenState extends State<AuthScreen> {
               const SizedBox(height: 10),
               OutlinedButton(
                 onPressed: () async {
-                  setState(() {
-                    Navigator.of(context, rootNavigator: true)
-                        .pushReplacementNamed("/main");
-                  });
+                  await Future.wait([
+                    prefs.setString("firstName", ""),
+                    prefs.setString("lastName", ""),
+                    prefs.setString("mobile", ""),
+                    prefs.setString("email", ""),
+                  ]);
+                  if (context.mounted) {
+                    Navigator.of(context, rootNavigator: true).pushReplacementNamed("/main");
+                    // Navigator.of(context).pushReplacementNamed("otp");
+                  }
                 },
                 style: OutlinedButton.styleFrom(
                   side: BorderSide(color: Theme.of(context).primaryColor),
@@ -312,9 +343,18 @@ class _AuthScreenState extends State<AuthScreen> {
                         aadharController.text,
                         bloodGroup ?? "",
                       );
-                      if (result) {
-                        if (context.mounted) {
+                      setState(() {
+                        loading = false;
+                      });
+                      if (context.mounted) {
+                        if (result) {
                           Navigator.of(context).pushReplacementNamed("otp");
+                        } else {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text("Something went wrong"),
+                            ),
+                          );
                         }
                       }
                     }

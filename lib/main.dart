@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:vvcmc_citizen_app/feature/auth_screen.dart';
 import 'package:vvcmc_citizen_app/feature/home/home_screen.dart';
+import 'package:vvcmc_citizen_app/feature/notifications_screen.dart';
 import 'package:vvcmc_citizen_app/feature/services_screen.dart';
 import 'package:vvcmc_citizen_app/feature/sos_screen.dart';
 import 'package:vvcmc_citizen_app/feature/utilities/utilities_screen.dart';
@@ -8,6 +10,7 @@ import 'package:vvcmc_citizen_app/feature/webview_screen.dart';
 import 'package:vvcmc_citizen_app/utils/get_it.dart' as sl;
 
 void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
   await sl.init();
   runApp(const MyApp());
 }
@@ -18,6 +21,7 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+    final prefs = sl.getIt<SharedPreferences>();
     return MaterialApp(
       title: 'VVMC Citizen App',
       theme: ThemeData(
@@ -53,10 +57,14 @@ class MyApp extends StatelessWidget {
           builder: (_) {
             switch (settings.name) {
               case "/":
-                return const AuthScreen();
+                return prefs.getBool("loggedIn") ?? false
+                    ? const Main()
+                    : const AuthScreen();
               case "/main":
                 return const Main();
-              case WebViewScreen.routeName:
+              case "/notifications":
+                return const NotificationsScreen();
+              case "/web":
                 final args = settings.arguments as Map;
                 return WebViewScreen(
                   url: args["url"],
@@ -159,7 +167,9 @@ class _MainState extends State<Main> with TickerProviderStateMixin {
                   customBorder: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(20),
                   ),
-                  onTap: () {},
+                  onTap: () {
+                    Navigator.of(context).pushNamed("/notifications");
+                  },
                   child: Padding(
                     padding: const EdgeInsets.all(4.0),
                     child: Image.asset("assets/icons/bell.png"),

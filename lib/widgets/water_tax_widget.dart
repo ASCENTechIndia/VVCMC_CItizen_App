@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:vvcmc_citizen_app/models/ward.dart';
 import 'package:vvcmc_citizen_app/models/water_tax_details.dart';
 import 'package:vvcmc_citizen_app/models/zone.dart';
@@ -17,10 +18,15 @@ class WaterTaxWidget extends StatefulWidget {
 
 class _WaterTaxWidgetState extends State<WaterTaxWidget> {
   final soapClient = getIt<SoapClient>();
+  final prefs = getIt<SharedPreferences>();
   final formKey = GlobalKey<FormState>();
+  final detailsFormKey = GlobalKey<FormState>();
+  final mobileController = TextEditingController();
+  final emailController = TextEditingController();
+  final taxNoController = TextEditingController();
+  final amountController = TextEditingController();
   int? zoneId;
   int? wardId;
-  final taxNoController = TextEditingController();
   List<Ward> wards = [];
 
   @override
@@ -30,22 +36,25 @@ class _WaterTaxWidgetState extends State<WaterTaxWidget> {
       children: [
         const HeaderWidget(title: "Water Tax"),
         Expanded(
-          child: FutureBuilder(
-            future: soapClient.getZones(),
-            builder: (context, snapshot) {
-              if (snapshot.hasData) {
-                List<Zone> data = snapshot.data!;
-                return Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Form(
-                    key: formKey,
+          child: Form(
+            key: formKey,
+            child: FutureBuilder(
+              future: soapClient.getZones(),
+              builder: (context, snapshot) {
+                if (snapshot.hasData) {
+                  List<Zone> data = snapshot.data!;
+                  print(data);
+                  return Padding(
+                    padding: const EdgeInsets.all(16.0),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
                         const Text(
                           "Zone",
                           style: TextStyle(
-                              fontSize: 20, fontWeight: FontWeight.bold),
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
                         const SizedBox(height: 10),
                         DropdownButtonFormField(
@@ -135,14 +144,14 @@ class _WaterTaxWidgetState extends State<WaterTaxWidget> {
                         ),
                       ],
                     ),
-                  ),
-                );
-              }
-              if (snapshot.hasError) {
-                return const Center(child: Text("Failed to load data"));
-              }
-              return const Center(child: CircularProgressIndicator());
-            },
+                  );
+                }
+                if (snapshot.hasError) {
+                  return const Center(child: Text("Failed to load data"));
+                }
+                return const Center(child: CircularProgressIndicator());
+              },
+            ),
           ),
         ),
       ],
@@ -167,6 +176,9 @@ class _WaterTaxWidgetState extends State<WaterTaxWidget> {
               );
               if (snapshot.hasData) {
                 WaterTaxDetails data = snapshot.data!;
+                mobileController.text = prefs.getString("mobile")!;
+                emailController.text = prefs.getString("email")!;
+                amountController.text = data.total;
                 return SingleChildScrollView(
                   child: Padding(
                     padding: const EdgeInsets.all(16.0),
@@ -304,9 +316,11 @@ class _WaterTaxWidgetState extends State<WaterTaxWidget> {
                         ),
                         if (data.allowPayment)
                           Form(
+                            key: detailsFormKey,
                             child: Column(
                               children: [
                                 TextFormField(
+                                  controller: mobileController,
                                   decoration: const InputDecoration(
                                     hintText: "Mobile No.",
                                     border: OutlineInputBorder(
@@ -317,6 +331,18 @@ class _WaterTaxWidgetState extends State<WaterTaxWidget> {
                                 ),
                                 const SizedBox(height: 10),
                                 TextFormField(
+                                  validator: (value) {
+                                    if (value == null || value.isEmpty) {
+                                      return "Email is required";
+                                    }
+                                    if (!RegExp(
+                                            r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
+                                        .hasMatch(value)) {
+                                      return "Email is invalid";
+                                    }
+                                    return null;
+                                  },
+                                  controller: emailController,
                                   decoration: const InputDecoration(
                                     hintText: "Email",
                                     border: OutlineInputBorder(
@@ -327,6 +353,16 @@ class _WaterTaxWidgetState extends State<WaterTaxWidget> {
                                 ),
                                 const SizedBox(height: 10),
                                 TextFormField(
+                                  validator: (value) {
+                                    if (value == null || value.isEmpty) {
+                                      return "Amount is required";
+                                    }
+                                    if (!RegExp(r"^\d+$").hasMatch(value)) {
+                                      return "Amount is invalid";
+                                    }
+                                    return null;
+                                  },
+                                  controller: amountController,
                                   decoration: const InputDecoration(
                                     hintText: "Amount to Pay",
                                     border: OutlineInputBorder(
@@ -340,7 +376,9 @@ class _WaterTaxWidgetState extends State<WaterTaxWidget> {
                           ),
                         const SizedBox(height: 10),
                         OutlinedButton(
-                          onPressed: () {},
+                          onPressed: () {
+                            if (formKey.currentState!.validate()) {}
+                          },
                           style: OutlinedButton.styleFrom(
                             side: BorderSide(
                                 color: Theme.of(context).primaryColor),

@@ -488,6 +488,26 @@ class SoapClient {
     }
   }
 
+  Future<bool> verifyOTP(
+    String mobile,
+    String otp,
+  ) async {
+    try {
+      final [header, body] = await post(
+        "VerifyOTP",
+        {
+          "MobileNo": mobile,
+          "OTP": otp,
+        },
+      );
+      if (header == null) return false;
+      return header.findElements("SuccessCode").first.innerText == "9999";
+    } catch (error) {
+      print(error);
+      rethrow;
+    }
+  }
+
   Future<bool> submitCitizenFeedback(
     String username,
     String mobNo,
@@ -574,6 +594,38 @@ class SoapClient {
     } catch (error) {
       print(error);
       return false;
+    }
+  }
+
+  Future<String?> getSession(
+    String mobile,
+    String email,
+  ) async {
+    try {
+      final [header, body] = await post(
+        "GetVclickSessionID",
+        {
+          "MobileNo": mobile,
+          "Email": email,
+        },
+      );
+      if (body == null) return null;
+      return body.findElements("UniqueId").first.innerText;
+    } catch (error) {
+      print(error);
+      return null;
+    }
+  }
+
+  Future<List<String>> getNotifications() async {
+    try {
+      final [header, body] = await post("GetVclicknotification", {});
+      if (header == null) return [];
+      print(header.findElements("SuccessMessage").first.innerText.split("#"));
+      return header.findElements("SuccessMessage").first.innerText.split("#");
+    } catch (error) {
+      print(error);
+      rethrow;
     }
   }
 }

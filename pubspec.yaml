@@ -43,6 +43,7 @@ dependencies:
   intl: ^0.20.1
   image_picker: ^1.1.2
   location: ^8.0.0
+  shared_preferences: ^2.4.0
 
 dev_dependencies:
   flutter_test:

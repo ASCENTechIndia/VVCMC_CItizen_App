@@ -217,7 +217,7 @@ class HomeScreen extends StatelessWidget {
           "icon": "news.png",
           "text": "News Update",
           "onTap": () => Navigator.of(context, rootNavigator: true).pushNamed(
-                WebViewScreen.routeName,
+                "/web",
                 arguments: {
                   "url": "https://vvcmc.in/vaccination-press-note",
                   "title": "News Update",
@@ -228,7 +228,7 @@ class HomeScreen extends StatelessWidget {
           "icon": "vote.png",
           "text": "Election",
           "onTap": () => Navigator.of(context, rootNavigator: true).pushNamed(
-                WebViewScreen.routeName,
+                "/web",
                 arguments: {
                   "url": "https://vvcmc.in/election-page",
                   "title": "Election",
@@ -246,7 +246,7 @@ class HomeScreen extends StatelessWidget {
           "icon": "scheme.png",
           "text": "Scheme",
           "onTap": () => Navigator.of(context, rootNavigator: true).pushNamed(
-                WebViewScreen.routeName,
+                "/web",
                 arguments: {
                   "url": "https://vvcmc.in/scheme",
                   "title": "Scheme",
@@ -326,7 +326,7 @@ class HomeScreen extends StatelessWidget {
                   ),
                   onTap: () {
                     Navigator.of(context, rootNavigator: true).pushNamed(
-                      WebViewScreen.routeName,
+                      "/web",
                       arguments: {
                         "url": "https://vvcmc.in/important-contact",
                         "title": "Disaster Management",

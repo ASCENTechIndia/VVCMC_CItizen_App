@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:vvcmc_citizen_app/feature/utilities/clean_vvmc_widget.dart';
 import 'package:vvcmc_citizen_app/feature/webview_screen.dart';
+import 'package:vvcmc_citizen_app/utils/get_it.dart';
+import 'package:vvcmc_citizen_app/utils/soap_client.dart';
 import 'package:vvcmc_citizen_app/widgets/card_widget.dart';
 import 'package:vvcmc_citizen_app/widgets/property_tax_receipt_widget.dart';
 import 'package:vvcmc_citizen_app/widgets/property_tax_widget.dart';
@@ -11,6 +14,8 @@ import 'package:vvcmc_citizen_app/widgets/water_tax_widget.dart';
 class UtilitiesScreen extends StatelessWidget {
   UtilitiesScreen({super.key});
 
+  final soapClient = getIt<SoapClient>();
+  final prefs = getIt<SharedPreferences>();
   final navigatorKey = GlobalKey<NavigatorState>();
 
   @override
@@ -40,8 +45,10 @@ class UtilitiesScreen extends StatelessWidget {
             "download_your_water_tax": (context) =>
                 const WaterTaxReceiptWidget(),
             "vvmt": buildVVMT,
-            "download_property_tax_receipt": (context) => const PropertyTaxReceiptWidget(),
-            "download_water_tax_receipt": (context) => const WaterTaxReceiptWidget(),
+            "download_property_tax_receipt": (context) =>
+                const PropertyTaxReceiptWidget(),
+            "download_water_tax_receipt": (context) =>
+                const WaterTaxReceiptWidget(),
           };
           var builder = routes[settings.name];
           builder ??= (context) => const Center(child: Text("No route"));
@@ -127,7 +134,7 @@ class UtilitiesScreen extends StatelessWidget {
           "icon": "news.png",
           "text": "News Update",
           "onTap": () => Navigator.of(context, rootNavigator: true).pushNamed(
-                WebViewScreen.routeName,
+                "/web",
                 arguments: {
                   "url": "https://vvcmc.in/vaccination-press-note",
                   "title": "News Update",
@@ -149,14 +156,27 @@ class UtilitiesScreen extends StatelessWidget {
         {
           "icon": "tax.png",
           "text": "Tax Calculator",
-          "onTap": () => Navigator.of(context, rootNavigator: true).pushNamed(
-                WebViewScreen.routeName,
-                arguments: {
-                  "url":
-                      "https://onlinevvcmc.in/VVCMCCitizenDashboard/FrmTaxCalculatorWeb.aspx",
-                  "title": "Tax Calculator",
-                },
-              ),
+          "onTap": () async {
+            String? session = await soapClient.getSession(
+              prefs.getString("mobile")!,
+              prefs.getString("email")!,
+            );
+            if (session == null) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(
+                  content: Text("Failed to get session"),
+                ),
+              );
+            }
+            Navigator.of(context, rootNavigator: true).pushNamed(
+              "/web",
+              arguments: {
+                "url":
+                    "https://onlinevvcmc.in/VVCMCCitizenDashboard/FrmTaxCalculatorWeb.aspx?@=${prefs.getString("mobile")!}~${prefs.getString("email")!}~$session",
+                "title": "Tax Calculator",
+              },
+            );
+          },
         },
       ],
       [
@@ -169,8 +189,8 @@ class UtilitiesScreen extends StatelessWidget {
         {
           "icon": "water-receipt.png",
           "text": "Download Water Tax Receipt",
-          "onTap": () => Navigator.of(context)
-              .pushNamed("download_water_tax_receipt"),
+          "onTap": () =>
+              Navigator.of(context).pushNamed("download_water_tax_receipt"),
         },
       ],
     ];

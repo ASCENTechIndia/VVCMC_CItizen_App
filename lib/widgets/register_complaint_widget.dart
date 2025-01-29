@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:location/location.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:vvcmc_citizen_app/models/complaint_type.dart';
 import 'package:vvcmc_citizen_app/models/department.dart';
 import 'package:vvcmc_citizen_app/models/prabhag.dart';
@@ -21,14 +22,16 @@ class RegisterComplaintWidget extends StatefulWidget {
 
 class _RegisterComplaintWidgetState extends State<RegisterComplaintWidget> {
   final soapClient = getIt<SoapClient>();
+  final prefs = getIt<SharedPreferences>();
   final formKey = GlobalKey<FormState>();
   final nameController = TextEditingController();
-  final mobileNoController = TextEditingController();
+  final mobileController = TextEditingController();
   final emailController = TextEditingController();
   final addressController = TextEditingController();
   final subjectController = TextEditingController();
   final detailsController = TextEditingController();
   final location = Location();
+
   File? imgFile;
   int? prabhagId;
   int? departmentId;
@@ -37,6 +40,10 @@ class _RegisterComplaintWidgetState extends State<RegisterComplaintWidget> {
 
   @override
   void initState() {
+    nameController.text =
+        "${prefs.getString("firstName")!} ${prefs.getString("lastName")!}";
+    mobileController.text = prefs.getString("mobile")!;
+    emailController.text = prefs.getString("email")!;
     requestLocation();
     super.initState();
   }
@@ -168,7 +175,7 @@ class _RegisterComplaintWidgetState extends State<RegisterComplaintWidget> {
                           TextFormField(
                             validator: (value) {
                               if (value == null || value.isEmpty) {
-                                return "Email is required";
+                                return "Name is required";
                               }
                               return null;
                             },
@@ -191,7 +198,7 @@ class _RegisterComplaintWidgetState extends State<RegisterComplaintWidget> {
                               }
                               return null;
                             },
-                            controller: mobileNoController,
+                            controller: mobileController,
                             decoration: const InputDecoration(
                               hintText: "Mobile No.",
                               border: OutlineInputBorder(
@@ -282,7 +289,9 @@ class _RegisterComplaintWidgetState extends State<RegisterComplaintWidget> {
                               Expanded(
                                 child: OutlinedButton(
                                   onPressed: () async {
-                                    if (!formKey.currentState!.validate()) return;
+                                    if (!formKey.currentState!.validate()) {
+                                      return;
+                                    }
                                     String? location = await getLocation();
                                     if (location == null) {
                                       if (context.mounted) {
@@ -300,7 +309,7 @@ class _RegisterComplaintWidgetState extends State<RegisterComplaintWidget> {
                                         await soapClient.registerComplaint(
                                       departmentId.toString(),
                                       nameController.text,
-                                      mobileNoController.text,
+                                      mobileController.text,
                                       detailsController.text,
                                       imgFile,
                                       emailController.text,
@@ -314,7 +323,8 @@ class _RegisterComplaintWidgetState extends State<RegisterComplaintWidget> {
                                         ScaffoldMessenger.of(context)
                                             .showSnackBar(
                                           const SnackBar(
-                                            content: Text("Complaint registered sucessfully"),
+                                            content: Text(
+                                                "Complaint registered sucessfully"),
                                           ),
                                         );
                                         Navigator.of(context).pop();
