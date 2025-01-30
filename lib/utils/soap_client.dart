@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:http/http.dart' as http;
@@ -63,13 +64,13 @@ class SoapClient {
       "Host": host,
     };
     try {
-      print(soapEnvelope);
+      log(soapEnvelope);
       var response = await http.post(
         Uri.parse(url),
         headers: headers,
         body: soapEnvelope,
       );
-      print(response.body);
+      log(response.body);
       if (response.statusCode == 200) {
         String xmlString =
             response.body.replaceAll("&lt;", "<").replaceAll("&gt;", ">");
@@ -81,7 +82,7 @@ class SoapClient {
         if (header != null) {
           responseHeader = XmlDocument.parse(header.group(0)!).rootElement;
         }
-        print(responseHeader);
+        log("$responseHeader");
         RegExp detailsRegex =
             RegExp(r'<ResponseDetails>(.*?)</ResponseDetails>', dotAll: true);
         var details = detailsRegex.firstMatch(xmlString);
@@ -90,39 +91,39 @@ class SoapClient {
         }
         return [responseHeader, responseDetails];
       } else {
-        print("Error: ${response.statusCode}");
-        print("Error: ${response.body}");
+        log("Error: ${response.statusCode}");
+        log("Error: ${response.body}");
       }
     } catch (e) {
-      print("Request failed: $e");
+      log("Request failed: $e");
       rethrow;
     }
     return [];
 /*
     try {
-      print(soapEnvelope);
+      log(soapEnvelope);
       var response = await http.post(
         Uri.parse(url),
         headers: headers,
         body: soapEnvelope,
       );
-      print(response.body);
+      log(response.body);
       if (response.statusCode == 200) {
         String xmlString =
             response.body.replaceAll("&lt;", "<").replaceAll("&gt;", ">");
         var document = XmlDocument.parse(xmlString);
         var responseHeader =
             document.rootElement.findAllElements("ResponseHeader").first;
-        print(responseHeader);
+        log(responseHeader);
         var responseDetails =
             document.rootElement.findAllElements("ResponseDetails").first;
         return [responseHeader, responseDetails];
       } else {
-        print("Error: ${response.statusCode}");
-        print("Error: ${response.body}");
+        log("Error: ${response.statusCode}");
+        log("Error: ${response.body}");
       }
     } catch (e) {
-      print("Request failed: $e");
+      log("Request failed: $e");
       rethrow;
     }
     return [];
@@ -141,7 +142,7 @@ class SoapClient {
       }
       return electedMembers;
     } catch (error) {
-      print(error);
+      log("$error");
       rethrow;
     }
   }
@@ -158,7 +159,7 @@ class SoapClient {
       }
       return prabhagSamiti;
     } catch (error) {
-      print(error);
+      log("$error");
       rethrow;
     }
   }
@@ -175,7 +176,7 @@ class SoapClient {
       }
       return officialNumbers;
     } catch (error) {
-      print(error);
+      log("$error");
       rethrow;
     }
   }
@@ -192,7 +193,7 @@ class SoapClient {
       }
       return mayorMessage;
     } catch (error) {
-      print(error);
+      log("$error");
       rethrow;
     }
   }
@@ -209,7 +210,7 @@ class SoapClient {
       }
       return hospitals;
     } catch (error) {
-      print(error);
+      log("$error");
       rethrow;
     }
   }
@@ -226,7 +227,7 @@ class SoapClient {
       }
       return ambulances;
     } catch (error) {
-      print(error);
+      log("$error");
       rethrow;
     }
   }
@@ -243,7 +244,7 @@ class SoapClient {
       }
       return police;
     } catch (error) {
-      print(error);
+      log("$error");
       rethrow;
     }
   }
@@ -260,7 +261,7 @@ class SoapClient {
       }
       return fireBrigades;
     } catch (error) {
-      print(error);
+      log("$error");
       rethrow;
     }
   }
@@ -277,7 +278,7 @@ class SoapClient {
       }
       return bloodBanks;
     } catch (error) {
-      print(error);
+      log("$error");
       rethrow;
     }
   }
@@ -294,7 +295,7 @@ class SoapClient {
       }
       return eyeBanks;
     } catch (error) {
-      print(error);
+      log("$error");
       rethrow;
     }
   }
@@ -311,7 +312,7 @@ class SoapClient {
       }
       return governmentOffices;
     } catch (error) {
-      print(error);
+      log("$error");
       rethrow;
     }
   }
@@ -328,7 +329,7 @@ class SoapClient {
       }
       return gallery;
     } catch (error) {
-      print(error);
+      log("$error");
       rethrow;
     }
   }
@@ -343,7 +344,7 @@ class SoapClient {
       tax = PropertyTaxDetails.fromXML(header, body);
       return tax;
     } catch (error) {
-      print(error);
+      log("$error");
       rethrow;
     }
   }
@@ -360,7 +361,7 @@ class SoapClient {
       }
       return zones;
     } catch (error) {
-      print(error);
+      log("$error");
       rethrow;
     }
   }
@@ -378,7 +379,7 @@ class SoapClient {
       }
       return wards;
     } catch (error) {
-      print(error);
+      log("$error");
       rethrow;
     }
   }
@@ -402,7 +403,7 @@ class SoapClient {
       tax = WaterTaxDetails.fromXML(body);
       return tax;
     } catch (error) {
-      print(error);
+      log("$error");
       rethrow;
     }
   }
@@ -419,7 +420,7 @@ class SoapClient {
       }
       return prabhags;
     } catch (error) {
-      print(error);
+      log("$error");
       rethrow;
     }
   }
@@ -436,7 +437,7 @@ class SoapClient {
       }
       return departments;
     } catch (error) {
-      print(error);
+      log("$error");
       rethrow;
     }
   }
@@ -454,7 +455,7 @@ class SoapClient {
       }
       return complaintTypes;
     } catch (error) {
-      print(error);
+      log("$error");
       rethrow;
     }
   }
@@ -480,10 +481,10 @@ class SoapClient {
         },
       );
       if (header == null) return false;
-      print(header.findElements("SuccessCode").first.innerText);
+      log(header.findElements("SuccessCode").first.innerText);
       return header.findElements("SuccessCode").first.innerText == "9999";
     } catch (error) {
-      print(error);
+      log("$error");
       rethrow;
     }
   }
@@ -503,7 +504,7 @@ class SoapClient {
       if (header == null) return false;
       return header.findElements("SuccessCode").first.innerText == "9999";
     } catch (error) {
-      print(error);
+      log("$error");
       rethrow;
     }
   }
@@ -549,10 +550,10 @@ class SoapClient {
         },
       );
       if (header == null) return false;
-      print(header.findElements("SuccessCode").first.innerText);
+      log(header.findElements("SuccessCode").first.innerText);
       return header.findElements("SuccessCode").first.innerText == "9999";
     } catch (error) {
-      print(error);
+      log("$error");
       return false;
     }
   }
@@ -589,10 +590,10 @@ class SoapClient {
         },
       );
       if (header == null) return false;
-      print(header.findElements("SuccessCode").first.innerText);
+      log(header.findElements("SuccessCode").first.innerText);
       return header.findElements("SuccessCode").first.innerText == "9999";
     } catch (error) {
-      print(error);
+      log("$error");
       return false;
     }
   }
@@ -612,7 +613,7 @@ class SoapClient {
       if (body == null) return null;
       return body.findElements("UniqueId").first.innerText;
     } catch (error) {
-      print(error);
+      log("$error");
       return null;
     }
   }
@@ -621,10 +622,10 @@ class SoapClient {
     try {
       final [header, body] = await post("GetVclicknotification", {});
       if (header == null) return [];
-      print(header.findElements("SuccessMessage").first.innerText.split("#"));
+      log("${header.findElements("SuccessMessage").first.innerText.split("#")}");
       return header.findElements("SuccessMessage").first.innerText.split("#");
     } catch (error) {
-      print(error);
+      log("$error");
       rethrow;
     }
   }

@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
@@ -45,7 +47,7 @@ class _WebViewState extends State<WebView> {
           onWebResourceError: (WebResourceError err) {
             final noInternet =
                 err.description == "net::ERR_INTERNET_DISCONNECTED";
-            print(err.description);
+            log("$err.description");
             Navigator.of(context).pop();
             showDialog(
               context: context,

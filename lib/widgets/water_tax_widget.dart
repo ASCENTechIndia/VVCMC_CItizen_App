@@ -43,7 +43,6 @@ class _WaterTaxWidgetState extends State<WaterTaxWidget> {
               builder: (context, snapshot) {
                 if (snapshot.hasData) {
                   List<Zone> data = snapshot.data!;
-                  print(data);
                   return Padding(
                     padding: const EdgeInsets.all(16.0),
                     child: Column(

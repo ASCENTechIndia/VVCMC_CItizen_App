@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:vvcmc_citizen_app/feature/auth_screen.dart';
@@ -10,6 +12,7 @@ import 'package:vvcmc_citizen_app/feature/webview_screen.dart';
 import 'package:vvcmc_citizen_app/utils/get_it.dart' as sl;
 
 void main() async {
+  log("Hello world poppies!");
   WidgetsFlutterBinding.ensureInitialized();
   await sl.init();
   runApp(const MyApp());

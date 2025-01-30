@@ -27,7 +27,6 @@ class PropertyTaxDetails {
         taxes.add(PropertyTax.fromXML(child));
       }
     }
-    print(taxes);
     return PropertyTaxDetails(
       billNo: header.findElements("BillNo").first.innerText,
       name: header.findElements("Name").first.innerText,
