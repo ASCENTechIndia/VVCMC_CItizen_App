@@ -8,7 +8,7 @@ final getIt = GetIt.instance;
 Future<void> init() async {
   final prefs = await SharedPreferences.getInstance();
 
-  getIt.registerSingleton<SoapClient>(SoapClient());
+  getIt.registerSingleton<SoapClient>(SoapClient(prefs: prefs));
   getIt.registerSingleton<RestClient>(RestClient());
   getIt.registerSingleton<SharedPreferences>(prefs);
 }

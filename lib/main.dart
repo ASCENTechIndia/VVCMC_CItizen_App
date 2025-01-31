@@ -1,10 +1,9 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:vvcmc_citizen_app/feature/auth_screen.dart';
 import 'package:vvcmc_citizen_app/feature/home/home_screen.dart';
 import 'package:vvcmc_citizen_app/feature/notifications_screen.dart';
+import 'package:vvcmc_citizen_app/feature/profile_screen.dart';
 import 'package:vvcmc_citizen_app/feature/services_screen.dart';
 import 'package:vvcmc_citizen_app/feature/sos_screen.dart';
 import 'package:vvcmc_citizen_app/feature/utilities/utilities_screen.dart';
@@ -12,7 +11,6 @@ import 'package:vvcmc_citizen_app/feature/webview_screen.dart';
 import 'package:vvcmc_citizen_app/utils/get_it.dart' as sl;
 
 void main() async {
-  log("Hello world poppies!");
   WidgetsFlutterBinding.ensureInitialized();
   await sl.init();
   runApp(const MyApp());
@@ -67,6 +65,8 @@ class MyApp extends StatelessWidget {
                 return const Main();
               case "/notifications":
                 return const NotificationsScreen();
+              case "/profile":
+                return const ProfileScreen();
               case "/web":
                 final args = settings.arguments as Map;
                 return WebViewScreen(
@@ -192,7 +192,9 @@ class _MainState extends State<Main> with TickerProviderStateMixin {
                   customBorder: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(20),
                   ),
-                  onTap: () {},
+                  onTap: () {
+                    Navigator.of(context).pushNamed("/profile");
+                  },
                   child: Padding(
                     padding: const EdgeInsets.all(4.0),
                     child: Image.asset("assets/icons/profile.png"),

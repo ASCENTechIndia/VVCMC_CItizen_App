@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -103,20 +105,15 @@ class _AuthScreenState extends State<AuthScreen> {
                   );
                   if (result) {
                     final prefs = await SharedPreferences.getInstance();
-                    await Future.wait([
-                      prefs.setString("firstName", firstNameController.text),
-                      prefs.setString("lastName", lastNameController.text),
-                      prefs.setString("mobile", mobileController.text),
-                      prefs.setString("email", emailController.text),
-                      prefs.setBool("loggedIn", true),
-                    ]);
+                    prefs.setBool("loggedIn", true);
                   }
                   setState(() {
                     loading = false;
                   });
                   if (context.mounted) {
                     if (result) {
-                      Navigator.of(context, rootNavigator: true).pushReplacementNamed("/main");
+                      Navigator.of(context, rootNavigator: true)
+                          .pushReplacementNamed("/main");
                     } else {
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(
@@ -164,6 +161,15 @@ class _AuthScreenState extends State<AuthScreen> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               TextFormField(
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return "Mobile is required";
+                  }
+                  if (!RegExp(r"^[0-9]{10}").hasMatch(value)) {
+                    return "Mobile is invalid";
+                  }
+                  return null;
+                },
                 controller: mobileController,
                 decoration: const InputDecoration(
                   hintText: "Mobile",
@@ -175,15 +181,42 @@ class _AuthScreenState extends State<AuthScreen> {
               const SizedBox(height: 10),
               OutlinedButton(
                 onPressed: () async {
-                  await Future.wait([
-                    prefs.setString("firstName", ""),
-                    prefs.setString("lastName", ""),
-                    prefs.setString("mobile", ""),
-                    prefs.setString("email", ""),
-                  ]);
+                  setState(() {
+                    loading = true;
+                  });
+                  bool result =
+                      await soapClient.storeUserDetails(mobileController.text);
+                  log("RES: $result");
+                  log("${prefs.getString("firstName")!}");
+                  log("${prefs.getString("lastName")!}");
+                  log("${prefs.getString("email")!}");
+                  log("${prefs.getString("mobile")!}");
+                  log("${prefs.getString("aadhar")!}");
+                  log("${prefs.getString("bloodGroup")!}");
+
+                  if (result) {
+                    result = await soapClient.register(
+                      prefs.getString("firstName")!,
+                      prefs.getString("lastName")!,
+                      prefs.getString("email")!,
+                      prefs.getString("mobile")!,
+                      prefs.getString("aadhar")!,
+                      prefs.getString("bloodGroup")!,
+                    );
+                  }
+                  setState(() {
+                    loading = false;
+                  });
                   if (context.mounted) {
-                    Navigator.of(context, rootNavigator: true).pushReplacementNamed("/main");
-                    // Navigator.of(context).pushReplacementNamed("otp");
+                    if (result) {
+                      Navigator.of(context).pushReplacementNamed("otp");
+                    } else {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text("Failed to send OTP"),
+                        ),
+                      );
+                    }
                   }
                 },
                 style: OutlinedButton.styleFrom(
@@ -343,6 +376,22 @@ class _AuthScreenState extends State<AuthScreen> {
                         aadharController.text,
                         bloodGroup ?? "",
                       );
+                      if (result) {
+                        await Future.wait([
+                          prefs.setString(
+                            "firstName",
+                            firstNameController.text,
+                          ),
+                          prefs.setString(
+                            "lastName",
+                            lastNameController.text,
+                          ),
+                          prefs.setString("mobile", mobileController.text),
+                          prefs.setString("email", emailController.text),
+                          prefs.setString("aadhar", aadharController.text),
+                          prefs.setString("bloodGroup", bloodGroup ?? ""),
+                        ]);
+                      }
                       setState(() {
                         loading = false;
                       });

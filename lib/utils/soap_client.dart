@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'dart:io';
 
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:vvcmc_citizen_app/models/ambulance.dart';
 import 'package:vvcmc_citizen_app/models/blood_bank.dart';
 import 'package:vvcmc_citizen_app/models/complaint_type.dart';
@@ -24,11 +25,13 @@ import 'package:vvcmc_citizen_app/models/zone.dart';
 import 'package:xml/xml.dart';
 
 class SoapClient {
+  final SharedPreferences prefs;
   final String url;
   final String soapAction;
   final String host;
 
   SoapClient({
+    required this.prefs,
     this.url = "http://www.onlinevvcmc.in/VVCMCPersonaliseApp/Service.svc",
     this.soapAction = "http://tempuri.org/IService/",
     this.host = "www.onlinevvcmc.in",
@@ -480,6 +483,7 @@ class SoapClient {
           "BloodGroup": bloodGroup,
         },
       );
+      log("$header");
       if (header == null) return false;
       log(header.findElements("SuccessCode").first.innerText);
       return header.findElements("SuccessCode").first.innerText == "9999";
@@ -627,6 +631,78 @@ class SoapClient {
     } catch (error) {
       log("$error");
       rethrow;
+    }
+  }
+
+  Future<bool> updateUserDetails(
+    String firstName,
+    String lastName,
+    String email,
+    String mobile,
+    String aadharNo,
+    String bloodGroup,
+  ) async {
+    try {
+      final [header, body] = await post(
+        "UpdateUserDetails",
+        {
+          "FirstName": firstName,
+          "LastName": lastName,
+          "Email": email,
+          "MobileNo": mobile,
+          "AdharNo": aadharNo,
+          "BloodGroup": bloodGroup,
+        },
+      );
+      if (header == null) return false;
+      log(header.findElements("SuccessCode").first.innerText);
+      return header.findElements("SuccessCode").first.innerText == "9999";
+    } catch (error) {
+      log("$error");
+      return false;
+    }
+  }
+
+  Future<bool> storeUserDetails(String mobile) async {
+    //await Future.wait([
+    //  prefs.setString("firstName", ""),
+    //  prefs.setString("lastName", ""),
+    //  prefs.setString("mobile", ""),
+    //  prefs.setString("email", ""),
+    //  prefs.setString("aadhar", ""),
+    //  prefs.setString("bloodGroup", ""),
+    //]);
+    //return false;
+    try {
+      final [header, body] = await post(
+        "GetUserDetails",
+        {
+          "MobileNo": mobile,
+        },
+      );
+      log("HEADER: $header");
+      if (header == null) return false;
+      await Future.wait([
+        prefs.setString(
+          "firstName",
+          header.findElements("FirstName").first.innerText,
+        ),
+        prefs.setString(
+          "lastName",
+          header.findElements("LastName").first.innerText,
+        ),
+        prefs.setString("mobile", header.findElements("Mobile").first.innerText),
+        prefs.setString("email", header.findElements("Email").first.innerText),
+        prefs.setString("aadhar", header.findElements("Adhar").first.innerText),
+        prefs.setString(
+          "bloodGroup",
+          header.findElements("BloodGroup").first.innerText,
+        ),
+      ]);
+      return true;
+    } catch (error) {
+      log("$error");
+      return false;
     }
   }
 }
