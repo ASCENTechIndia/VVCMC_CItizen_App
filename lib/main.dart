@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:vvcmc_citizen_app/feature/auth_screen.dart';
 import 'package:vvcmc_citizen_app/feature/home/home_screen.dart';
@@ -16,14 +18,38 @@ void main() async {
   runApp(const MyApp());
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({super.key});
+
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  final prefs = sl.getIt<SharedPreferences>();
+  late String locale;
+
+  @override
+  void initState() {
+    locale = prefs.getString("locale") ?? "en";
+    super.initState();
+  }
 
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    final prefs = sl.getIt<SharedPreferences>();
     return MaterialApp(
+      locale: Locale(locale),
+      localizationsDelegates: const [
+        AppLocalizations.delegate,
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
+      supportedLocales: const [
+        Locale("en"),
+        Locale("mr"),
+      ],
       title: 'VVMC Citizen App',
       theme: ThemeData(
         // This is the theme of your application.
@@ -59,10 +85,10 @@ class MyApp extends StatelessWidget {
             switch (settings.name) {
               case "/":
                 return prefs.getBool("loggedIn") ?? false
-                    ? const Main()
+                    ? Main(switchLocale: switchLocale)
                     : const AuthScreen();
               case "/main":
-                return const Main();
+                return Main(switchLocale: switchLocale);
               case "/notifications":
                 return const NotificationsScreen();
               case "/profile":
@@ -81,10 +107,25 @@ class MyApp extends StatelessWidget {
       },
     );
   }
+
+  void switchLocale() {
+    if (prefs.getString("locale") == "en") {
+      prefs.setString("locale", "mr");
+      setState(() {
+        locale = "mr";
+      });
+    } else {
+      prefs.setString("locale", "en");
+      setState(() {
+        locale = "en";
+      });
+    }
+  }
 }
 
 class Main extends StatefulWidget {
-  const Main({super.key});
+  final void Function() switchLocale;
+  const Main({required this.switchLocale, super.key});
 
   // This widget is the home page of your application. It is stateful, meaning
   // that it has a State object (defined below) that contains fields that affect
@@ -101,6 +142,8 @@ class Main extends StatefulWidget {
 
 class _MainState extends State<Main> with TickerProviderStateMixin {
   late final TabController _tabController;
+  final prefs = sl.getIt<SharedPreferences>();
+
   @override
   void initState() {
     _tabController =
@@ -137,14 +180,15 @@ class _MainState extends State<Main> with TickerProviderStateMixin {
             Row(
               children: [
                 SizedBox(
-                    width: 40,
-                    height: 40,
-                    child: Image.asset("assets/images/logo.png")),
+                  width: 40,
+                  height: 40,
+                  child: Image.asset("assets/images/logo.png"),
+                ),
                 const SizedBox(width: 10),
-                const Column(
+                Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
+                    const Text(
                       "Vasai Virar City",
                       style: TextStyle(
                         fontSize: 15,
@@ -152,7 +196,7 @@ class _MainState extends State<Main> with TickerProviderStateMixin {
                         color: Colors.white,
                       ),
                     ),
-                    Text(
+                    const Text(
                       "Municipal Corporation",
                       style: TextStyle(
                         fontSize: 15,
@@ -182,7 +226,9 @@ class _MainState extends State<Main> with TickerProviderStateMixin {
                   customBorder: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(20),
                   ),
-                  onTap: () {},
+                  onTap: () async {
+                    widget.switchLocale();
+                  },
                   child: Padding(
                     padding: const EdgeInsets.all(4.0),
                     child: Image.asset("assets/icons/language.png"),
