@@ -142,6 +142,9 @@ class Main extends StatefulWidget {
 
 class _MainState extends State<Main> with TickerProviderStateMixin {
   late final TabController _tabController;
+  var homeNavigatorKey = GlobalKey<NavigatorState>();
+  var servicesNavigatorKey = GlobalKey<NavigatorState>();
+  var utilitiesNavigatorKey = GlobalKey<NavigatorState>();
   final prefs = sl.getIt<SharedPreferences>();
 
   @override
@@ -150,7 +153,11 @@ class _MainState extends State<Main> with TickerProviderStateMixin {
         TabController(length: 4, vsync: this, animationDuration: Duration.zero);
     _tabController.addListener(() {
       if (mounted && !_tabController.indexIsChanging) {
-        setState(() {});
+        setState(() {
+          homeNavigatorKey = GlobalKey<NavigatorState>();
+          servicesNavigatorKey = GlobalKey<NavigatorState>();
+          utilitiesNavigatorKey = GlobalKey<NavigatorState>();
+        });
       }
     });
     super.initState();
@@ -349,9 +356,9 @@ class _MainState extends State<Main> with TickerProviderStateMixin {
         physics: const NeverScrollableScrollPhysics(),
         controller: _tabController,
         children: [
-          HomeScreen(),
-          ServicesScreen(),
-          UtilitiesScreen(),
+          HomeScreen(navigatorKey: homeNavigatorKey),
+          ServicesScreen(navigatorKey: servicesNavigatorKey),
+          UtilitiesScreen(navigatorKey: utilitiesNavigatorKey),
           const SosScreen(),
         ],
       ),

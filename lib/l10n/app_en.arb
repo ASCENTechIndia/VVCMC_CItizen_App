@@ -29,6 +29,7 @@
     "noDataFound": "No data found", 
     "search": "Search",
     "submit": "Submit",
+    "close": "Close",
     
     "@_HOME": {},
     "yourCityServices": "Your city services, updates, and more - all in one place!",
@@ -82,6 +83,43 @@
     "complaintRegisteredSuccessfully": "Complaint registered sucessfully",
     "somethingWentWrong": "Something went wrong",
     "gpsLocationServiceShouldBeOn": "GPS Location Service should be on",
+
+    "@_SERVICES": {},
+    "aboutVvmc": "About VVMC",
+    "emergencyNumbers": "Emergency Numbers",
+    "electedMembers": "Elected Members",
+    "prabhagSamiti": "Prabhag Samiti",
+    "officialNumbers": "Official Numbers",
+    "commissionerMessage": "Commissioner Message",
+    "mayorMessage": "Mayor Message",
+    "map": "Map",
+    "gallery": "Gallery",
+    "twitter": "Twitter",
+    "vvmcWebsite": "VVMC Website",
+    "facebook": "Facebook",
+    "youtube": "Youtube",
+    "vts": "VTS",
+    "accessEssentialServices": "Access essential services to keep your city life running smoothly.",
+
+    "@_ABOUT_VVMC": {},
+    "aboutContent" :"Vasai-Virar City is the only Municipal Corporation in the newly formed Palghar district. It is located at North Mumbai. The area of Vasai-Virar City is 311 sq. km. The city is located on the north bank of Vasai Creek, part of the estuary of the Ulhas River.\n\nVasai-Virar City has been separated from Greater Mumbai and Mira-Bhayandar City by the Vasai Creek. The City is well connected to Mumbai by Western Railway and through Mumbai-Ahmedabad National Highway. The city is connected to Navi Mumbai, Thane, Bhiwandi, Kalyan and Panvel cities by the Vasai-Diva Railway line. Vasai Virar city has significant growth potential due to close proximity to Brihan Mumbai.\n\nThe Vasai-Virar City Municipal Corporation (VVCMC) was established on 3rd July 2009. Vasai Virar corporation is located between 19 deg. 28 min. north-90 deg. 47 min. north latitude and 72 deg. 48 min. east-72 deg. 8 min. east.\n\nVasai Virar is a historical city and an important business port. The history of Vasai comes from ancient ages. One version of the origin of the name derived from Sanskrit word which means 'waas' or residence. The Portuguese influence is especially noticeable in Vasai and Virar. When Marathas invaded and colonized the region, they named it as 'Bajipura' or 'Bajipur'. But it did not stick. When England conquered the region from Marathas in the year 1774, they named it as Bassein region which is now called Vasai. Bassein was an important trading centre of that time. From 15th century it was ruled by Portuguese, followed by Diu and British This region has many Heritage installations.. The Bassein fort was initially built by Bahadurshah of Gujarat and further developed by Portuguese.",
+    
+    "@_EMERGENCY_NUMBERS": {},
+    "hospitals": "Hospitals",
+    "ambulance": "Ambulance",
+    "policeStation": "Police Station",
+    "fireBrigades": "Fire Brigades",
+    "bloodBanks": "Blood Banks",
+    "eyeBanks": "Eye Banks",
+    "governmentOffices": "Government Offices",
+    
+    "@_OFFICIAL_NUMBERS": {},
+    "ward": "Ward",
+
+    "@_COMMISSIONER_MESSAGE": {},
+    "shriAnilkumar": "Shri. Anilkumar Khanderao Pawar(I.A.S.)",
+    "commissionerMessageContent": "The Corporation is constantly working for health and well being of its citizens and in lieu of that citizens pay various taxes. Information about these taxes including tax rates, necessary application forms and their details is given on the website in a simple and easily understandable language for the common man. Also importantly, the Development Plan of city has been made available on the website, which can be very useful for land use planning to the citizens.\n\nI will try to bring more transparency and accountability in the system through e-governance. As the Municipal Commissioner, I would like to assure the citizens of Vasai Virar that we would constantly endeavor to achieve the goal of improving services provided by the Corporation to its citizens and to ensure that the website is helpful as a step towards achievement of that goal.",
+
     
     "@_END": {}
 }

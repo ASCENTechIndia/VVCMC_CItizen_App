@@ -10,27 +10,33 @@ import 'package:vvcmc_citizen_app/widgets/register_complaint_widget.dart';
 import 'package:vvcmc_citizen_app/widgets/water_tax_receipt_widget.dart';
 import 'package:vvcmc_citizen_app/widgets/water_tax_widget.dart';
 
-class UtilitiesScreen extends StatelessWidget {
-  UtilitiesScreen({super.key});
+class UtilitiesScreen extends StatefulWidget {
+  final GlobalKey<NavigatorState> navigatorKey;
+  
+  const UtilitiesScreen({required this.navigatorKey, super.key});
 
+  @override
+  State<UtilitiesScreen> createState() => _UtilitiesScreenState();
+}
+
+class _UtilitiesScreenState extends State<UtilitiesScreen> {
   final soapClient = getIt<SoapClient>();
   final prefs = getIt<SharedPreferences>();
-  final navigatorKey = GlobalKey<NavigatorState>();
 
   @override
   Widget build(BuildContext context) {
     return PopScope(
       canPop: false,
       onPopInvokedWithResult: (_, __) {
-        if (navigatorKey.currentState == null) return;
-        if (navigatorKey.currentState!.canPop()) {
-          navigatorKey.currentState!.pop();
+        if (widget.navigatorKey.currentState == null) return;
+        if (widget.navigatorKey.currentState!.canPop()) {
+          widget.navigatorKey.currentState!.pop();
         } else {
           Navigator.of(context).pop();
         }
       },
       child: Navigator(
-        key: navigatorKey,
+        key: widget.navigatorKey,
         onGenerateRoute: (RouteSettings settings) {
           final Map<String, WidgetBuilder> routes = {
             "/": buildUtilities,

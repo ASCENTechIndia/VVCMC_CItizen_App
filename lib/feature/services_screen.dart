@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:vvcmc_citizen_app/models/ambulance.dart';
 import 'package:vvcmc_citizen_app/models/blood_bank.dart';
@@ -17,26 +18,37 @@ import 'package:vvcmc_citizen_app/widgets/card_widget.dart';
 import 'package:vvcmc_citizen_app/widgets/header_widget.dart';
 import 'package:vvcmc_citizen_app/widgets/outlined_card_widget.dart';
 
-class ServicesScreen extends StatelessWidget {
-  ServicesScreen({super.key});
+class ServicesScreen extends StatefulWidget {
+  final GlobalKey<NavigatorState> navigatorKey;
 
-  final navigatorKey = GlobalKey<NavigatorState>();
+  const ServicesScreen({required this.navigatorKey, super.key});
+
+  @override
+  State<ServicesScreen> createState() => _ServicesScreenState();
+}
+
+class _ServicesScreenState extends State<ServicesScreen> {
   final soapClient = getIt<SoapClient>();
+
+  @override
+  void initState() {
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
     return PopScope(
       canPop: false,
       onPopInvokedWithResult: (_, __) {
-        if (navigatorKey.currentState == null) return;
-        if (navigatorKey.currentState!.canPop()) {
-          navigatorKey.currentState!.pop();
+        if (widget.navigatorKey.currentState == null) return;
+        if (widget.navigatorKey.currentState!.canPop()) {
+          widget.navigatorKey.currentState!.pop();
         } else {
           Navigator.of(context).pop();
         }
       },
       child: Navigator(
-        key: navigatorKey,
+        key: widget.navigatorKey,
         onGenerateRoute: (RouteSettings settings) {
           final Map<String, WidgetBuilder> routes = {
             "/": buildServices,
@@ -70,10 +82,11 @@ class ServicesScreen extends StatelessWidget {
   }
 
   Widget buildGallery(context) {
+    final localizations = AppLocalizations.of(context)!;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        const HeaderWidget(title: "Gallery"),
+        HeaderWidget(title: localizations.gallery),
         Expanded(
           child: FutureBuilder(
             future: soapClient.getGallery(),
@@ -115,7 +128,7 @@ class ServicesScreen extends StatelessWidget {
                                               BorderRadius.all(Radius.zero),
                                         ),
                                       ),
-                                      child: const Text("Close"),
+                                      child: Text(localizations.close),
                                       onPressed: () {
                                         Navigator.pop(context);
                                       },
@@ -136,7 +149,7 @@ class ServicesScreen extends StatelessWidget {
                 );
               }
               if (snapshot.hasError) {
-                return const Center(child: Text("Failed to load data"));
+                return Center(child: Text(localizations.failedToLoadData));
               }
               return const Center(child: CircularProgressIndicator());
             },
@@ -147,10 +160,11 @@ class ServicesScreen extends StatelessWidget {
   }
 
   Widget buildGovernmentOffices(context) {
+    final localizations = AppLocalizations.of(context)!;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        const HeaderWidget(title: "Government Offices"),
+        HeaderWidget(title: localizations.governmentOffices),
         Expanded(
           child: FutureBuilder(
             future: soapClient.getGovernmentOffices(),
@@ -181,7 +195,7 @@ class ServicesScreen extends StatelessWidget {
                 );
               }
               if (snapshot.hasError) {
-                return const Center(child: Text("Failed to load data"));
+                return Center(child: Text(localizations.failedToLoadData));
               }
               return const Center(child: CircularProgressIndicator());
             },
@@ -192,10 +206,11 @@ class ServicesScreen extends StatelessWidget {
   }
 
   Widget buildEyeBanks(context) {
+    final localizations = AppLocalizations.of(context)!;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        const HeaderWidget(title: "Eye Banks"),
+        HeaderWidget(title: localizations.eyeBanks),
         Expanded(
           child: FutureBuilder(
             future: soapClient.getEyeBanks(),
@@ -226,7 +241,7 @@ class ServicesScreen extends StatelessWidget {
                 );
               }
               if (snapshot.hasError) {
-                return const Center(child: Text("Failed to load data"));
+                return Center(child: Text(localizations.failedToLoadData));
               }
               return const Center(child: CircularProgressIndicator());
             },
@@ -237,10 +252,11 @@ class ServicesScreen extends StatelessWidget {
   }
 
   Widget buildBloodBanks(context) {
+    final localizations = AppLocalizations.of(context)!;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        const HeaderWidget(title: "Blood Banks"),
+        HeaderWidget(title: localizations.bloodBanks),
         Expanded(
           child: FutureBuilder(
             future: soapClient.getBloodBanks(),
@@ -271,7 +287,7 @@ class ServicesScreen extends StatelessWidget {
                 );
               }
               if (snapshot.hasError) {
-                return const Center(child: Text("Failed to load data"));
+                return Center(child: Text(localizations.failedToLoadData));
               }
               return const Center(child: CircularProgressIndicator());
             },
@@ -282,10 +298,11 @@ class ServicesScreen extends StatelessWidget {
   }
 
   Widget buildFireBrigades(context) {
+    final localizations = AppLocalizations.of(context)!;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        const HeaderWidget(title: "Fire Brigades"),
+        HeaderWidget(title: localizations.fireBrigades),
         Expanded(
           child: FutureBuilder(
             future: soapClient.getFireBrigades(),
@@ -316,7 +333,7 @@ class ServicesScreen extends StatelessWidget {
                 );
               }
               if (snapshot.hasError) {
-                return const Center(child: Text("Failed to load data"));
+                return Center(child: Text(localizations.failedToLoadData));
               }
               return const Center(child: CircularProgressIndicator());
             },
@@ -327,10 +344,11 @@ class ServicesScreen extends StatelessWidget {
   }
 
   Widget buildPoliceStation(context) {
+    final localizations = AppLocalizations.of(context)!;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        const HeaderWidget(title: "Police Stations"),
+        HeaderWidget(title: localizations.policeStation),
         Expanded(
           child: FutureBuilder(
             future: soapClient.getPolice(),
@@ -361,7 +379,7 @@ class ServicesScreen extends StatelessWidget {
                 );
               }
               if (snapshot.hasError) {
-                return const Center(child: Text("Failed to load data"));
+                return Center(child: Text(localizations.failedToLoadData));
               }
               return const Center(child: CircularProgressIndicator());
             },
@@ -372,10 +390,11 @@ class ServicesScreen extends StatelessWidget {
   }
 
   Widget buildAmbulance(context) {
+    final localizations = AppLocalizations.of(context)!;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        const HeaderWidget(title: "Ambulance"),
+        HeaderWidget(title: localizations.ambulance),
         Expanded(
           child: FutureBuilder(
             future: soapClient.getAmbulance(),
@@ -406,7 +425,7 @@ class ServicesScreen extends StatelessWidget {
                 );
               }
               if (snapshot.hasError) {
-                return const Center(child: Text("Failed to load data"));
+                return Center(child: Text(localizations.failedToLoadData));
               }
               return const Center(child: CircularProgressIndicator());
             },
@@ -417,10 +436,11 @@ class ServicesScreen extends StatelessWidget {
   }
 
   Widget buildHospitals(context) {
+    final localizations = AppLocalizations.of(context)!;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        const HeaderWidget(title: "Hospitals"),
+        HeaderWidget(title: localizations.hospitals),
         Expanded(
           child: FutureBuilder(
             future: soapClient.getHospitals(),
@@ -451,7 +471,7 @@ class ServicesScreen extends StatelessWidget {
                 );
               }
               if (snapshot.hasError) {
-                return const Center(child: Text("Failed to load data"));
+                return Center(child: Text(localizations.failedToLoadData));
               }
               return const Center(child: CircularProgressIndicator());
             },
@@ -462,10 +482,11 @@ class ServicesScreen extends StatelessWidget {
   }
 
   Widget buildMap(context) {
+    final localizations = AppLocalizations.of(context)!;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        const HeaderWidget(title: "Map"),
+        HeaderWidget(title: localizations.map),
         Expanded(
           child: Padding(
             padding: const EdgeInsets.all(16.0),
@@ -481,10 +502,11 @@ class ServicesScreen extends StatelessWidget {
   }
 
   Widget buildMayor(context) {
+    final localizations = AppLocalizations.of(context)!;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        const HeaderWidget(title: "Mayor Message"),
+        HeaderWidget(title: localizations.mayorMessage),
         Expanded(
           child: FutureBuilder(
             future: soapClient.getMayorMessage(),
@@ -499,7 +521,9 @@ class ServicesScreen extends StatelessWidget {
                       children: [
                         Image.network(mayorMessage.imageUrl),
                         const SizedBox(height: 10),
-                        Center(child: Text(mayorMessage.mayorName)),
+                        Center(
+                          child: Text(mayorMessage.mayorName),
+                        ),
                         const SizedBox(height: 10),
                         Text(mayorMessage.mayorMessage),
                       ],
@@ -508,7 +532,7 @@ class ServicesScreen extends StatelessWidget {
                 );
               }
               if (snapshot.hasError) {
-                return const Center(child: Text("Failed to load data"));
+                return Center(child: Text(localizations.failedToLoadData));
               }
               return const Center(child: CircularProgressIndicator());
             },
@@ -519,10 +543,11 @@ class ServicesScreen extends StatelessWidget {
   }
 
   Widget buildCommissioner(context) {
+    final localizations = AppLocalizations.of(context)!;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        const HeaderWidget(title: "Commissioner Message"),
+        HeaderWidget(title: localizations.commissionerMessage),
         Expanded(
           child: SingleChildScrollView(
             child: Padding(
@@ -540,7 +565,7 @@ class ServicesScreen extends StatelessWidget {
                   const SizedBox(height: 10),
                   Center(
                     child: Text(
-                      "Shri. Anilkumar Kanderao Pawar (I.A.S.)",
+                      localizations.shriAnilkumar,
                       style: TextStyle(
                         color: Colors.green[800],
                         fontWeight: FontWeight.bold,
@@ -554,12 +579,7 @@ class ServicesScreen extends StatelessWidget {
                     style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
                   ),
                   const SizedBox(height: 20),
-                  const Text(
-                      "The Corporation is constantly working for health and well being of its citizens and in lieu of that citizens pay various taxes. Information about these taxes including tax rates, necessary application forms and their details is given on the website in a simple and easily understandable language for the common man. Also importantly, the Development Plan of city has been made available on the website, which can be very useful for land use planning to the citizens."),
-                  const SizedBox(height: 10),
-                  const Text(
-                    "I will try to bring more transparency and accountability in the system through e-governance. As the Municipal Commissioner, I would like to assure the citizens of Vasai Virar that we would constantly endeavor to achieve the goal of improving services provided by the Corporation to its citizens and to ensure that the website is helpful as a step towards achievement of that goal.",
-                  ),
+                  Text(localizations.commissionerMessageContent),
                 ],
               ),
             ),
@@ -570,10 +590,11 @@ class ServicesScreen extends StatelessWidget {
   }
 
   Widget buildOfficial(context) {
+    final localizations = AppLocalizations.of(context)!;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        const HeaderWidget(title: "Official Numbers"),
+        HeaderWidget(title: localizations.officialNumbers),
         Expanded(
           child: FutureBuilder(
             future: soapClient.getOfficialNumbers(),
@@ -592,7 +613,7 @@ class ServicesScreen extends StatelessWidget {
                               description: [
                                 officialNumber.designation,
                                 officialNumber.emailId,
-                                "Ward: ${officialNumber.wardName}",
+                                "${localizations.ward}: ${officialNumber.wardName}",
                               ],
                               contacts: [
                                 officialNumber.mobileNo,
@@ -605,7 +626,7 @@ class ServicesScreen extends StatelessWidget {
                 );
               }
               if (snapshot.hasError) {
-                return const Center(child: Text("Failed to load data"));
+                return Center(child: Text(localizations.failedToLoadData));
               }
               return const Center(child: CircularProgressIndicator());
             },
@@ -616,10 +637,11 @@ class ServicesScreen extends StatelessWidget {
   }
 
   Widget buildPrabhag(context) {
+    final localizations = AppLocalizations.of(context)!;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        const HeaderWidget(title: "Prabhag Samiti"),
+        HeaderWidget(title: localizations.prabhagSamiti),
         Expanded(
           child: FutureBuilder(
             future: soapClient.getPrabhagSamiti(),
@@ -649,7 +671,7 @@ class ServicesScreen extends StatelessWidget {
                 );
               }
               if (snapshot.hasError) {
-                return const Center(child: Text("Failed to load data"));
+                return Center(child: Text(localizations.failedToLoadData));
               }
               return const Center(child: CircularProgressIndicator());
             },
@@ -660,10 +682,11 @@ class ServicesScreen extends StatelessWidget {
   }
 
   Widget buildElected(context) {
+    final localizations = AppLocalizations.of(context)!;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        const HeaderWidget(title: "Elected Member"),
+        HeaderWidget(title: localizations.electedMembers),
         Expanded(
           child: FutureBuilder(
             future: soapClient.getElectedMembers(),
@@ -689,7 +712,7 @@ class ServicesScreen extends StatelessWidget {
                 );
               }
               if (snapshot.hasError) {
-                return const Center(child: Text("Failed to load data"));
+                return Center(child: Text(localizations.failedToLoadData));
               }
               return const Center(child: CircularProgressIndicator());
             },
@@ -700,48 +723,49 @@ class ServicesScreen extends StatelessWidget {
   }
 
   Widget buildEmergency(context) {
+    final localizations = AppLocalizations.of(context)!;
     return Padding(
       padding: const EdgeInsets.all(16.0),
       child: Column(
         children: [
           CardWidget(
-            title: const Text("Hospitals"),
+            title: Text(localizations.hospitals),
             onTap: () =>
                 Navigator.of(context).pushNamed("emergency_numbers/hospitals"),
           ),
           const SizedBox(height: 8),
           CardWidget(
-            title: const Text("Ambulance"),
+            title: Text(localizations.ambulance),
             onTap: () =>
                 Navigator.of(context).pushNamed("emergency_numbers/ambulance"),
           ),
           const SizedBox(height: 8),
           CardWidget(
-            title: const Text("Police Station"),
+            title: Text(localizations.policeStation),
             onTap: () => Navigator.of(context)
                 .pushNamed("emergency_numbers/police_station"),
           ),
           const SizedBox(height: 8),
           CardWidget(
-            title: const Text("Fire Brigades"),
+            title: Text(localizations.fireBrigades),
             onTap: () => Navigator.of(context)
                 .pushNamed("emergency_numbers/fire_brigades"),
           ),
           const SizedBox(height: 8),
           CardWidget(
-            title: const Text("Blood Banks"),
+            title: Text(localizations.bloodBanks),
             onTap: () => Navigator.of(context)
                 .pushNamed("emergency_numbers/blood_banks"),
           ),
           const SizedBox(height: 8),
           CardWidget(
-            title: const Text("Eye Banks"),
+            title: Text(localizations.eyeBanks),
             onTap: () =>
                 Navigator.of(context).pushNamed("emergency_numbers/eye_banks"),
           ),
           const SizedBox(height: 8),
           CardWidget(
-            title: const Text("Government Offices"),
+            title: Text(localizations.governmentOffices),
             onTap: () => Navigator.of(context)
                 .pushNamed("emergency_numbers/government_offices"),
           ),
@@ -751,34 +775,19 @@ class ServicesScreen extends StatelessWidget {
   }
 
   Widget buildAbout(context) {
-    return const Column(
+    final localizations = AppLocalizations.of(context)!;
+    return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        HeaderWidget(title: "About VVMC"),
+        HeaderWidget(title: localizations.aboutVvmc),
         Expanded(
           child: SingleChildScrollView(
             child: Padding(
-              padding: EdgeInsets.all(16.0),
+              padding: const EdgeInsets.all(16.0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                      "Vasai-Virar City is the only Municipal Corporation in the newly formed Palghar district. It is located at North Mumbai. The area of Vasai-Virar City is 311 sq. km. The city is located on the north bank of Vasai Creek, part of the estuary of the Ulhas River."),
-                  SizedBox(height: 10),
-                  Text(
-                    "Vasai-Virar City has been separated from Greater Mumbai and Mira-Bhayandar City by the Vasai Creek. The City is well connected to Mumbai by Western Railway and through Mumbai-Ahmedabad National Highway. The city is connected to Navi Mumbai, Thane, Bhiwandi, Kalyan and Panvel cities by the Vasai-Diva Railway line. Vasai Virar city has significant growth potential due to close proximity to Brihan Mumbai.",
-                  ),
-                  SizedBox(height: 10),
-                  Text(
-                      "The Vasai-Virar City Municipal Corporation (VVCMC) was established on 3rd July 2009. Vasai Virar corporation is located between 19 deg. 28 min. north-90 deg. 47 min. north latitude and 72 deg. 48 min. east-72 deg. 8 min. east"),
-                  SizedBox(height: 20),
-                  Text(
-                    "History",
-                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                  ),
-                  SizedBox(height: 10),
-                  Text(
-                      "Vasai Virar is a historical city and an important business port. The history of Vasai comes from ancient ages. One version of the origin of the name derived from Sanskrit word which means 'waas' or residence. The Portuguese influence is especially noticeable in Vasai and Virar. When Marathas invaded and colonized the region, they named it as 'Bajipura' or 'Bajipur'. But it did not stick. When England conquered the region from Marathas in the year 1774, they named it as Bassein region which is now called Vasai. Bassein was an important trading centre of that time. From 15th century it was ruled by Portuguese, followed by Diu and British This region has many Heritage installations.. The Bassein fort was initially built by Bahadurshah of Gujarat and further developed by Portuguese."),
+                  Text(localizations.aboutContent),
                 ],
               ),
             ),
@@ -789,40 +798,41 @@ class ServicesScreen extends StatelessWidget {
   }
 
   Widget buildServices(context) {
+    final AppLocalizations localizations = AppLocalizations.of(context)!;
     List cards = [
       [
         {
           "icon": "logo.png",
-          "text": "About VVMC",
+          "text": localizations.aboutVvmc,
           "onTap": () => Navigator.of(context).pushNamed("about_vvmc"),
         },
         {
           "icon": "emergency.png",
-          "text": "Emergency Numbers",
+          "text": localizations.emergencyNumbers,
           "onTap": () => Navigator.of(context).pushNamed("emergency_numbers"),
         },
       ],
       [
         {
           "icon": "elected.png",
-          "text": "Elected Member",
+          "text": localizations.electedMembers,
           "onTap": () => Navigator.of(context).pushNamed("elected_member"),
         },
         {
           "icon": "prabhag.png",
-          "text": "Prabhag Samiti",
+          "text": localizations.prabhagSamiti,
           "onTap": () => Navigator.of(context).pushNamed("prabhag_samiti"),
         },
       ],
       [
         {
           "icon": "official.png",
-          "text": "Official Numbers",
+          "text": localizations.officialNumbers,
           "onTap": () => Navigator.of(context).pushNamed("official_numbers"),
         },
         {
           "icon": "commissioner.png",
-          "text": "Commissioner Message",
+          "text": localizations.commissionerMessage,
           "onTap": () =>
               Navigator.of(context).pushNamed("commissioner_message"),
         },
@@ -830,34 +840,40 @@ class ServicesScreen extends StatelessWidget {
       [
         {
           "icon": "mayor.png",
-          "text": "Mayor Message",
+          "text": localizations.mayorMessage,
           "onTap": () => Navigator.of(context).pushNamed("mayor_message"),
         },
         {
           "icon": "map.png",
-          "text": "Map",
+          "text": localizations.map,
           "onTap": () => Navigator.of(context).pushNamed("map"),
         },
       ],
       [
         {
           "icon": "gallery.png",
-          "text": "Gallery",
+          "text": localizations.gallery,
           "onTap": () => Navigator.of(context).pushNamed("gallery"),
         },
         {
           "icon": "twitter.png",
-          "text": "Twitter",
+          "text": localizations.twitter,
           "onTap": () => launchUrl(
                 Uri.parse("https://twitter.com/VasaiVirarMcorp"),
               ),
         },
       ],
       [
-        {"icon": "logo.png", "text": "VVMC Website"},
+        {
+          "icon": "logo.png",
+          "text": localizations.vvmcWebsite,
+          "onTap": () => launchUrl(
+                Uri.parse("https://vvcmc.in/"),
+              ),
+        },
         {
           "icon": "facebook.png",
-          "text": "Facebook",
+          "text": localizations.facebook,
           "onTap": () => launchUrl(
                 Uri.parse("https://facebook.com/vvcmc1"),
               ),
@@ -866,7 +882,7 @@ class ServicesScreen extends StatelessWidget {
       [
         {
           "icon": "youtube.png",
-          "text": "Youtube",
+          "text": localizations.youtube,
           "onTap": () => launchUrl(
                 Uri.parse(
                     "https://youtube.com/channel/UCeQZ7rHyw1-f_SCy5298YIg"),
@@ -874,7 +890,7 @@ class ServicesScreen extends StatelessWidget {
         },
         {
           "icon": "vts.png",
-          "text": "VTS",
+          "text": localizations.vts,
           "onTap": () => launchUrl(
                 Uri.parse("https://intouch.mapmyindia.com/nextgen"),
               ),
@@ -891,9 +907,9 @@ class ServicesScreen extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                const Text(
-                  "Access essential services to keep your city life running smoothly.",
-                  style: TextStyle(
+                Text(
+                  localizations.accessEssentialServices,
+                  style: const TextStyle(
                     fontWeight: FontWeight.w500,
                     fontSize: 16,
                   ),
