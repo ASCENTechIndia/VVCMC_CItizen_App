@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:vvcmc_citizen_app/models/property_tax.dart';
 import 'package:vvcmc_citizen_app/models/property_tax_details.dart';
@@ -22,10 +23,11 @@ class PropertyTaxWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final AppLocalizations localizations = AppLocalizations.of(context)!;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        const HeaderWidget(title: "View Your Property Tax"),
+        HeaderWidget(title: localizations.viewYourPropertyTax),
         Padding(
           padding: const EdgeInsets.all(16.0),
           child: Column(
@@ -37,14 +39,14 @@ class PropertyTaxWidget extends StatelessWidget {
                   child: TextFormField(
                     validator: (String? value) {
                       if (value == null || value.isEmpty) {
-                        return "Property No. is required";
+                        return localizations.propertyNoIsRequired;
                       }
                       return null;
                     },
                     controller: propertyNoController,
-                    decoration: const InputDecoration(
-                      hintText: "Property No.",
-                      border: OutlineInputBorder(
+                    decoration: InputDecoration(
+                      hintText: localizations.propertyNo,
+                      border: const OutlineInputBorder(
                         borderSide: BorderSide(color: Colors.black),
                       ),
                     ),
@@ -69,7 +71,7 @@ class PropertyTaxWidget extends StatelessWidget {
                       borderRadius: BorderRadius.all(Radius.zero),
                     ),
                   ),
-                  child: const Text("Search"),
+                  child: Text(localizations.search),
                 ),
               ];
               return data;
@@ -81,10 +83,11 @@ class PropertyTaxWidget extends StatelessWidget {
   }
 
   Widget buildDetails(context, _, __) {
+    final AppLocalizations localizations = AppLocalizations.of(context)!;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        const HeaderWidget(title: "Property Tax"),
+        HeaderWidget(title: localizations.propertyTax),
         Expanded(
           child: FutureBuilder(
             future: soapClient.getPropertyTax(propertyNoController.text),
@@ -102,7 +105,7 @@ class PropertyTaxWidget extends StatelessWidget {
                     (_) => ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(
                         content: Text(
-                          "No data found for $propertyNo",
+                          localizations.noDataFoundFor(propertyNo)
                         ),
                       ),
                     ),
@@ -118,7 +121,8 @@ class PropertyTaxWidget extends StatelessWidget {
                       children: [
                         Table(
                           border: TableBorder.symmetric(
-                              outside: BorderSide(color: Colors.grey[600]!)),
+                            outside: BorderSide(color: Colors.grey[600]!),
+                          ),
                           columnWidths: const {
                             1: FlexColumnWidth(2),
                           },
@@ -127,12 +131,12 @@ class PropertyTaxWidget extends StatelessWidget {
                               decoration: BoxDecoration(
                                   color: Theme.of(context).primaryColor),
                               children: [
-                                const TableCell(
+                                TableCell(
                                   child: Padding(
-                                    padding: EdgeInsets.all(8.0),
+                                    padding: const EdgeInsets.all(8.0),
                                     child: Text(
-                                      "Bill No.",
-                                      style: TextStyle(
+                                      localizations.billNo,
+                                      style: const TextStyle(
                                         fontWeight: FontWeight.bold,
                                         color: Colors.white,
                                       ),
@@ -155,10 +159,10 @@ class PropertyTaxWidget extends StatelessWidget {
                             ),
                             TableRow(
                               children: [
-                                const TableCell(
+                                TableCell(
                                   child: Padding(
-                                    padding: EdgeInsets.all(8.0),
-                                    child: Text("Name"),
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Text(localizations.name),
                                   ),
                                 ),
                                 TableCell(
@@ -171,10 +175,10 @@ class PropertyTaxWidget extends StatelessWidget {
                             ),
                             TableRow(
                               children: [
-                                const TableCell(
+                                TableCell(
                                   child: Padding(
-                                    padding: EdgeInsets.all(8.0),
-                                    child: Text("Address"),
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Text(localizations.address),
                                   ),
                                 ),
                                 TableCell(
@@ -187,10 +191,10 @@ class PropertyTaxWidget extends StatelessWidget {
                             ),
                             TableRow(
                               children: [
-                                const TableCell(
+                                TableCell(
                                   child: Padding(
-                                    padding: EdgeInsets.all(8.0),
-                                    child: Text("Property No."),
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Text(localizations.propertyNo),
                                   ),
                                 ),
                                 TableCell(
@@ -219,12 +223,13 @@ class PropertyTaxWidget extends StatelessWidget {
                             List<TableRow> rows = [
                               TableRow(
                                 decoration: BoxDecoration(
-                                    color: Theme.of(context).primaryColor),
+                                  color: Theme.of(context).primaryColor,
+                                ),
                                 children: [
-                                  "Property Tax",
-                                  "Previous",
-                                  "Current",
-                                  "Total"
+                                  localizations.propertyTax,
+                                  localizations.previous,
+                                  localizations.current,
+                                  localizations.total,
                                 ]
                                     .map(
                                       (title) => TableCell(
@@ -309,18 +314,18 @@ class PropertyTaxWidget extends StatelessWidget {
                                 TextFormField(
                                   validator: (value) {
                                     if (value == null || value.isEmpty) {
-                                      return "Mobile is required";
+                                      return localizations.mobileIsRequired;
                                     }
                                     if (!RegExp(r"^[0-9]{10}")
                                         .hasMatch(value)) {
-                                      return "Mobile is invalid";
+                                      return localizations.mobileIsInvalid;
                                     }
                                     return null;
                                   },
                                   controller: mobileController,
-                                  decoration: const InputDecoration(
-                                    hintText: "Mobile No.",
-                                    border: OutlineInputBorder(
+                                  decoration: InputDecoration(
+                                    hintText: localizations.mobileNo,
+                                    border: const OutlineInputBorder(
                                       borderSide:
                                           BorderSide(color: Colors.black),
                                     ),
@@ -330,19 +335,19 @@ class PropertyTaxWidget extends StatelessWidget {
                                 TextFormField(
                                   validator: (value) {
                                     if (value == null || value.isEmpty) {
-                                      return "Email is required";
+                                      return localizations.emailIsRequired;
                                     }
                                     if (!RegExp(
                                             r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
                                         .hasMatch(value)) {
-                                      return "Email is invalid";
+                                      return localizations.emailIsInvalid;
                                     }
                                     return null;
                                   },
                                   controller: emailController,
-                                  decoration: const InputDecoration(
-                                    hintText: "Email",
-                                    border: OutlineInputBorder(
+                                  decoration: InputDecoration(
+                                    hintText: localizations.email,
+                                    border: const OutlineInputBorder(
                                       borderSide:
                                           BorderSide(color: Colors.black),
                                     ),
@@ -352,16 +357,16 @@ class PropertyTaxWidget extends StatelessWidget {
                                 TextFormField(
                                   validator: (value) {
                                     if (value == null || value.isEmpty) {
-                                      return "Amount is required";
+                                      return localizations.amountIsRequired;
                                     }
                                     if (!RegExp(r"^\d+$").hasMatch(value)) {
-                                      return "Amount is invalid";
+                                      return localizations.amountIsInvalid;
                                     }
                                     return null;
                                   },
-                                  decoration: const InputDecoration(
-                                    hintText: "Amount to Pay",
-                                    border: OutlineInputBorder(
+                                  decoration: InputDecoration(
+                                    hintText: localizations.amountToPay,
+                                    border: const OutlineInputBorder(
                                       borderSide:
                                           BorderSide(color: Colors.black),
                                     ),
@@ -382,7 +387,7 @@ class PropertyTaxWidget extends StatelessWidget {
                               borderRadius: BorderRadius.all(Radius.zero),
                             ),
                           ),
-                          child: const Text("Pay Bill"),
+                          child: Text(localizations.payBill),
                         )
                       ],
                     ),
@@ -390,7 +395,7 @@ class PropertyTaxWidget extends StatelessWidget {
                 );
               }
               if (snapshot.hasError) {
-                return const Center(child: Text("Failed to load data"));
+                return Center(child: Text(localizations.failedToLoadData));
               }
               return const Center(child: CircularProgressIndicator());
             },

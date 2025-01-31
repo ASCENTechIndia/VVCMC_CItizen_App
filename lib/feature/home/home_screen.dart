@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:vvcmc_citizen_app/feature/home/temperature_grid_widget.dart';
 import 'package:vvcmc_citizen_app/models/temperature.dart';
 import 'package:vvcmc_citizen_app/utils/get_it.dart';
@@ -41,7 +42,8 @@ class HomeScreen extends StatelessWidget {
                 PropertyTaxWidget(),
             "view_your_tax/download_your_property_tax": (context) =>
                 const PropertyTaxReceiptWidget(),
-            "view_your_tax/view_your_water_tax": (context) => const WaterTaxWidget(),
+            "view_your_tax/view_your_water_tax": (context) =>
+                const WaterTaxWidget(),
             "view_your_tax/download_your_water_tax": (context) =>
                 const WaterTaxReceiptWidget(),
             "register_your_complaint": (context) =>
@@ -118,28 +120,29 @@ class HomeScreen extends StatelessWidget {
   }
 
   Widget buildViewTax(context) {
+    final AppLocalizations localizations = AppLocalizations.of(context)!;
     List cards = [
       [
         {
           "icon": "property-tax.png",
-          "text": "View Your Property Tax",
+          "text": localizations.viewYourPropertyTax,
           "route": "view_your_property_tax",
         },
         {
           "icon": "water-tax.png",
-          "text": "View Your Water Tax",
+          "text": localizations.viewYourWaterTax,
           "route": "view_your_water_tax",
         },
       ],
       [
         {
           "icon": "property-tax.png",
-          "text": "Download Property Tax Receipt",
+          "text": localizations.downloadYourPropertyTaxReceipt,
           "route": "download_your_property_tax",
         },
         {
           "icon": "water-tax.png",
-          "text": "Download Water Tax Receipt",
+          "text": localizations.downloadYourWaterTaxReceipt,
           "route": "download_your_water_tax",
         },
       ],
@@ -197,16 +200,17 @@ class HomeScreen extends StatelessWidget {
   }
 
   Widget buildHome(context) {
+    final AppLocalizations localizations = AppLocalizations.of(context)!;
     List cards = [
       [
         {
           "icon": "property-tax.png",
-          "text": "View Your Tax",
+          "text": localizations.viewYourTax,
           "onTap": () => Navigator.of(context).pushNamed("view_your_tax"),
         },
         {
           "icon": "complaint.png",
-          "text": "Register Your Complaint",
+          "text": localizations.registerYourComplaint,
           "onTap": () =>
               Navigator.of(context).pushNamed("register_your_complaint"),
         },
@@ -214,7 +218,7 @@ class HomeScreen extends StatelessWidget {
       [
         {
           "icon": "news.png",
-          "text": "News Update",
+          "text": localizations.newsUpdate,
           "onTap": () => Navigator.of(context, rootNavigator: true).pushNamed(
                 "/web",
                 arguments: {
@@ -225,7 +229,7 @@ class HomeScreen extends StatelessWidget {
         },
         {
           "icon": "vote.png",
-          "text": "Election",
+          "text": localizations.election,
           "onTap": () => Navigator.of(context, rootNavigator: true).pushNamed(
                 "/web",
                 arguments: {
@@ -238,12 +242,12 @@ class HomeScreen extends StatelessWidget {
       [
         {
           "icon": "temperature.png",
-          "text": "Temperature",
+          "text": localizations.temperature,
           "onTap": () => Navigator.of(context).pushNamed("temperature"),
         },
         {
           "icon": "scheme.png",
-          "text": "Scheme",
+          "text": localizations.scheme,
           "onTap": () => Navigator.of(context, rootNavigator: true).pushNamed(
                 "/web",
                 arguments: {
@@ -263,9 +267,9 @@ class HomeScreen extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              const Text(
-                "Your city services, updates, and more - all in one place!",
-                style: TextStyle(
+              Text(
+                localizations.yourCityServices,
+                style: const TextStyle(
                   fontWeight: FontWeight.w500,
                   fontSize: 16,
                 ),
@@ -319,16 +323,17 @@ class HomeScreen extends StatelessWidget {
               Center(
                 child: CardWidget(
                   icon: Image.asset("assets/icons/disaster.png"),
-                  title: const Text(
-                    "Disaster Management",
-                    style: TextStyle(fontSize: 12, fontWeight: FontWeight.w500),
+                  title: Text(
+                    localizations.disasterManagement,
+                    style: const TextStyle(
+                        fontSize: 12, fontWeight: FontWeight.w500),
                   ),
                   onTap: () {
                     Navigator.of(context, rootNavigator: true).pushNamed(
                       "/web",
                       arguments: {
                         "url": "https://vvcmc.in/important-contact",
-                        "title": "Disaster Management",
+                        "title": localizations.disasterManagement,
                       },
                     );
                   },

@@ -153,12 +153,12 @@ class _MainState extends State<Main> with TickerProviderStateMixin {
         setState(() {});
       }
     });
-    // Todo: implement initState
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
+    final localizations = AppLocalizations.of(context)!;
     // This method is rerun every time setState is called, for instance as done
     // by the _incrementCounter method above.
     //
@@ -188,16 +188,16 @@ class _MainState extends State<Main> with TickerProviderStateMixin {
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text(
-                      "Vasai Virar City",
+                    Text(
+                      localizations.vasaiVirarCity,
                       style: TextStyle(
                         fontSize: 15,
                         fontWeight: FontWeight.bold,
                         color: Colors.white,
                       ),
                     ),
-                    const Text(
-                      "Municipal Corporation",
+                    Text(
+                      localizations.municipalCorporation,
                       style: TextStyle(
                         fontSize: 15,
                         fontWeight: FontWeight.bold,
@@ -263,8 +263,10 @@ class _MainState extends State<Main> with TickerProviderStateMixin {
               ? const BoxDecoration()
               : BoxDecoration(
                   border: BorderDirectional(
-                      bottom: BorderSide(
-                          width: 2.0, color: Theme.of(context).primaryColor))),
+                    bottom: BorderSide(
+                        width: 2.0, color: Theme.of(context).primaryColor),
+                  ),
+                ),
           indicatorPadding: const EdgeInsets.only(bottom: 8.0),
           tabs: [
             Padding(
@@ -278,7 +280,7 @@ class _MainState extends State<Main> with TickerProviderStateMixin {
                   size: 32,
                 ),
                 child: Text(
-                  "Home",
+                  localizations.home,
                   style: TextStyle(
                     fontWeight: _tabController.index == 0
                         ? FontWeight.bold
@@ -299,7 +301,7 @@ class _MainState extends State<Main> with TickerProviderStateMixin {
                   size: 32,
                 ),
                 child: Text(
-                  "Services",
+                  localizations.services,
                   style: TextStyle(
                     fontWeight: _tabController.index == 1
                         ? FontWeight.bold
@@ -320,7 +322,7 @@ class _MainState extends State<Main> with TickerProviderStateMixin {
                   size: 32,
                 ),
                 child: Text(
-                  "Utilities",
+                  localizations.utilities,
                   style: TextStyle(
                     fontWeight: _tabController.index == 2
                         ? FontWeight.bold

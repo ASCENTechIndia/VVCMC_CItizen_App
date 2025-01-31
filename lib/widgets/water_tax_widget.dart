@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:vvcmc_citizen_app/models/ward.dart';
 import 'package:vvcmc_citizen_app/models/water_tax_details.dart';
@@ -31,10 +32,11 @@ class _WaterTaxWidgetState extends State<WaterTaxWidget> {
 
   @override
   Widget build(BuildContext context) {
+    final AppLocalizations localizations = AppLocalizations.of(context)!;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        const HeaderWidget(title: "Water Tax"),
+        HeaderWidget(title: localizations.waterTax),
         Expanded(
           child: Form(
             key: formKey,
@@ -48,9 +50,9 @@ class _WaterTaxWidgetState extends State<WaterTaxWidget> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
-                        const Text(
-                          "Zone",
-                          style: TextStyle(
+                        Text(
+                          localizations.zone,
+                          style: const TextStyle(
                             fontSize: 20,
                             fontWeight: FontWeight.bold,
                           ),
@@ -75,17 +77,17 @@ class _WaterTaxWidgetState extends State<WaterTaxWidget> {
                                 ),
                               )
                               .toList(),
-                          decoration: const InputDecoration(
-                            hintText: "Select Zone",
-                            border: OutlineInputBorder(
+                          decoration: InputDecoration(
+                            hintText: localizations.selectZone,
+                            border: const OutlineInputBorder(
                               borderSide: BorderSide(color: Colors.black),
                             ),
                           ),
                         ),
                         const SizedBox(height: 10),
-                        const Text(
-                          "Ward",
-                          style: TextStyle(
+                        Text(
+                          localizations.ward,
+                          style: const TextStyle(
                               fontSize: 20, fontWeight: FontWeight.bold),
                         ),
                         const SizedBox(height: 10),
@@ -104,9 +106,9 @@ class _WaterTaxWidgetState extends State<WaterTaxWidget> {
                                 ),
                               )
                               .toList(),
-                          decoration: const InputDecoration(
-                            hintText: "Select Ward",
-                            border: OutlineInputBorder(
+                          decoration: InputDecoration(
+                            hintText: localizations.selectWard,
+                            border: const OutlineInputBorder(
                               borderSide: BorderSide(color: Colors.black),
                             ),
                           ),
@@ -114,9 +116,9 @@ class _WaterTaxWidgetState extends State<WaterTaxWidget> {
                         const SizedBox(height: 10),
                         TextFormField(
                           controller: taxNoController,
-                          decoration: const InputDecoration(
-                            hintText: "Tax No.",
-                            border: OutlineInputBorder(
+                          decoration: InputDecoration(
+                            hintText: localizations.taxNo,
+                            border: const OutlineInputBorder(
                               borderSide: BorderSide(color: Colors.black),
                             ),
                           ),
@@ -139,14 +141,14 @@ class _WaterTaxWidgetState extends State<WaterTaxWidget> {
                               borderRadius: BorderRadius.all(Radius.zero),
                             ),
                           ),
-                          child: const Text("Search"),
+                          child: Text(localizations.search),
                         ),
                       ],
                     ),
                   );
                 }
                 if (snapshot.hasError) {
-                  return const Center(child: Text("Failed to load data"));
+                  return Center(child: Text(localizations.failedToLoadData));
                 }
                 return const Center(child: CircularProgressIndicator());
               },
@@ -158,10 +160,11 @@ class _WaterTaxWidgetState extends State<WaterTaxWidget> {
   }
 
   Widget buildDetails(context, _, __) {
+    final AppLocalizations localizations = AppLocalizations.of(context)!;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        const HeaderWidget(title: "Water Tax Bill"),
+        HeaderWidget(title: localizations.waterTaxBill),
         Expanded(
           child: FutureBuilder(
             future: soapClient.getWaterTaxDetails(
@@ -195,12 +198,12 @@ class _WaterTaxWidgetState extends State<WaterTaxWidget> {
                               decoration: BoxDecoration(
                                   color: Theme.of(context).primaryColor),
                               children: [
-                                const TableCell(
+                                TableCell(
                                   child: Padding(
-                                    padding: EdgeInsets.all(8.0),
+                                    padding: const EdgeInsets.all(8.0),
                                     child: Text(
-                                      "Connection No.",
-                                      style: TextStyle(
+                                      localizations.connectionNo,
+                                      style: const TextStyle(
                                         fontWeight: FontWeight.bold,
                                         color: Colors.white,
                                       ),
@@ -223,10 +226,10 @@ class _WaterTaxWidgetState extends State<WaterTaxWidget> {
                             ),
                             TableRow(
                               children: [
-                                const TableCell(
+                                TableCell(
                                   child: Padding(
-                                    padding: EdgeInsets.all(8.0),
-                                    child: Text("Name"),
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Text(localizations.name),
                                   ),
                                 ),
                                 TableCell(
@@ -239,10 +242,10 @@ class _WaterTaxWidgetState extends State<WaterTaxWidget> {
                             ),
                             TableRow(
                               children: [
-                                const TableCell(
+                                TableCell(
                                   child: Padding(
-                                    padding: EdgeInsets.all(8.0),
-                                    child: Text("Road Name"),
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Text(localizations.roadName),
                                   ),
                                 ),
                                 TableCell(
@@ -255,11 +258,11 @@ class _WaterTaxWidgetState extends State<WaterTaxWidget> {
                             ),
                             TableRow(
                               children: [
-                                const TableCell(
+                                TableCell(
                                   child: Padding(
-                                    padding: EdgeInsets.all(8.0),
+                                    padding: const EdgeInsets.all(8.0),
                                     child: Text(
-                                      "Previous Bill Amt.",
+                                      localizations.previousBillAmt,
                                     ),
                                   ),
                                 ),
@@ -273,10 +276,10 @@ class _WaterTaxWidgetState extends State<WaterTaxWidget> {
                             ),
                             TableRow(
                               children: [
-                                const TableCell(
+                                TableCell(
                                   child: Padding(
-                                    padding: EdgeInsets.all(8.0),
-                                    child: Text("Current Bill Amt."),
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Text(localizations.currentBillAmt),
                                   ),
                                 ),
                                 TableCell(
@@ -289,10 +292,10 @@ class _WaterTaxWidgetState extends State<WaterTaxWidget> {
                             ),
                             TableRow(
                               children: [
-                                const TableCell(
+                                TableCell(
                                   child: Padding(
-                                    padding: EdgeInsets.all(8.0),
-                                    child: Text("Total (Rs.)"),
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Text(localizations.totalRs),
                                   ),
                                 ),
                                 TableCell(
@@ -320,9 +323,9 @@ class _WaterTaxWidgetState extends State<WaterTaxWidget> {
                               children: [
                                 TextFormField(
                                   controller: mobileController,
-                                  decoration: const InputDecoration(
-                                    hintText: "Mobile No.",
-                                    border: OutlineInputBorder(
+                                  decoration: InputDecoration(
+                                    hintText: localizations.mobileNo,
+                                    border: const OutlineInputBorder(
                                       borderSide:
                                           BorderSide(color: Colors.black),
                                     ),
@@ -332,19 +335,19 @@ class _WaterTaxWidgetState extends State<WaterTaxWidget> {
                                 TextFormField(
                                   validator: (value) {
                                     if (value == null || value.isEmpty) {
-                                      return "Email is required";
+                                      return localizations.emailIsRequired;
                                     }
                                     if (!RegExp(
                                             r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
                                         .hasMatch(value)) {
-                                      return "Email is invalid";
+                                      return localizations.emailIsInvalid;
                                     }
                                     return null;
                                   },
                                   controller: emailController,
-                                  decoration: const InputDecoration(
-                                    hintText: "Email",
-                                    border: OutlineInputBorder(
+                                  decoration: InputDecoration(
+                                    hintText: localizations.email,
+                                    border: const OutlineInputBorder(
                                       borderSide:
                                           BorderSide(color: Colors.black),
                                     ),
@@ -354,17 +357,17 @@ class _WaterTaxWidgetState extends State<WaterTaxWidget> {
                                 TextFormField(
                                   validator: (value) {
                                     if (value == null || value.isEmpty) {
-                                      return "Amount is required";
+                                      return localizations.amountIsRequired;
                                     }
                                     if (!RegExp(r"^\d+$").hasMatch(value)) {
-                                      return "Amount is invalid";
+                                      return localizations.amountIsInvalid;
                                     }
                                     return null;
                                   },
                                   controller: amountController,
-                                  decoration: const InputDecoration(
-                                    hintText: "Amount to Pay",
-                                    border: OutlineInputBorder(
+                                  decoration: InputDecoration(
+                                    hintText: localizations.amountToPay,
+                                    border: const OutlineInputBorder(
                                       borderSide:
                                           BorderSide(color: Colors.black),
                                     ),
@@ -385,7 +388,7 @@ class _WaterTaxWidgetState extends State<WaterTaxWidget> {
                               borderRadius: BorderRadius.all(Radius.zero),
                             ),
                           ),
-                          child: const Text("Pay Bill"),
+                          child: Text(localizations.payBill),
                         )
                       ],
                     ),
@@ -395,9 +398,9 @@ class _WaterTaxWidgetState extends State<WaterTaxWidget> {
               if (snapshot.hasError) {
                 WidgetsBinding.instance.addPostFrameCallback(
                   (_) => ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
+                    SnackBar(
                       content: Text(
-                        "No data found",
+                        localizations.noDataFound,
                       ),
                     ),
                   ),

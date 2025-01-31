@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:location/location.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -50,10 +51,11 @@ class _RegisterComplaintWidgetState extends State<RegisterComplaintWidget> {
 
   @override
   Widget build(BuildContext context) {
+    final AppLocalizations localizations = AppLocalizations.of(context)!;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        const HeaderWidget(title: "Register Your Complaint"),
+        HeaderWidget(title: localizations.registerYourComplaint),
         Expanded(
           child: FutureBuilder(
             future: Future.wait(
@@ -73,7 +75,7 @@ class _RegisterComplaintWidgetState extends State<RegisterComplaintWidget> {
                           DropdownButtonFormField(
                             validator: (value) {
                               if (value == null) {
-                                return "Prabhag is required";
+                                return localizations.prabhagIsRequired;
                               }
                               return null;
                             },
@@ -92,9 +94,9 @@ class _RegisterComplaintWidgetState extends State<RegisterComplaintWidget> {
                                   ),
                                 )
                                 .toList(),
-                            decoration: const InputDecoration(
-                              hintText: "Select Prabhag",
-                              border: OutlineInputBorder(
+                            decoration: InputDecoration(
+                              hintText: localizations.selectPrabhag,
+                              border: const OutlineInputBorder(
                                 borderSide: BorderSide(color: Colors.black),
                               ),
                             ),
@@ -103,7 +105,7 @@ class _RegisterComplaintWidgetState extends State<RegisterComplaintWidget> {
                           DropdownButtonFormField(
                             validator: (value) {
                               if (value == null) {
-                                return "Department is required";
+                                return localizations.departmentIsRequired;
                               }
                               return null;
                             },
@@ -126,9 +128,9 @@ class _RegisterComplaintWidgetState extends State<RegisterComplaintWidget> {
                                   ),
                                 )
                                 .toList(),
-                            decoration: const InputDecoration(
-                              hintText: "Select Department",
-                              border: OutlineInputBorder(
+                            decoration: InputDecoration(
+                              hintText: localizations.selectDepartment,
+                              border: const OutlineInputBorder(
                                 borderSide: BorderSide(color: Colors.black),
                               ),
                             ),
@@ -137,7 +139,7 @@ class _RegisterComplaintWidgetState extends State<RegisterComplaintWidget> {
                           DropdownButtonFormField(
                             validator: (value) {
                               if (value == null) {
-                                return "Complaint type is required";
+                                return localizations.complaintTypeIsRequired;
                               }
                               return null;
                             },
@@ -158,31 +160,31 @@ class _RegisterComplaintWidgetState extends State<RegisterComplaintWidget> {
                                   ),
                                 )
                                 .toList(),
-                            decoration: const InputDecoration(
-                              hintText: "Select Complaint Type",
-                              border: OutlineInputBorder(
+                            decoration: InputDecoration(
+                              hintText: localizations.selectComplaintType,
+                              border: const OutlineInputBorder(
                                 borderSide: BorderSide(color: Colors.black),
                               ),
                             ),
                           ),
                           const SizedBox(height: 10),
-                          const Text(
-                            "Complaint Details",
-                            style: TextStyle(
+                          Text(
+                            localizations.complaintDetails,
+                            style: const TextStyle(
                                 fontSize: 18, fontWeight: FontWeight.bold),
                           ),
                           const SizedBox(height: 10),
                           TextFormField(
                             validator: (value) {
                               if (value == null || value.isEmpty) {
-                                return "Name is required";
+                                return localizations.nameIsRequired;
                               }
                               return null;
                             },
                             controller: nameController,
-                            decoration: const InputDecoration(
-                              hintText: "Name",
-                              border: OutlineInputBorder(
+                            decoration: InputDecoration(
+                              hintText: localizations.name,
+                              border: const OutlineInputBorder(
                                 borderSide: BorderSide(color: Colors.black),
                               ),
                             ),
@@ -191,17 +193,17 @@ class _RegisterComplaintWidgetState extends State<RegisterComplaintWidget> {
                           TextFormField(
                             validator: (value) {
                               if (value == null || value.isEmpty) {
-                                return "Mobile is required";
+                                return localizations.mobileIsRequired;
                               }
                               if (!RegExp(r"^[0-9]{10}").hasMatch(value)) {
-                                return "Mobile is invalid";
+                                return localizations.mobileIsInvalid;
                               }
                               return null;
                             },
                             controller: mobileController,
-                            decoration: const InputDecoration(
-                              hintText: "Mobile No.",
-                              border: OutlineInputBorder(
+                            decoration: InputDecoration(
+                              hintText: localizations.mobileNo,
+                              border: const OutlineInputBorder(
                                 borderSide: BorderSide(color: Colors.black),
                               ),
                             ),
@@ -210,19 +212,19 @@ class _RegisterComplaintWidgetState extends State<RegisterComplaintWidget> {
                           TextFormField(
                             validator: (value) {
                               if (value == null || value.isEmpty) {
-                                return "Email is required";
+                                return localizations.emailIsRequired;
                               }
                               if (!RegExp(
                                       r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
                                   .hasMatch(value)) {
-                                return "Email is invalid";
+                                return localizations.emailIsInvalid;
                               }
                               return null;
                             },
                             controller: emailController,
-                            decoration: const InputDecoration(
-                              hintText: "Email",
-                              border: OutlineInputBorder(
+                            decoration: InputDecoration(
+                              hintText: localizations.email,
+                              border: const OutlineInputBorder(
                                 borderSide: BorderSide(color: Colors.black),
                               ),
                             ),
@@ -231,14 +233,15 @@ class _RegisterComplaintWidgetState extends State<RegisterComplaintWidget> {
                           TextFormField(
                             validator: (value) {
                               if (value == null || value.isEmpty) {
-                                return "Complainant's address is required";
+                                return localizations
+                                    .complainantAddressIsRequired;
                               }
                               return null;
                             },
                             controller: addressController,
-                            decoration: const InputDecoration(
-                              hintText: "Complainant's Address",
-                              border: OutlineInputBorder(
+                            decoration: InputDecoration(
+                              hintText: localizations.complainantAddress,
+                              border: const OutlineInputBorder(
                                 borderSide: BorderSide(color: Colors.black),
                               ),
                             ),
@@ -247,14 +250,14 @@ class _RegisterComplaintWidgetState extends State<RegisterComplaintWidget> {
                           TextFormField(
                             validator: (value) {
                               if (value == null || value.isEmpty) {
-                                return "Complaint subject is required";
+                                return localizations.complaintSubjectIsRequired;
                               }
                               return null;
                             },
                             controller: subjectController,
-                            decoration: const InputDecoration(
-                              hintText: "Complaint Subject",
-                              border: OutlineInputBorder(
+                            decoration: InputDecoration(
+                              hintText: localizations.complaintSubject,
+                              border: const OutlineInputBorder(
                                 borderSide: BorderSide(color: Colors.black),
                               ),
                             ),
@@ -263,15 +266,15 @@ class _RegisterComplaintWidgetState extends State<RegisterComplaintWidget> {
                           TextFormField(
                             validator: (value) {
                               if (value == null || value.isEmpty) {
-                                return "Complaint details are required";
+                                return localizations
+                                    .complaintDetailsAreRequired;
                               }
                               return null;
                             },
                             controller: detailsController,
-                            decoration: const InputDecoration(
-                              hintText:
-                                  "Complaint Details (100 characters max)",
-                              border: OutlineInputBorder(
+                            decoration: InputDecoration(
+                              hintText: localizations.complaintDetails,
+                              border: const OutlineInputBorder(
                                 borderSide: BorderSide(color: Colors.black),
                               ),
                             ),
@@ -297,9 +300,11 @@ class _RegisterComplaintWidgetState extends State<RegisterComplaintWidget> {
                                       if (context.mounted) {
                                         ScaffoldMessenger.of(context)
                                             .showSnackBar(
-                                          const SnackBar(
+                                          SnackBar(
                                             content: Text(
-                                                "Unable to fetch location"),
+                                              localizations
+                                                  .unableToFetchLocation,
+                                            ),
                                           ),
                                         );
                                         return;
@@ -322,18 +327,21 @@ class _RegisterComplaintWidgetState extends State<RegisterComplaintWidget> {
                                       if (success) {
                                         ScaffoldMessenger.of(context)
                                             .showSnackBar(
-                                          const SnackBar(
+                                          SnackBar(
                                             content: Text(
-                                                "Complaint registered sucessfully"),
+                                              localizations
+                                                  .complaintRegisteredSuccessfully,
+                                            ),
                                           ),
                                         );
                                         Navigator.of(context).pop();
                                       } else {
                                         ScaffoldMessenger.of(context)
                                             .showSnackBar(
-                                          const SnackBar(
-                                            content:
-                                                Text("Something went wrong"),
+                                          SnackBar(
+                                            content: Text(
+                                              localizations.somethingWentWrong,
+                                            ),
                                           ),
                                         );
                                       }
@@ -347,16 +355,16 @@ class _RegisterComplaintWidgetState extends State<RegisterComplaintWidget> {
                                           BorderRadius.all(Radius.zero),
                                     ),
                                   ),
-                                  child: const Text("Submit"),
+                                  child: Text(localizations.submit),
                                 ),
                               ),
                             ],
                           ),
                           const SizedBox(height: 10),
-                          const Center(
+                          Center(
                             child: Text(
-                              "GPS Location Service should be on",
-                              style: TextStyle(
+                              localizations.gpsLocationServiceShouldBeOn,
+                              style: const TextStyle(
                                 color: Colors.red,
                                 fontWeight: FontWeight.bold,
                               ),
@@ -369,7 +377,7 @@ class _RegisterComplaintWidgetState extends State<RegisterComplaintWidget> {
                 );
               }
               if (snapshot.hasError) {
-                return const Center(child: Text("Failed to load data"));
+                return Center(child: Text(localizations.failedToLoadData));
               }
               return const Center(child: CircularProgressIndicator());
             },
