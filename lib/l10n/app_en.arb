@@ -1,4 +1,22 @@
 {
+    "@_AUTH": {},
+    "vasaiVirarMunicipalCorporation": "Vasai Virar Municipal Corporation",
+    "register": "Register",
+    "firstNameIsRequired": "First Name is required",
+    "firstName": "First Name",
+    "lastNameIsRequired": "last Name is required",
+    "lastName": "Last Name",
+    "aadharNo": "Aadhar No.",
+    "selectBloodGroup": "Select Blood Group",
+    "alreadyRegistered": "Already Registered",
+    "login": "Login",
+    "failedToSendOtp": "Failed to send OTP",
+    "verifyOtp": "Verify OTP",
+    "enterOtp": "Enter OTP",
+    "invalidOtp": "Invalid OTP",
+    "resendOtp": "Resend OTP",
+    "verify": "Verify",
+
     "@_MAIN": {},
     "vasaiVirarCity": "Vasai Virar City",
     "municipalCorporation": "Municipal Corporation",
@@ -25,7 +43,8 @@
     "search": "Search",
     "submit": "Submit",
     "close": "Close",
-    
+    "ambulance": "Ambulance",
+
     "@_HOME": {},
     "yourCityServices": "Your city services, updates, and more - all in one place!",
     "viewYourTax": "View Your Tax",
@@ -104,7 +123,6 @@
     
     "@_EMERGENCY_NUMBERS": {},
     "hospitals": "Hospitals",
-    "ambulance": "Ambulance",
     "policeStation": "Police Station",
     "fireBrigades": "Fire Brigades",
     "bloodBanks": "Blood Banks",
@@ -154,6 +172,12 @@
     "complaintDate": "Complaint Date",
     "statusDate": "Status Date",
     "remark": "Remark",
+
+    "@_SOS": {},
+    "police": "Police",
+    "fireBrigade": "Fire Brigade",
+    "emergencyNumber": "Emergency Number",
+    "getQuickHelp": "Get quick help in emergencies. Your safety is just one tap away.",
     
     "@_END": {}
 }

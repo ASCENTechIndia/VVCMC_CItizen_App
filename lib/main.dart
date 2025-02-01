@@ -109,7 +109,7 @@ class _MyAppState extends State<MyApp> {
   }
 
   void switchLocale() {
-    if (prefs.getString("locale") == "en") {
+    if ((prefs.getString("locale") ?? "en") == "en" ) {
       prefs.setString("locale", "mr");
       setState(() {
         locale = "mr";

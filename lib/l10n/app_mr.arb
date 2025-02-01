@@ -25,6 +25,7 @@
     "search": "Search",
     "submit": "Submit",
     "close": "Close",
+    "ambulance": "Ambulance",
     
     "@_HOME": {},
     "yourCityServices": "Your city services, updates, and more - all in one place!",
@@ -104,7 +105,6 @@
     
     "@_EMERGENCY_NUMBERS": {},
     "hospitals": "Hospitals",
-    "ambulance": "Ambulance",
     "policeStation": "Police Station",
     "fireBrigades": "Fire Brigades",
     "bloodBanks": "Blood Banks",
@@ -147,6 +147,19 @@
     "questionSix": "Does your household have a toilet",
     "questionSeven": "Are there any unattended garbage heaps in your area",
     "feedbackSubmittedSuccessfully": "Feedback submitted successfully",
+
+    "@_TRACK_COMPLAINT": {},
+    "complaintType": "Complaint Type",
+    "status": "Status",
+    "complaintDate": "Complaint Date",
+    "statusDate": "Status Date",
+    "remark": "Remark",
+
+    "@_SOS": {},
+    "police": "Police",
+    "fireBrigade": "Fire Brigade",
+    "emergencyNumber": "Emergency Number",
+    "getQuickHelp": "Get quick help in emergencies. Your safety is just one tap away.",
     
     "@_END": {}
 }
