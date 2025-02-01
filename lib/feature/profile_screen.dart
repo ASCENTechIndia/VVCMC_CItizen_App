@@ -65,14 +65,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   TextFormField(
                     validator: (value) {
                       if (value == null || value.isEmpty) {
-                      return localizations.firstNameIsRequired;
+                        return localizations.firstNameIsRequired;
                       }
                       return null;
                     },
                     controller: firstNameController,
                     decoration: InputDecoration(
-                    hintText: localizations.firstName,
-                      border: OutlineInputBorder(
+                      hintText: localizations.firstName,
+                      border: const OutlineInputBorder(
                         borderSide: BorderSide(color: Colors.black),
                       ),
                     ),
@@ -81,14 +81,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   TextFormField(
                     validator: (value) {
                       if (value == null || value.isEmpty) {
-                      return localizations.lastNameIsRequired;
+                        return localizations.lastNameIsRequired;
                       }
                       return null;
                     },
                     controller: lastNameController,
                     decoration: InputDecoration(
-                    hintText: localizations.lastName,
-                      border: OutlineInputBorder(
+                      hintText: localizations.lastName,
+                      border: const OutlineInputBorder(
                         borderSide: BorderSide(color: Colors.black),
                       ),
                     ),
@@ -97,19 +97,19 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   TextFormField(
                     validator: (value) {
                       if (value == null || value.isEmpty) {
-                      return localizations.emailIsRequired;
+                        return localizations.emailIsRequired;
                       }
                       if (!RegExp(
                               r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
                           .hasMatch(value)) {
-                      return localizations.emailIsInvalid;
+                        return localizations.emailIsInvalid;
                       }
                       return null;
                     },
                     controller: emailController,
                     decoration: InputDecoration(
-                    hintText: localizations.email,
-                      border: OutlineInputBorder(
+                      hintText: localizations.email,
+                      border: const OutlineInputBorder(
                         borderSide: BorderSide(color: Colors.black),
                       ),
                     ),
@@ -118,17 +118,17 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   TextFormField(
                     validator: (value) {
                       if (value == null || value.isEmpty) {
-                      return localizations.mobileIsRequired;
+                        return localizations.mobileIsRequired;
                       }
                       if (!RegExp(r"^[0-9]{10}").hasMatch(value)) {
-                      return localizations.mobileIsInvalid;
+                        return localizations.mobileIsInvalid;
                       }
                       return null;
                     },
                     controller: mobileController,
                     decoration: InputDecoration(
-                    hintText: localizations.mobileNo,
-                      border: OutlineInputBorder(
+                      hintText: localizations.mobileNo,
+                      border: const OutlineInputBorder(
                         borderSide: BorderSide(color: Colors.black),
                       ),
                     ),
@@ -137,8 +137,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   TextFormField(
                     controller: aadharController,
                     decoration: InputDecoration(
-                    hintText: localizations.aadharNo,
-                      border: OutlineInputBorder(
+                      hintText: localizations.aadharNo,
+                      border: const OutlineInputBorder(
                         borderSide: BorderSide(color: Colors.black),
                       ),
                     ),
@@ -170,8 +170,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         )
                         .toList(),
                     decoration: InputDecoration(
-                    hintText: localizations.selectBloodGroup,
-                      border: OutlineInputBorder(
+                      hintText: localizations.selectBloodGroup,
+                      border: const OutlineInputBorder(
                         borderSide: BorderSide(color: Colors.black),
                       ),
                     ),
@@ -198,7 +198,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           if (result) {
                             ScaffoldMessenger.of(context).showSnackBar(
                               SnackBar(
-                                content: Text(localizations.savedSuccessfully),
+                                content: Text(localizations.profileSavedSuccessfully),
                               ),
                             );
                             Navigator.of(context).pop();

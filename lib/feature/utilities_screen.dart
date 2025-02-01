@@ -559,7 +559,7 @@ class _UtilitiesScreenState extends State<UtilitiesScreen> {
                 "/web",
                 arguments: {
                   "url": "https://vvcmc.in/vaccination-press-note",
-                  "title": "News Update",
+                  "title": localizations.newsUpdate,
                 },
               ),
         },

@@ -27,7 +27,7 @@ class PropertyTaxWidget extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        HeaderWidget(title: localizations.viewYourPropertyTax),
+        HeaderWidget(title: localizations.propertyTax),
         Padding(
           padding: const EdgeInsets.all(16.0),
           child: Column(
@@ -87,7 +87,7 @@ class PropertyTaxWidget extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        HeaderWidget(title: localizations.propertyTax),
+        HeaderWidget(title: localizations.propertyTaxBill),
         Expanded(
           child: FutureBuilder(
             future: soapClient.getPropertyTax(propertyNoController.text),

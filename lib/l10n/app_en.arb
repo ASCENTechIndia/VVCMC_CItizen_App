@@ -3,7 +3,6 @@
     "vasaiVirarMunicipalCorporation": "Vasai Virar Municipal Corporation",
     "register": "Register",
     "alreadyRegistered": "Already Registered",
-    "login": "Login",
     "failedToSendOtp": "Failed to send OTP",
     "verifyOtp": "Verify OTP",
     "enterOtp": "Enter OTP",
@@ -32,11 +31,12 @@
     "name": "Name",
     "firstName": "First Name",
     "lastName": "Last Name",
+    "address": "Address",
     "selectBloodGroup": "Select Blood Group",
     "aadharNo": "Aadhar No.",
     "mobileNo": "Mobile No.",
     "email": "Email",
-    "amountToPay": "AmountToPay",
+    "amountToPay": "Amount to pay",
     "payBill": "Pay Bill",
     "failedToLoadData": "Failed to load data",
     "noDataFound": "No data found", 
@@ -44,6 +44,9 @@
     "submit": "Submit",
     "close": "Close",
     "ambulance": "Ambulance",
+    "confirmPhoneCall": "Confirm Phone Call",
+    "doYouWishToCall": "Do you wish to call {number}?",
+    "ward": "Ward",
 
     "@_HOME": {},
     "yourCityServices": "Your city services, updates, and more - all in one place!",
@@ -54,27 +57,31 @@
     "disasterManagement": "Disaster Management",
 
     "@_PROPERTY_TAX": {},
+    "propertyTax": "Property Tax",
+    "propertyTaxBill": "Property Tax Bill",
+    "propertyTaxReceipt": "Property Tax Receipt",
+    "propertyTaxDetails": "Property Tax Details",
     "viewYourPropertyTax": "View Your Property Tax",
     "downloadPropertyTaxReceipt": "Download Property Tax Receipt",
     "propertyNo": "Property No.",
     "propertyNoIsRequired": "Property No. is required",
     "noDataFoundFor": "No data found for {propertyNo}",
     "billNo": "Bill No.",
-    "address": "Address",
-    "propertyTax": "Property Tax",
     "previous": "Previous",
     "current": "Current",
     "total": "Total",
 
     "@_WATER_TAX": {},
+    "waterTax": "Water Tax",
+    "waterTaxBill": "Water Tax Bill",
+    "waterTaxReceipt": "Water Tax Receipt",
+    "waterTaxDetails": "Water Tax Details",
     "viewYourWaterTax": "View Your Water Tax",
     "downloadWaterTaxReceipt": "Download Water Tax Receipt",
     "zone": "Zone",
     "selectZone": "Select Zone",
-    "ward": "Ward",
     "selectWard": "Select Ward",
     "taxNo": "Tax No.",
-    "waterTaxBill": "Water Tax Bill",
     "connectionNo": "Connection No.",
     "roadName": "Road Name",
     "previousBillAmt": "Previous Bill Amt.",
@@ -95,7 +102,7 @@
     "complaintSubjectIsRequired": "Complaint subject is required",
     "complaintSubject": "Complaint Subject",
     "complaintDetailsAreRequired": "Complaint details are required",
-    "complaintDetails": "Complaint Details (100 characters max)",
+    "complaintDetailsHint": "Complaint Details (100 characters max)",
     "unableToFetchLocation": "Unable to fetch location",
     "complaintRegisteredSuccessfully": "Complaint registered sucessfully",
     "somethingWentWrong": "Something went wrong",
@@ -119,8 +126,8 @@
     "accessEssentialServices": "Access essential services to keep your city life running smoothly.",
 
     "@_ABOUT_VVMC": {},
-    "aboutContent" : "Vasai-Virar City is the only Municipal Corporation in the newly formed Palghar district. It is located at North Mumbai. The area of Vasai-Virar City is 311 sq. km. The city is located on the north bank of Vasai Creek, part of the estuary of the Ulhas River.\n\nVasai-Virar City has been separated from Greater Mumbai and Mira-Bhayandar City by the Vasai Creek. The City is well connected to Mumbai by Western Railway and through Mumbai-Ahmedabad National Highway. The city is connected to Navi Mumbai, Thane, Bhiwandi, Kalyan and Panvel cities by the Vasai-Diva Railway line. Vasai Virar city has significant growth potential due to close proximity to Brihan Mumbai.\n\nThe Vasai-Virar City Municipal Corporation (VVCMC) was established on 3rd July 2009. Vasai Virar corporation is located between 19 deg. 28 min. north-90 deg. 47 min. north latitude and 72 deg. 48 min. east-72 deg. 8 min. east.\n\nVasai Virar is a historical city and an important business port. The history of Vasai comes from ancient ages. One version of the origin of the name derived from Sanskrit word which means 'waas' or residence. The Portuguese influence is especially noticeable in Vasai and Virar. When Marathas invaded and colonized the region, they named it as 'Bajipura' or 'Bajipur'. But it did not stick. When England conquered the region from Marathas in the year 1774, they named it as Bassein region which is now called Vasai. Bassein was an important trading centre of that time. From 15th century it was ruled by Portuguese, followed by Diu and British This region has many Heritage installations.. The Bassein fort was initially built by Bahadurshah of Gujarat and further developed by Portuguese.",
-    
+    "aboutContent" : "\t\tVasai-Virar City is the only Municipal Corporation in the newly formed Palghar district. It is located at North Mumbai. The area of Vasai-Virar City is 311 sq. km. The city is located on the north bank of Vasai Creek, part of the estuary of the Ulhas River.\n\t\tVasai-Virar City has been separated from Greater Mumbai and Mira-Bhayandar City by the Vasai Creek. The City is well connected to Mumbai by Western Railway and through Mumbai-Ahmedabad National Highway. The city is connected to Navi Mumbai, Thane, Bhiwandi, Kalyan and Panvel cities by the Vasai-Diva Railway line. Vasai Virar city has significant growth potential due to close proximity to Brihan Mumbai.\n\t\tThe Vasai-Virar City Municipal Corporation (VVCMC) was established on 3rd July 2009. Vasai Virar corporation is located between 19 deg. 28 min. north-90 deg. 47 min. north latitude and 72 deg. 48 min. east-72 deg. 8 min. east\n\t\t\tHistory:-\n\t\tVasai Virar is a historical city and an important business port. The history of Vasai comes from ancient ages. One version of the origin of the name derived from Sanskrit word which means 'waas' or residence. The Portuguese influence is especially noticeable in Vasai and Virar. When Marathas invaded and colonized the region, they named it as 'Bajipura' or 'Bajipur'. But it did not stick. When England conquered the region from Marathas in the year 1774, they named it as Bassein region which is now called Vasai. Bassein was an important trading centre of that time. From 15th century it was ruled by Portuguese, followed by Diu and British This region has many Heritage installations.. The Bassein fort was initially built by Bahadurshah of Gujarat and further developed by Portuguese.",
+
     "@_EMERGENCY_NUMBERS": {},
     "hospitals": "Hospitals",
     "policeStation": "Police Station",
@@ -128,13 +135,13 @@
     "bloodBanks": "Blood Banks",
     "eyeBanks": "Eye Banks",
     "governmentOffices": "Government Offices",
-    
-    "@_OFFICIAL_NUMBERS": {},
-    "ward": "Ward",
 
     "@_COMMISSIONER_MESSAGE": {},
     "shriAnilkumar": "Shri. Anilkumar Khanderao Pawar(I.A.S.)",
     "commissionerMessageContent": "The Corporation is constantly working for health and well being of its citizens and in lieu of that citizens pay various taxes. Information about these taxes including tax rates, necessary application forms and their details is given on the website in a simple and easily understandable language for the common man. Also importantly, the Development Plan of city has been made available on the website, which can be very useful for land use planning to the citizens.\n\nI will try to bring more transparency and accountability in the system through e-governance. As the Municipal Commissioner, I would like to assure the citizens of Vasai Virar that we would constantly endeavor to achieve the goal of improving services provided by the Corporation to its citizens and to ensure that the website is helpful as a step towards achievement of that goal.",
+
+    "@_MAP": {},
+    "corporationMap": "Corporation Map",
 
     "@_UTILITIES": {},
     "cleanVvmc": "Clean VVMC",
@@ -154,7 +161,6 @@
     "landmarkIsRequired": "Landmark is required",
     "landmark": "Landmark",
     "addressIsRequired": "Address is required",
-    "address": "Address",    
     "yes": "Yes",
     "no": "No",
     "questionOne": "Do you find your area clean",
@@ -179,10 +185,13 @@
     "emergencyNumber": "Emergency Number",
     "getQuickHelp": "Get quick help in emergencies. Your safety is just one tap away.",
 
+    "@_NOTIFICATIONS": {},
+    "notifications": "Notifications",
+
     "@_PROFILE": {},
     "editProfile": "Edit Profile",
-    "savedSuccessfully": "Saved Successfully",
+    "profileSavedSuccessfully": "Profile saved successfully",
     "save": "Save",
-    
+
     "@_END": {}
 }

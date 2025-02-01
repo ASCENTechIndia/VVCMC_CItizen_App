@@ -486,7 +486,7 @@ class _ServicesScreenState extends State<ServicesScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        HeaderWidget(title: localizations.map),
+        HeaderWidget(title: localizations.corporationMap),
         Expanded(
           child: Padding(
             padding: const EdgeInsets.all(16.0),
@@ -574,9 +574,9 @@ class _ServicesScreenState extends State<ServicesScreen> {
                     ),
                   ),
                   const SizedBox(height: 20),
-                  const Text(
-                    "Email: commissioner.vvmc@gov.in",
-                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                  Text(
+                    "${localizations.email}: commissioner.vvmc@gov.in",
+                    style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
                   ),
                   const SizedBox(height: 20),
                   Text(localizations.commissionerMessageContent),
@@ -787,7 +787,7 @@ class _ServicesScreenState extends State<ServicesScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(localizations.aboutContent),
+                  Text(localizations.aboutContent, style: const TextStyle(fontSize: 16)),
                 ],
               ),
             ),

@@ -44,7 +44,7 @@ class SosScreen extends StatelessWidget {
                 children: [
                   Text(
                     localizations.getQuickHelp,
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontWeight: FontWeight.w500,
                       fontSize: 14,
                     ),
@@ -62,9 +62,10 @@ class SosScreen extends StatelessWidget {
                                   context: context,
                                   builder: (context) {
                                     return AlertDialog(
-                                      title: const Text("Confirm Phone Call"),
+                                      title: Text(localizations.confirmPhoneCall),
                                       content: Text(
-                                          "Do you wish to call ${card["text"]}?"),
+                                          localizations.doYouWishToCall(card["text"])
+                                          ),
                                       actions: [
                                         TextButton(
                                           child: Text(localizations.no),

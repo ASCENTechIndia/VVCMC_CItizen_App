@@ -156,7 +156,7 @@ class _AuthScreenState extends State<AuthScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        HeaderWidget(title: localizations.login),
+        HeaderWidget(title: localizations.alreadyRegistered),
         Padding(
           padding: const EdgeInsets.all(16),
           child: Column(
@@ -252,7 +252,7 @@ class _AuthScreenState extends State<AuthScreen> {
                   controller: firstNameController,
                   decoration: InputDecoration(
                     hintText: localizations.firstName,
-                    border: OutlineInputBorder(
+                    border: const OutlineInputBorder(
                       borderSide: BorderSide(color: Colors.black),
                     ),
                   ),
@@ -268,7 +268,7 @@ class _AuthScreenState extends State<AuthScreen> {
                   controller: lastNameController,
                   decoration: InputDecoration(
                     hintText: localizations.lastName,
-                    border: OutlineInputBorder(
+                    border: const OutlineInputBorder(
                       borderSide: BorderSide(color: Colors.black),
                     ),
                   ),
@@ -289,7 +289,7 @@ class _AuthScreenState extends State<AuthScreen> {
                   controller: emailController,
                   decoration: InputDecoration(
                     hintText: localizations.email,
-                    border: OutlineInputBorder(
+                    border: const OutlineInputBorder(
                       borderSide: BorderSide(color: Colors.black),
                     ),
                   ),
@@ -308,7 +308,7 @@ class _AuthScreenState extends State<AuthScreen> {
                   controller: mobileController,
                   decoration:  InputDecoration(
                     hintText: localizations.mobileNo,
-                    border: OutlineInputBorder(
+                    border: const OutlineInputBorder(
                       borderSide: BorderSide(color: Colors.black),
                     ),
                   ),
@@ -318,7 +318,7 @@ class _AuthScreenState extends State<AuthScreen> {
                   controller: aadharController,
                   decoration: InputDecoration(
                     hintText: localizations.aadharNo,
-                    border: OutlineInputBorder(
+                    border: const OutlineInputBorder(
                       borderSide: BorderSide(color: Colors.black),
                     ),
                   ),
@@ -351,7 +351,7 @@ class _AuthScreenState extends State<AuthScreen> {
                       .toList(),
                   decoration: InputDecoration(
                     hintText: localizations.selectBloodGroup,
-                    border: OutlineInputBorder(
+                    border: const OutlineInputBorder(
                       borderSide: BorderSide(color: Colors.black),
                     ),
                   ),

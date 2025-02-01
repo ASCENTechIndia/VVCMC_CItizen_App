@@ -273,7 +273,7 @@ class _RegisterComplaintWidgetState extends State<RegisterComplaintWidget> {
                             },
                             controller: detailsController,
                             decoration: InputDecoration(
-                              hintText: localizations.complaintDetails,
+                              hintText: localizations.complaintDetailsHint,
                               border: const OutlineInputBorder(
                                 borderSide: BorderSide(color: Colors.black),
                               ),

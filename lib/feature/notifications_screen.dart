@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:vvcmc_citizen_app/utils/get_it.dart';
 import 'package:vvcmc_citizen_app/utils/soap_client.dart';
 
@@ -7,6 +8,7 @@ class NotificationsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final AppLocalizations localizations = AppLocalizations.of(context)!;
     final soapClient = getIt<SoapClient>();
     final colorScheme = Theme.of(context).colorScheme;
     return Scaffold(
@@ -14,7 +16,7 @@ class NotificationsScreen extends StatelessWidget {
         iconTheme: const IconThemeData(color: Colors.white),
         backgroundColor: colorScheme.primary,
         title: Text(
-          "Notifications",
+          localizations.notifications,
           style: TextStyle(
             fontWeight: FontWeight.bold,
             fontSize: 24,
