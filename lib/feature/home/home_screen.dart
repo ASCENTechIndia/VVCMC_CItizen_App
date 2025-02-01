@@ -230,7 +230,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 "/web",
                 arguments: {
                   "url": "https://vvcmc.in/vaccination-press-note",
-                  "title": "News Update",
+                  "title": localizations.newsUpdate,
                 },
               ),
         },
@@ -241,7 +241,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 "/web",
                 arguments: {
                   "url": "https://vvcmc.in/election-page",
-                  "title": "Election",
+                  "title": localizations.election,
                 },
               ),
         },
@@ -259,7 +259,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 "/web",
                 arguments: {
                   "url": "https://vvcmc.in/scheme",
-                  "title": "Scheme",
+                  "title": localizations.scheme,
                 },
               ),
         }

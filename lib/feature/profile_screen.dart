@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:vvcmc_citizen_app/utils/get_it.dart';
 import 'package:vvcmc_citizen_app/utils/soap_client.dart';
@@ -34,13 +35,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final localizations = AppLocalizations.of(context)!;
     final colorScheme = Theme.of(context).colorScheme;
     return Scaffold(
       appBar: AppBar(
         iconTheme: const IconThemeData(color: Colors.white),
         backgroundColor: colorScheme.primary,
         title: Text(
-          "Edit Profile",
+          localizations.editProfile,
           style: TextStyle(
             fontWeight: FontWeight.bold,
             fontSize: 24,
@@ -63,13 +65,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   TextFormField(
                     validator: (value) {
                       if (value == null || value.isEmpty) {
-                        return "First Name is required";
+                      return localizations.firstNameIsRequired;
                       }
                       return null;
                     },
                     controller: firstNameController,
-                    decoration: const InputDecoration(
-                      hintText: "First Name",
+                    decoration: InputDecoration(
+                    hintText: localizations.firstName,
                       border: OutlineInputBorder(
                         borderSide: BorderSide(color: Colors.black),
                       ),
@@ -79,13 +81,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   TextFormField(
                     validator: (value) {
                       if (value == null || value.isEmpty) {
-                        return "Last Name is required";
+                      return localizations.lastNameIsRequired;
                       }
                       return null;
                     },
                     controller: lastNameController,
-                    decoration: const InputDecoration(
-                      hintText: "Last Name",
+                    decoration: InputDecoration(
+                    hintText: localizations.lastName,
                       border: OutlineInputBorder(
                         borderSide: BorderSide(color: Colors.black),
                       ),
@@ -95,18 +97,18 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   TextFormField(
                     validator: (value) {
                       if (value == null || value.isEmpty) {
-                        return "Email is required";
+                      return localizations.emailIsRequired;
                       }
                       if (!RegExp(
                               r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
                           .hasMatch(value)) {
-                        return "Email is invalid";
+                      return localizations.emailIsInvalid;
                       }
                       return null;
                     },
                     controller: emailController,
-                    decoration: const InputDecoration(
-                      hintText: "Email",
+                    decoration: InputDecoration(
+                    hintText: localizations.email,
                       border: OutlineInputBorder(
                         borderSide: BorderSide(color: Colors.black),
                       ),
@@ -116,16 +118,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   TextFormField(
                     validator: (value) {
                       if (value == null || value.isEmpty) {
-                        return "Mobile is required";
+                      return localizations.mobileIsRequired;
                       }
                       if (!RegExp(r"^[0-9]{10}").hasMatch(value)) {
-                        return "Mobile is invalid";
+                      return localizations.mobileIsInvalid;
                       }
                       return null;
                     },
                     controller: mobileController,
-                    decoration: const InputDecoration(
-                      hintText: "Mobile",
+                    decoration: InputDecoration(
+                    hintText: localizations.mobileNo,
                       border: OutlineInputBorder(
                         borderSide: BorderSide(color: Colors.black),
                       ),
@@ -134,8 +136,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   const SizedBox(height: 10),
                   TextFormField(
                     controller: aadharController,
-                    decoration: const InputDecoration(
-                      hintText: "Aadhar No.",
+                    decoration: InputDecoration(
+                    hintText: localizations.aadharNo,
                       border: OutlineInputBorder(
                         borderSide: BorderSide(color: Colors.black),
                       ),
@@ -167,8 +169,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           ),
                         )
                         .toList(),
-                    decoration: const InputDecoration(
-                      hintText: "Select Blood Group",
+                    decoration: InputDecoration(
+                    hintText: localizations.selectBloodGroup,
                       border: OutlineInputBorder(
                         borderSide: BorderSide(color: Colors.black),
                       ),
@@ -195,15 +197,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         if (context.mounted) {
                           if (result) {
                             ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
-                                content: Text("Saved sucessfully"),
+                              SnackBar(
+                                content: Text(localizations.savedSuccessfully),
                               ),
                             );
                             Navigator.of(context).pop();
                           } else {
                             ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
-                                content: Text("Something went wrong"),
+                              SnackBar(
+                                content: Text(localizations.somethingWentWrong),
                               ),
                             );
                           }
@@ -216,7 +218,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         borderRadius: BorderRadius.all(Radius.zero),
                       ),
                     ),
-                    child: const Text("Save"),
+                    child: Text(localizations.save),
                   ),
                 ],
               ),
