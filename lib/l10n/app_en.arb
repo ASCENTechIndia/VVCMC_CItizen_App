@@ -147,6 +147,13 @@
     "questionSix": "Does your household have a toilet",
     "questionSeven": "Are there any unattended garbage heaps in your area",
     "feedbackSubmittedSuccessfully": "Feedback submitted successfully",
+
+    "@_TRACK_COMPLAINT": {},
+    "complaintType": "Complaint Type",
+    "status": "Status",
+    "complaintDate": "Complaint Date",
+    "statusDate": "Status Date",
+    "remark": "Remark",
     
     "@_END": {}
 }

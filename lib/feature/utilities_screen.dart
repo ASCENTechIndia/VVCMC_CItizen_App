@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:vvcmc_citizen_app/models/complaint_details.dart';
+import 'package:vvcmc_citizen_app/models/complaint_status.dart';
 import 'package:vvcmc_citizen_app/utils/get_it.dart';
 import 'package:vvcmc_citizen_app/utils/soap_client.dart';
 import 'package:vvcmc_citizen_app/widgets/card_widget.dart';
@@ -30,6 +32,7 @@ class _UtilitiesScreenState extends State<UtilitiesScreen> {
   final areaController = TextEditingController();
   final landmarkController = TextEditingController();
   final addressController = TextEditingController();
+  String complaintNo = "";
 
   @override
   void initState() {
@@ -61,6 +64,8 @@ class _UtilitiesScreenState extends State<UtilitiesScreen> {
             "register_your_complaint": (context) =>
                 const RegisterComplaintWidget(),
             "clean_vvmc": buildClean,
+            "track_my_complaint": buildTrack,
+            "track_my_complaint/complaint_details": buildComplaintDetails,
             "vvmt": buildVVMT,
             "download_property_tax_receipt": (context) =>
                 const PropertyTaxReceiptWidget(),
@@ -116,6 +121,191 @@ class _UtilitiesScreenState extends State<UtilitiesScreen> {
           ),
         ],
       ),
+    );
+  }
+
+  Widget buildComplaintDetails(context) {
+    final localizations = AppLocalizations.of(context)!;
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        HeaderWidget(title: complaintNo),
+        Expanded(
+          child: FutureBuilder(
+            future: soapClient.getComplaintDetails(complaintNo),
+            builder: (context, AsyncSnapshot snapshot) {
+              if (snapshot.hasData) {
+                List<ComplaintDetails> complaintDetails = snapshot.data!;
+                return Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Builder(
+                    builder: (context) {
+                      List<TableRow> rows = [
+                        TableRow(
+                          decoration:
+                              BoxDecoration(color: Theme.of(context).primaryColor),
+                          children: [localizations.statusDate, localizations.status, localizations.remark]
+                              .map(
+                                (item) => TableCell(
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Text(
+                                      item,
+                                      textAlign: TextAlign.center,
+                                      style: const TextStyle(
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              )
+                              .toList(),
+                        ),
+                      ];
+                      for (var entry in complaintDetails.asMap().entries) {
+                        rows.add(
+                          TableRow(
+                            decoration: BoxDecoration(
+                              color:
+                                  entry.key % 2 == 0 ? Colors.white : Colors.blue[50],
+                            ),
+                            children: [entry.value.date, entry.value.status, entry.value.remark]
+                                .map(
+                                  (value) => TableCell(
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Text(value, style: const TextStyle(fontSize: 12)),
+                                    ),
+                                  ),
+                                )
+                                .toList(),
+                          ),
+                        );
+                      }
+                      return Table(
+                        columnWidths: const {
+                          3: FlexColumnWidth(2),
+                        },
+                        children: rows,
+                      );
+                    },
+                  ),
+                );
+              }
+              if (snapshot.hasError) {
+                return Center(child: Text(localizations.somethingWentWrong));
+              }
+              return const Center(child: CircularProgressIndicator());
+            },
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget buildTrack(context) {
+    final localizations = AppLocalizations.of(context)!;
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        HeaderWidget(title: localizations.trackMyComplaint),
+        Expanded(
+          child: FutureBuilder(
+            future: soapClient.getComplaintStatus(),
+            builder: (context, AsyncSnapshot snapshot) {
+              if (snapshot.hasData) {
+                List<ComplaintStatus> complaintStatus = snapshot.data!;
+                return Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Column(
+                    children: complaintStatus
+                        .map(
+                          (complaint) => Card(
+                            color: const Color(0xFFF5F5F5),
+                            elevation: 0,
+                            shape: RoundedRectangleBorder(
+                              side: BorderSide(color: Colors.grey[500]!),
+                            ),
+                            child: InkWell(
+                              onTap: () {
+                                setState(() {
+                                  complaintNo = complaint.complaintNo;
+                                });
+                                Navigator.of(context).pushNamed(
+                                    "track_my_complaint/complaint_details");
+                              },
+                              child: Padding(
+                                padding: const EdgeInsets.all(12.0),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                                  children: [
+                                    Text(
+                                      complaint.complaintNo,
+                                      style: const TextStyle(
+                                          fontSize: 18, fontWeight: FontWeight.bold),
+                                    ),
+                                    Table(
+                                      columnWidths: const {
+                                        1: FlexColumnWidth(2),
+                                      },
+                                      children: [
+                                        TableRow(children: [
+                                          TableCell(
+                                            child: Text(
+                                              localizations.complaintType,
+                                              style: TextStyle(
+                                                color: Theme.of(context).primaryColor,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
+                                          ),
+                                          TableCell(child: Text(complaint.type)),
+                                        ]),
+                                        TableRow(children: [
+                                          TableCell(
+                                            child: Text(
+                                              localizations.status,
+                                              style: TextStyle(
+                                                color: Theme.of(context).primaryColor,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
+                                          ),
+                                          TableCell(child: Text(complaint.status)),
+                                        ]),
+                                        TableRow(children: [
+                                          TableCell(
+                                            child: Text(
+                                              localizations.complaintDate,
+                                              style: TextStyle(
+                                                color: Theme.of(context).primaryColor,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
+                                          ),
+                                          TableCell(child: Text(complaint.date)),
+                                        ]),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
+                        )
+                        .toList(),
+                  ),
+                );
+              }
+              if (snapshot.hasError) {
+                return Center(child: Text(localizations.somethingWentWrong));
+              }
+              return const Center(child: CircularProgressIndicator());
+            },
+          ),
+        ),
+      ],
     );
   }
 
@@ -299,8 +489,9 @@ class _UtilitiesScreenState extends State<UtilitiesScreen> {
                           if (success) {
                             ScaffoldMessenger.of(context).showSnackBar(
                               SnackBar(
-                                content: Text(localizations
-                                    .feedbackSubmittedSuccessfully),
+                                content: Text(
+                                  localizations.feedbackSubmittedSuccessfully,
+                                ),
                               ),
                             );
                             Navigator.of(context).pop();

@@ -6,6 +6,8 @@ import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:vvcmc_citizen_app/models/ambulance.dart';
 import 'package:vvcmc_citizen_app/models/blood_bank.dart';
+import 'package:vvcmc_citizen_app/models/complaint_details.dart';
+import 'package:vvcmc_citizen_app/models/complaint_status.dart';
 import 'package:vvcmc_citizen_app/models/complaint_type.dart';
 import 'package:vvcmc_citizen_app/models/department.dart';
 import 'package:vvcmc_citizen_app/models/elected_member.dart';
@@ -664,15 +666,6 @@ class SoapClient {
   }
 
   Future<bool> storeUserDetails(String mobile) async {
-    //await Future.wait([
-    //  prefs.setString("firstName", ""),
-    //  prefs.setString("lastName", ""),
-    //  prefs.setString("mobile", ""),
-    //  prefs.setString("email", ""),
-    //  prefs.setString("aadhar", ""),
-    //  prefs.setString("bloodGroup", ""),
-    //]);
-    //return false;
     try {
       final [header, body] = await post(
         "GetUserDetails",
@@ -691,7 +684,8 @@ class SoapClient {
           "lastName",
           header.findElements("LastName").first.innerText,
         ),
-        prefs.setString("mobile", header.findElements("Mobile").first.innerText),
+        prefs.setString(
+            "mobile", header.findElements("Mobile").first.innerText),
         prefs.setString("email", header.findElements("Email").first.innerText),
         prefs.setString("aadhar", header.findElements("Adhar").first.innerText),
         prefs.setString(
@@ -703,6 +697,46 @@ class SoapClient {
     } catch (error) {
       log("$error");
       return false;
+    }
+  }
+
+  Future<List<ComplaintStatus>> getComplaintStatus() async {
+    try {
+      final [header, body] = await post("ComplaintStatus", {
+        "MobileNo": prefs.getString("mobile")!,
+        "ComplaintNo": "",
+      });
+      if (body == null) return [];
+      List<ComplaintStatus> complaintStatus = [];
+      for (var child in body.children) {
+        if (child.children.isNotEmpty) {
+          complaintStatus.add(ComplaintStatus.fromXML(child));
+        }
+      }
+      return complaintStatus;
+    } catch (error) {
+      log("$error");
+      rethrow;
+    }
+  }
+
+
+  Future<List<ComplaintDetails>> getComplaintDetails(String complaintNo) async {
+    try {
+      final [header, body] = await post("ComplaintNoDetails", {
+        "ComplaintNo": complaintNo,
+      });
+      if (body == null) return [];
+      List<ComplaintDetails> complaintDetails = [];
+      for (var child in body.children) {
+        if (child.children.isNotEmpty) {
+          complaintDetails.add(ComplaintDetails.fromXML(child));
+        }
+      }
+      return complaintDetails;
+    } catch (error) {
+      log("$error");
+      rethrow;
     }
   }
 }

@@ -69,6 +69,7 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Widget buildTemperature(context) {
+    final AppLocalizations localizations = AppLocalizations.of(context)!;
     return FutureBuilder(
       future: restClient.getTemperature(),
       builder: (context, AsyncSnapshot snapshot) {
@@ -118,7 +119,7 @@ class _HomeScreenState extends State<HomeScreen> {
           );
         }
         if (snapshot.hasError) {
-          return const Center(child: Text("Something went wrong"));
+          return Center(child: Text(localizations.somethingWentWrong));
         }
         return const Center(child: CircularProgressIndicator());
       },
