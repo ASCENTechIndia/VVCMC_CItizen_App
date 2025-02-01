@@ -46,11 +46,11 @@ class _HomeScreenState extends State<HomeScreen> {
             "view_your_tax": buildViewTax,
             "view_your_tax/view_your_property_tax": (context) =>
                 PropertyTaxWidget(),
-            "view_your_tax/download_your_property_tax": (context) =>
+            "view_your_tax/download_property_tax": (context) =>
                 const PropertyTaxReceiptWidget(),
             "view_your_tax/view_your_water_tax": (context) =>
                 const WaterTaxWidget(),
-            "view_your_tax/download_your_water_tax": (context) =>
+            "view_your_tax/download_water_tax": (context) =>
                 const WaterTaxReceiptWidget(),
             "register_your_complaint": (context) =>
                 const RegisterComplaintWidget(),
@@ -143,13 +143,13 @@ class _HomeScreenState extends State<HomeScreen> {
       [
         {
           "icon": "property-tax.png",
-          "text": localizations.downloadYourPropertyTaxReceipt,
-          "route": "download_your_property_tax",
+          "text": localizations.downloadPropertyTaxReceipt,
+          "route": "download_property_tax",
         },
         {
           "icon": "water-tax.png",
-          "text": localizations.downloadYourWaterTaxReceipt,
-          "route": "download_your_water_tax",
+          "text": localizations.downloadWaterTaxReceipt,
+          "route": "download_water_tax",
         },
       ],
     ];

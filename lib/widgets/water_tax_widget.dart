@@ -36,7 +36,7 @@ class _WaterTaxWidgetState extends State<WaterTaxWidget> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        HeaderWidget(title: localizations.waterTax),
+        HeaderWidget(title: localizations.viewYourWaterTax),
         Expanded(
           child: Form(
             key: formKey,

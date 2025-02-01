@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -186,14 +184,6 @@ class _AuthScreenState extends State<AuthScreen> {
                   });
                   bool result =
                       await soapClient.storeUserDetails(mobileController.text);
-                  log("RES: $result");
-                  log("${prefs.getString("firstName")!}");
-                  log("${prefs.getString("lastName")!}");
-                  log("${prefs.getString("email")!}");
-                  log("${prefs.getString("mobile")!}");
-                  log("${prefs.getString("aadhar")!}");
-                  log("${prefs.getString("bloodGroup")!}");
-
                   if (result) {
                     result = await soapClient.register(
                       prefs.getString("firstName")!,

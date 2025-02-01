@@ -8,7 +8,7 @@ import 'package:vvcmc_citizen_app/feature/notifications_screen.dart';
 import 'package:vvcmc_citizen_app/feature/profile_screen.dart';
 import 'package:vvcmc_citizen_app/feature/services_screen.dart';
 import 'package:vvcmc_citizen_app/feature/sos_screen.dart';
-import 'package:vvcmc_citizen_app/feature/utilities/utilities_screen.dart';
+import 'package:vvcmc_citizen_app/feature/utilities_screen.dart';
 import 'package:vvcmc_citizen_app/feature/webview_screen.dart';
 import 'package:vvcmc_citizen_app/utils/get_it.dart' as sl;
 
@@ -197,7 +197,7 @@ class _MainState extends State<Main> with TickerProviderStateMixin {
                   children: [
                     Text(
                       localizations.vasaiVirarCity,
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontSize: 15,
                         fontWeight: FontWeight.bold,
                         color: Colors.white,
@@ -205,7 +205,7 @@ class _MainState extends State<Main> with TickerProviderStateMixin {
                     ),
                     Text(
                       localizations.municipalCorporation,
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontSize: 15,
                         fontWeight: FontWeight.bold,
                         color: Colors.white,
