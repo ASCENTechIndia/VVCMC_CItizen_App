@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:vvcmc_citizen_app/models/bus_schedule.dart';
 import 'package:vvcmc_citizen_app/models/complaint_details.dart';
 import 'package:vvcmc_citizen_app/models/complaint_status.dart';
 import 'package:vvcmc_citizen_app/utils/get_it.dart';
@@ -32,6 +33,8 @@ class _UtilitiesScreenState extends State<UtilitiesScreen> {
   final areaController = TextEditingController();
   final landmarkController = TextEditingController();
   final addressController = TextEditingController();
+  final fromController = TextEditingController();
+  final toController = TextEditingController();
   String complaintNo = "";
 
   @override
@@ -47,6 +50,17 @@ class _UtilitiesScreenState extends State<UtilitiesScreen> {
     return PopScope(
       canPop: false,
       onPopInvokedWithResult: (_, __) {
+        nameController.text =
+            "${prefs.getString("firstName")!} ${prefs.getString("lastName")!}";
+        mobileController.text = prefs.getString("mobile")!;
+        areaController.text = "";
+        landmarkController.text = "";
+        addressController.text = "";
+        fromController.text = "";
+        toController.text = "";
+        for (int i = 0; i < answers.length; i++) {
+          answers[i] = "Yes";
+        }
         if (widget.navigatorKey.currentState == null) return;
         if (widget.navigatorKey.currentState!.canPop()) {
           widget.navigatorKey.currentState!.pop();
@@ -86,41 +100,157 @@ class _UtilitiesScreenState extends State<UtilitiesScreen> {
 
   Widget buildVVMT(context) {
     final AppLocalizations localizations = AppLocalizations.of(context)!;
-    return Padding(
-      padding: const EdgeInsets.all(16.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          TextField(
-            decoration: InputDecoration(
-              hintText: localizations.from,
-              border: const OutlineInputBorder(
-                borderSide: BorderSide(color: Colors.black),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        HeaderWidget(title: localizations.busTimeTable),
+        Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              TextField(
+                controller: fromController,
+                decoration: InputDecoration(
+                  hintText: localizations.from,
+                  border: const OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.black),
+                  ),
+                ),
               ),
-            ),
-          ),
-          const SizedBox(height: 10),
-          TextField(
-            decoration: InputDecoration(
-              hintText: localizations.to,
-              border: const OutlineInputBorder(
-                borderSide: BorderSide(color: Colors.black),
+              const SizedBox(height: 10),
+              TextField(
+                controller: toController,
+                decoration: InputDecoration(
+                  hintText: localizations.to,
+                  border: const OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.black),
+                  ),
+                ),
               ),
-            ),
-          ),
-          const SizedBox(height: 20),
-          OutlinedButton(
-            onPressed: () {},
-            style: OutlinedButton.styleFrom(
-              side: BorderSide(color: Theme.of(context).primaryColor),
-              shape: const RoundedRectangleBorder(
-                borderRadius: BorderRadius.all(Radius.zero),
+              const SizedBox(height: 20),
+              OutlinedButton(
+                onPressed: () async {
+                  setState(() {});
+                },
+                style: OutlinedButton.styleFrom(
+                  side: BorderSide(color: Theme.of(context).primaryColor),
+                  shape: const RoundedRectangleBorder(
+                    borderRadius: BorderRadius.all(Radius.zero),
+                  ),
+                ),
+                child: Text(localizations.search),
               ),
-            ),
-            child: Text(localizations.search),
+            ],
           ),
-        ],
-      ),
+        ),
+        Expanded(
+          child: FutureBuilder(
+            future:
+                fromController.text.isNotEmpty && toController.text.isNotEmpty
+                    ? soapClient.getBusScheduleFromTo(
+                        fromController.text, toController.text)
+                    : soapClient.getBusSchedule(),
+            builder: (context, snapshot) {
+              if (snapshot.hasData) {
+                List<BusSchedule> busSchedules = snapshot.data!;
+                return Padding(
+                  padding: const EdgeInsets.only(
+                      top: 0, bottom: 16, left: 16, right: 16),
+                  child: SingleChildScrollView(
+                    scrollDirection: Axis.vertical,
+                    child: SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      child: ConstrainedBox(
+                        constraints: const BoxConstraints(minWidth: 700),
+                        child: Builder(
+                          builder: (context) {
+                            List<TableRow> rows = [
+                              TableRow(
+                                decoration: BoxDecoration(
+                                    color: Theme.of(context).primaryColor),
+                                children: [
+                                  localizations.routeNo,
+                                  localizations.from,
+                                  localizations.to,
+                                  localizations.stages,
+                                  localizations.startTime,
+                                  localizations.frequency,
+                                  localizations.endTime,
+                                ]
+                                    .map(
+                                      (item) => TableCell(
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: Text(
+                                            item,
+                                            style: const TextStyle(
+                                              color: Colors.white,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    )
+                                    .toList(),
+                              ),
+                            ];
+                            for (var entry in busSchedules.asMap().entries) {
+                              rows.add(
+                                TableRow(
+                                  decoration: BoxDecoration(
+                                    color: entry.key % 2 == 0
+                                        ? Colors.white
+                                        : Colors.blue[50],
+                                  ),
+                                  children: [
+                                    entry.value.routeNo,
+                                    entry.value.from,
+                                    entry.value.to,
+                                    entry.value.stages,
+                                    entry.value.startTime,
+                                    entry.value.frequency,
+                                    entry.value.endTime,
+                                  ]
+                                      .map(
+                                        (value) => TableCell(
+                                          child: Padding(
+                                            padding: const EdgeInsets.all(8.0),
+                                            child: Text(
+                                              value,
+                                              style:
+                                                  const TextStyle(fontSize: 12),
+                                            ),
+                                          ),
+                                        ),
+                                      )
+                                      .toList(),
+                                ),
+                              );
+                            }
+                            return Table(
+                              columnWidths: const {
+                                1: FlexColumnWidth(2),
+                                2: FlexColumnWidth(2),
+                                5: FlexColumnWidth(2),
+                              },
+                              children: rows,
+                            );
+                          },
+                        ),
+                      ),
+                    ),
+                  ),
+                );
+              }
+              if (snapshot.hasError) {
+                return Center(child: Text(localizations.somethingWentWrong));
+              }
+              return const Center(child: CircularProgressIndicator());
+            },
+          ),
+        ),
+      ],
     );
   }
 
@@ -142,9 +272,13 @@ class _UtilitiesScreenState extends State<UtilitiesScreen> {
                     builder: (context) {
                       List<TableRow> rows = [
                         TableRow(
-                          decoration:
-                              BoxDecoration(color: Theme.of(context).primaryColor),
-                          children: [localizations.statusDate, localizations.status, localizations.remark]
+                          decoration: BoxDecoration(
+                              color: Theme.of(context).primaryColor),
+                          children: [
+                            localizations.statusDate,
+                            localizations.status,
+                            localizations.remark
+                          ]
                               .map(
                                 (item) => TableCell(
                                   child: Padding(
@@ -167,15 +301,21 @@ class _UtilitiesScreenState extends State<UtilitiesScreen> {
                         rows.add(
                           TableRow(
                             decoration: BoxDecoration(
-                              color:
-                                  entry.key % 2 == 0 ? Colors.white : Colors.blue[50],
+                              color: entry.key % 2 == 0
+                                  ? Colors.white
+                                  : Colors.blue[50],
                             ),
-                            children: [entry.value.date, entry.value.status, entry.value.remark]
+                            children: [
+                              entry.value.date,
+                              entry.value.status,
+                              entry.value.remark
+                            ]
                                 .map(
                                   (value) => TableCell(
                                     child: Padding(
                                       padding: const EdgeInsets.all(8.0),
-                                      child: Text(value, style: const TextStyle(fontSize: 12)),
+                                      child: Text(value,
+                                          style: const TextStyle(fontSize: 12)),
                                     ),
                                   ),
                                 )
@@ -238,12 +378,14 @@ class _UtilitiesScreenState extends State<UtilitiesScreen> {
                               child: Padding(
                                 padding: const EdgeInsets.all(12.0),
                                 child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                                  crossAxisAlignment:
+                                      CrossAxisAlignment.stretch,
                                   children: [
                                     Text(
                                       complaint.complaintNo,
                                       style: const TextStyle(
-                                          fontSize: 18, fontWeight: FontWeight.bold),
+                                          fontSize: 18,
+                                          fontWeight: FontWeight.bold),
                                     ),
                                     Table(
                                       columnWidths: const {
@@ -255,36 +397,42 @@ class _UtilitiesScreenState extends State<UtilitiesScreen> {
                                             child: Text(
                                               localizations.complaintType,
                                               style: TextStyle(
-                                                color: Theme.of(context).primaryColor,
+                                                color: Theme.of(context)
+                                                    .primaryColor,
                                                 fontWeight: FontWeight.bold,
                                               ),
                                             ),
                                           ),
-                                          TableCell(child: Text(complaint.type)),
+                                          TableCell(
+                                              child: Text(complaint.type)),
                                         ]),
                                         TableRow(children: [
                                           TableCell(
                                             child: Text(
                                               localizations.status,
                                               style: TextStyle(
-                                                color: Theme.of(context).primaryColor,
+                                                color: Theme.of(context)
+                                                    .primaryColor,
                                                 fontWeight: FontWeight.bold,
                                               ),
                                             ),
                                           ),
-                                          TableCell(child: Text(complaint.status)),
+                                          TableCell(
+                                              child: Text(complaint.status)),
                                         ]),
                                         TableRow(children: [
                                           TableCell(
                                             child: Text(
                                               localizations.complaintDate,
                                               style: TextStyle(
-                                                color: Theme.of(context).primaryColor,
+                                                color: Theme.of(context)
+                                                    .primaryColor,
                                                 fontWeight: FontWeight.bold,
                                               ),
                                             ),
                                           ),
-                                          TableCell(child: Text(complaint.date)),
+                                          TableCell(
+                                              child: Text(complaint.date)),
                                         ]),
                                       ],
                                     ),

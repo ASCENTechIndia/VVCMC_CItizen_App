@@ -152,8 +152,14 @@
     "allTheTools": "All the tools you need to manage your municipal tasks, right here.",
 
     "@_VVMT": {},
+    "routeNo": "Route No.",
     "from": "From",
     "to": "To",
+    "stages": "Stages",
+    "startTime": "Start Time",
+    "frequency": "Frequency",
+    "endTime": "End Time",
+    "busTimeTable": "Bus Time Table",
 
     "@_CLEAN_VVMC": {},
     "areaIsRequired": "Area is required",

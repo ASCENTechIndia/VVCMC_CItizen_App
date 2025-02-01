@@ -52,7 +52,7 @@ class PropertyTaxWidget extends StatelessWidget {
                     ),
                   ),
                 ),
-                const SizedBox(height: 10),
+                const SizedBox(height: 20),
                 OutlinedButton(
                   onPressed: () {
                     if (formKey.currentState!.validate()) {

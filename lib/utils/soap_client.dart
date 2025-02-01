@@ -6,6 +6,7 @@ import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:vvcmc_citizen_app/models/ambulance.dart';
 import 'package:vvcmc_citizen_app/models/blood_bank.dart';
+import 'package:vvcmc_citizen_app/models/bus_schedule.dart';
 import 'package:vvcmc_citizen_app/models/complaint_details.dart';
 import 'package:vvcmc_citizen_app/models/complaint_status.dart';
 import 'package:vvcmc_citizen_app/models/complaint_type.dart';
@@ -720,7 +721,6 @@ class SoapClient {
     }
   }
 
-
   Future<List<ComplaintDetails>> getComplaintDetails(String complaintNo) async {
     try {
       final [header, body] = await post("ComplaintNoDetails", {
@@ -734,6 +734,46 @@ class SoapClient {
         }
       }
       return complaintDetails;
+    } catch (error) {
+      log("$error");
+      rethrow;
+    }
+  }
+
+  Future<List<BusSchedule>> getBusSchedule() async {
+    try {
+      final [header, body] = await post("GetBusScheduleList", {});
+      if (body == null) return [];
+      List<BusSchedule> busSchedule = [];
+      for (var child in body.children) {
+        if (child.children.isNotEmpty) {
+          busSchedule.add(BusSchedule.fromXML(child));
+        }
+      }
+      log("$busSchedule");
+      return busSchedule;
+    } catch (error) {
+      log("$error");
+      rethrow;
+    }
+  }
+
+  Future<List<BusSchedule>> getBusScheduleFromTo(String from, String to) async {
+    try {
+      final [header, body] =
+          await post("GetBusScheduleFromTo", {"rFrom": from, "rTo": to});
+      if (header == null) return [];
+      if (header.findElements("SuccessCode").first.innerText != "9999") return [];
+      if (body == null) return [];
+      log("$body");
+      List<BusSchedule> busSchedule = [];
+      for (var child in body.children) {
+        if (child.children.isNotEmpty) {
+          busSchedule.add(BusSchedule.fromXML(child));
+        }
+      }
+      log("$busSchedule");
+      return busSchedule;
     } catch (error) {
       log("$error");
       rethrow;
