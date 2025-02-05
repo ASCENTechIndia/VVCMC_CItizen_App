@@ -416,12 +416,19 @@ class SoapClient {
 
   Future<List<Prabhag>> getPrabhags() async {
     try {
-      final [header, body] = await post("GetPrabhagList", {});
-      if (body == null) return [];
+      final [headerEn, bodyEn] = await post("GetPrabhagList", {});
+      final [headerMr, bodyMr] = await post("GetPrabhagListMAR", {});
+      if (bodyEn == null || bodyMr == null) return [];
       List<Prabhag> prabhags = [];
-      for (var child in body.children) {
-        if (child.children.isNotEmpty) {
-          prabhags.add(Prabhag.fromXML(child));
+      var minLength = bodyEn.children.length < bodyMr.children.length
+          ? bodyEn.children.length
+          : bodyMr.children.length;
+      for (int i = 0; i < minLength; i++) {
+        var childEn = bodyEn.children[i];
+        var childMr = bodyMr.children[i];
+
+        if (childEn.children.isNotEmpty && childMr.children.isNotEmpty) {
+          prabhags.add(Prabhag.fromXML(childEn, childMr));
         }
       }
       return prabhags;
@@ -433,12 +440,19 @@ class SoapClient {
 
   Future<List<Department>> getDepartments() async {
     try {
-      final [header, body] = await post("GetCRMDepartmentList", {});
-      if (body == null) return [];
+      final [headerEn, bodyEn] = await post("GetCRMDepartmentList", {});
+      final [headerMr, bodyMr] = await post("GetCRMDepartmentListMAR", {});
+      if (bodyEn == null || bodyMr == null) return [];
       List<Department> departments = [];
-      for (var child in body.children) {
-        if (child.children.isNotEmpty) {
-          departments.add(Department.fromXML(child));
+      var minLength = bodyEn.children.length < bodyMr.children.length
+          ? bodyEn.children.length
+          : bodyMr.children.length;
+      for (int i = 0; i < minLength; i++) {
+        var childEn = bodyEn.children[i];
+        var childMr = bodyMr.children[i];
+
+        if (childEn.children.isNotEmpty && childMr.children.isNotEmpty) {
+          departments.add(Department.fromXML(childEn, childMr));
         }
       }
       return departments;
@@ -763,7 +777,8 @@ class SoapClient {
       final [header, body] =
           await post("GetBusScheduleFromTo", {"rFrom": from, "rTo": to});
       if (header == null) return [];
-      if (header.findElements("SuccessCode").first.innerText != "9999") return [];
+      if (header.findElements("SuccessCode").first.innerText != "9999")
+        return [];
       if (body == null) return [];
       log("$body");
       List<BusSchedule> busSchedule = [];

@@ -1,28 +1,43 @@
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:vvcmc_citizen_app/utils/get_it.dart';
 import 'package:xml/xml.dart';
 
 class PrabhagSamiti {
-  final String memberName;
-  final String memberNameMar;
-  final String prabhagSamitiName;
-  final String prabhagSamitiNameMar;
+  final String memberNameEn;
+  final String memberNameMr;
+  final String prabhagSamitiNameEn;
+  final String prabhagSamitiNameMr;
   final String emailId;
   final String mobileNo;
+  final prefs = getIt<SharedPreferences>();
 
   PrabhagSamiti({
-    required this.memberName,
-    required this.memberNameMar,
-    required this.prabhagSamitiName,
-    required this.prabhagSamitiNameMar,
+    required this.memberNameEn,
+    required this.memberNameMr,
+    required this.prabhagSamitiNameEn,
+    required this.prabhagSamitiNameMr,
     required this.emailId,
     required this.mobileNo,
   });
 
+  String get memberName {
+    if (prefs.getString("locale") == "mr") return memberNameMr;
+    return memberNameEn;
+  }
+
+  String get prabhagSamitiName {
+    if (prefs.getString("locale") == "mr") return prabhagSamitiNameMr;
+    return prabhagSamitiNameEn;
+  }
+
   factory PrabhagSamiti.fromXML(XmlNode xml) {
     return PrabhagSamiti(
-      memberName: xml.findElements("membername").first.innerText,
-      memberNameMar: xml.findElements("membernamemar").first.innerText,
-      prabhagSamitiName: xml.findElements("prabhagsamitiname").first.innerText,
-      prabhagSamitiNameMar: xml.findElements("prabhagsamitinamemar").first.innerText,
+      memberNameEn: xml.findElements("membername").first.innerText,
+      memberNameMr: xml.findElements("membernamemar").first.innerText,
+      prabhagSamitiNameEn:
+          xml.findElements("prabhagsamitiname").first.innerText,
+      prabhagSamitiNameMr:
+          xml.findElements("prabhagsamitinamemar").first.innerText,
       emailId: xml.findElements("emailid").first.innerText,
       mobileNo: xml.findElements("mobileno").first.innerText,
     );

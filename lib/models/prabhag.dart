@@ -1,18 +1,29 @@
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:vvcmc_citizen_app/utils/get_it.dart';
 import 'package:xml/xml.dart';
 
 class Prabhag {
   final int id;
-  final String name;
+  final String nameEn;
+  final String nameMr;
+  final prefs = getIt<SharedPreferences>();
 
   Prabhag({
     required this.id,
-    required this.name,
+    required this.nameEn,
+    required this.nameMr,
   });
 
-  factory Prabhag.fromXML(XmlNode xml) {
+  String get name {
+    if (prefs.getString("locale") == "mr") return nameMr;
+    return nameEn;
+  }
+
+  factory Prabhag.fromXML(XmlNode xmlEn, XmlNode xmlMr) {
     return Prabhag(
-      id: int.parse(xml.findElements("Id").first.innerText),
-      name: xml.findElements("PrabhagName").first.innerText,
+      id: int.parse(xmlEn.findElements("Id").first.innerText),
+      nameEn: xmlEn.findElements("PrabhagName").first.innerText,
+      nameMr: xmlMr.findElements("PrabhagName").first.innerText,
     );
   }
 }
