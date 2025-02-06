@@ -214,7 +214,11 @@ class ReceiptDetailsTable extends StatelessWidget {
             decoration: BoxDecoration(
               color: Theme.of(context).primaryColor,
             ),
-            children: ["Date", "Amount", "Receipt No"]
+            children: [
+              localizations.date,
+              localizations.amount,
+              localizations.receiptNo,
+            ]
                 .map(
                   (title) => TableCell(
                     child: Padding(

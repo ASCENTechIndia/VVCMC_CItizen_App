@@ -47,6 +47,9 @@
     "confirmPhoneCall": "Confirm Phone Call",
     "doYouWishToCall": "Do you wish to call {number}?",
     "ward": "Ward",
+    "date": "Date",
+    "amount": "Amount",
+    "receiptNo": "Receipt No.",
 
     "@_HOME": {},
     "yourCityServices": "Your city services, updates, and more - all in one place!",
