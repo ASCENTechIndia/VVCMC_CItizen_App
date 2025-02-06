@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:vvcmc_citizen_app/feature/auth_screen.dart';
 import 'package:vvcmc_citizen_app/feature/home/home_screen.dart';
@@ -14,7 +16,11 @@ import 'package:vvcmc_citizen_app/utils/get_it.dart' as sl;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await sl.init();
+  Permission.notification.request();
+  await Future.wait([
+    sl.init(),
+    FlutterDownloader.initialize(ignoreSsl: true),
+  ]);
   runApp(const MyApp());
 }
 
@@ -109,7 +115,7 @@ class _MyAppState extends State<MyApp> {
   }
 
   void switchLocale() {
-    if ((prefs.getString("locale") ?? "en") == "en" ) {
+    if ((prefs.getString("locale") ?? "en") == "en") {
       prefs.setString("locale", "mr");
       setState(() {
         locale = "mr";

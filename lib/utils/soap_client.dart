@@ -22,6 +22,7 @@ import 'package:vvcmc_citizen_app/models/police.dart';
 import 'package:vvcmc_citizen_app/models/prabhag.dart';
 import 'package:vvcmc_citizen_app/models/prabhag_samiti.dart';
 import 'package:vvcmc_citizen_app/models/property_tax_details.dart';
+import 'package:vvcmc_citizen_app/models/property_tax_receipt.dart';
 import 'package:vvcmc_citizen_app/models/ward.dart';
 import 'package:vvcmc_citizen_app/models/water_tax_details.dart';
 import 'package:vvcmc_citizen_app/models/zone.dart';
@@ -349,6 +350,56 @@ class SoapClient {
       PropertyTaxDetails? tax;
       tax = PropertyTaxDetails.fromXML(header, body);
       return tax;
+    } catch (error) {
+      log("$error");
+      rethrow;
+    }
+  }
+
+  Future<Receipt?> getReceipt(
+    String consumerNo,
+    String transType, {
+    int? zoneId,
+    int? wardId,
+  }) async {
+    try {
+      final [header, body] = await post("GetConsumerRecDtl", {
+        "MobileNo": prefs.getString("mobile")!,
+        "TransType": transType,
+        "ZoneId": zoneId?.toString() ?? "",
+        "WardNo": wardId?.toString() ?? "",
+        "ConsumerNo": consumerNo,
+      });
+      if (header == null) return null;
+      print(header);
+      return Receipt.fromString(
+        header.findElements("str").first.innerText,
+      );
+    } catch (error) {
+      log("$error");
+      rethrow;
+    }
+  }
+
+  Future<String?> getReceiptFile(
+    String consumerNo,
+    String receiptNo,
+    String transType, {
+    int? zoneId,
+    int? wardId,
+  }) async {
+    try {
+      final [header, body] = await post("GetReceipt", {
+        "MobileNo": prefs.getString("mobile")!,
+        "TransType": transType,
+        "ZoneId": zoneId?.toString() ?? "",
+        "WardNo": wardId?.toString() ?? "",
+        "ConsumerNo": consumerNo,
+        "RecNo": receiptNo,
+      });
+      if (header == null) return null;
+      print(header);
+      return header.findElements("ReceiptURL").first.innerText;
     } catch (error) {
       log("$error");
       rethrow;
@@ -777,8 +828,9 @@ class SoapClient {
       final [header, body] =
           await post("GetBusScheduleFromTo", {"rFrom": from, "rTo": to});
       if (header == null) return [];
-      if (header.findElements("SuccessCode").first.innerText != "9999")
+      if (header.findElements("SuccessCode").first.innerText != "9999") {
         return [];
+      }
       if (body == null) return [];
       log("$body");
       List<BusSchedule> busSchedule = [];

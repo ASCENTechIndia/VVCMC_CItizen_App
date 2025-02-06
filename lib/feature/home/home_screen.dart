@@ -15,7 +15,7 @@ import 'package:vvcmc_citizen_app/widgets/water_tax_widget.dart';
 
 class HomeScreen extends StatefulWidget {
   final GlobalKey<NavigatorState> navigatorKey;
-  
+
   const HomeScreen({required this.navigatorKey, super.key});
 
   @override
@@ -45,7 +45,7 @@ class _HomeScreenState extends State<HomeScreen> {
             "/": buildHome,
             "view_your_tax": buildViewTax,
             "view_your_tax/view_your_property_tax": (context) =>
-                PropertyTaxWidget(),
+                const PropertyTaxWidget(),
             "view_your_tax/download_property_tax": (context) =>
                 const PropertyTaxReceiptWidget(),
             "view_your_tax/view_your_water_tax": (context) =>

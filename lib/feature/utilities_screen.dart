@@ -73,7 +73,7 @@ class _UtilitiesScreenState extends State<UtilitiesScreen> {
         onGenerateRoute: (RouteSettings settings) {
           final Map<String, WidgetBuilder> routes = {
             "/": buildUtilities,
-            "view_your_property_tax": (context) => PropertyTaxWidget(),
+            "view_your_property_tax": (context) => const PropertyTaxWidget(),
             "view_your_water_tax": (context) => const WaterTaxWidget(),
             "register_your_complaint": (context) =>
                 const RegisterComplaintWidget(),

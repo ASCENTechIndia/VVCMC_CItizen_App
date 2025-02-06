@@ -7,11 +7,16 @@ import 'package:vvcmc_citizen_app/utils/get_it.dart';
 import 'package:vvcmc_citizen_app/utils/soap_client.dart';
 import 'package:vvcmc_citizen_app/widgets/header_widget.dart';
 
-class PropertyTaxWidget extends StatelessWidget {
-  PropertyTaxWidget({
+class PropertyTaxWidget extends StatefulWidget {
+  const PropertyTaxWidget({
     super.key,
   });
 
+  @override
+  State<PropertyTaxWidget> createState() => _PropertyTaxWidgetState();
+}
+
+class _PropertyTaxWidgetState extends State<PropertyTaxWidget> {
   final soapClient = getIt<SoapClient>();
   final prefs = getIt<SharedPreferences>();
   final formKey = GlobalKey<FormState>();
@@ -104,9 +109,7 @@ class PropertyTaxWidget extends StatelessWidget {
                   WidgetsBinding.instance.addPostFrameCallback(
                     (_) => ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(
-                        content: Text(
-                          localizations.noDataFoundFor(propertyNo)
-                        ),
+                        content: Text(localizations.noDataFoundFor(propertyNo)),
                       ),
                     ),
                   );
