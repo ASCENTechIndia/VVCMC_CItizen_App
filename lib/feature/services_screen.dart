@@ -576,7 +576,10 @@ class _ServicesScreenState extends State<ServicesScreen> {
                   const SizedBox(height: 20),
                   Text(
                     "${localizations.email}: commissioner.vvmc@gov.in",
-                    style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                    style: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 16,
+                    ),
                   ),
                   const SizedBox(height: 20),
                   Text(localizations.commissionerMessageContent),
@@ -735,18 +738,21 @@ class _ServicesScreenState extends State<ServicesScreen> {
           ),
           const SizedBox(height: 8),
           CardWidget(
+            icon: Image.asset("assets/icons/ambulance.png"),
             title: Text(localizations.ambulance),
             onTap: () =>
                 Navigator.of(context).pushNamed("emergency_numbers/ambulance"),
           ),
           const SizedBox(height: 8),
           CardWidget(
+            icon: Image.asset("assets/icons/police.png"),
             title: Text(localizations.policeStation),
             onTap: () => Navigator.of(context)
                 .pushNamed("emergency_numbers/police_station"),
           ),
           const SizedBox(height: 8),
           CardWidget(
+            icon: Image.asset("assets/icons/fire-brigade.png"),
             title: Text(localizations.fireBrigades),
             onTap: () => Navigator.of(context)
                 .pushNamed("emergency_numbers/fire_brigades"),
@@ -787,7 +793,10 @@ class _ServicesScreenState extends State<ServicesScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(localizations.aboutContent, style: const TextStyle(fontSize: 16)),
+                  Text(
+                    localizations.aboutContent,
+                    style: const TextStyle(fontSize: 16),
+                  ),
                 ],
               ),
             ),
