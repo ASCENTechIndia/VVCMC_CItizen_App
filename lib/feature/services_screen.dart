@@ -732,6 +732,7 @@ class _ServicesScreenState extends State<ServicesScreen> {
       child: Column(
         children: [
           CardWidget(
+            icon: Image.asset("assets/icons/hospital.png"),
             title: Text(localizations.hospitals),
             onTap: () =>
                 Navigator.of(context).pushNamed("emergency_numbers/hospitals"),
@@ -759,18 +760,21 @@ class _ServicesScreenState extends State<ServicesScreen> {
           ),
           const SizedBox(height: 8),
           CardWidget(
+            icon: Image.asset("assets/icons/blood-bank.png"),
             title: Text(localizations.bloodBanks),
             onTap: () => Navigator.of(context)
                 .pushNamed("emergency_numbers/blood_banks"),
           ),
           const SizedBox(height: 8),
           CardWidget(
+            icon: Image.asset("assets/icons/eye.png"),
             title: Text(localizations.eyeBanks),
             onTap: () =>
                 Navigator.of(context).pushNamed("emergency_numbers/eye_banks"),
           ),
           const SizedBox(height: 8),
           CardWidget(
+            icon: Image.asset("assets/icons/government-office.png"),
             title: Text(localizations.governmentOffices),
             onTap: () => Navigator.of(context)
                 .pushNamed("emergency_numbers/government_offices"),

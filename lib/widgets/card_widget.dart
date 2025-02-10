@@ -27,7 +27,7 @@ class _CardWidgetState extends State<CardWidget> {
             children: () {
               return widget.icon != null
                   ? [
-                      widget.icon!,
+                      SizedBox(width: 40, height: 40, child: widget.icon!),
                       const SizedBox(width: 10),
                       Flexible(child: widget.title),
                     ]
