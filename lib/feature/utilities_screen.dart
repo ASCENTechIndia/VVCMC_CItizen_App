@@ -514,7 +514,7 @@ class _UtilitiesScreenState extends State<UtilitiesScreen> {
                         if (value == null || value.isEmpty) {
                           return localizations.mobileIsRequired;
                         }
-                        if (!RegExp(r"^[0-9]{10}").hasMatch(value)) {
+                        if (!RegExp(r"^\d{10}$").hasMatch(value)) {
                           return localizations.mobileIsInvalid;
                         }
                         return null;

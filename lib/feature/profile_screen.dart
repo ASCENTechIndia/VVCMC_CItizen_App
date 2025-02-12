@@ -120,7 +120,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       if (value == null || value.isEmpty) {
                         return localizations.mobileIsRequired;
                       }
-                      if (!RegExp(r"^[0-9]{10}").hasMatch(value)) {
+                      if (!RegExp(r"^\d{10}$").hasMatch(value)) {
                         return localizations.mobileIsInvalid;
                       }
                       return null;
@@ -198,7 +198,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           if (result) {
                             ScaffoldMessenger.of(context).showSnackBar(
                               SnackBar(
-                                content: Text(localizations.profileSavedSuccessfully),
+                                content: Text(
+                                  localizations.profileSavedSuccessfully,
+                                ),
                               ),
                             );
                             Navigator.of(context).pop();

@@ -167,7 +167,7 @@ class _AuthScreenState extends State<AuthScreen> {
                   if (value == null || value.isEmpty) {
                     return localizations.mobileIsRequired;
                   }
-                  if (!RegExp(r"^[0-9]{10}").hasMatch(value)) {
+                  if (!RegExp(r"^\d{10}$").hasMatch(value)) {
                     return localizations.mobileIsInvalid;
                   }
                   return null;
@@ -300,13 +300,13 @@ class _AuthScreenState extends State<AuthScreen> {
                     if (value == null || value.isEmpty) {
                       return localizations.mobileIsRequired;
                     }
-                    if (!RegExp(r"^[0-9]{10}").hasMatch(value)) {
+                    if (!RegExp(r"^\d{10}$").hasMatch(value)) {
                       return localizations.mobileIsInvalid;
                     }
                     return null;
                   },
                   controller: mobileController,
-                  decoration:  InputDecoration(
+                  decoration: InputDecoration(
                     hintText: localizations.mobileNo,
                     border: const OutlineInputBorder(
                       borderSide: BorderSide(color: Colors.black),
@@ -395,7 +395,7 @@ class _AuthScreenState extends State<AuthScreen> {
                           Navigator.of(context).pushReplacementNamed("otp");
                         } else {
                           ScaffoldMessenger.of(context).showSnackBar(
-                             SnackBar(
+                            SnackBar(
                               content: Text(localizations.somethingWentWrong),
                             ),
                           );
@@ -422,7 +422,7 @@ class _AuthScreenState extends State<AuthScreen> {
                       borderRadius: BorderRadius.all(Radius.zero),
                     ),
                   ),
-                  child:  Text(localizations.alreadyRegistered),
+                  child: Text(localizations.alreadyRegistered),
                 ),
               ],
             ),
