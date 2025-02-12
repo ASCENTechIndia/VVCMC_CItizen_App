@@ -909,6 +909,24 @@ class _ServicesScreenState extends State<ServicesScreen> {
               ),
         },
       ],
+      [
+        {
+          "icon": "",
+          "text": localizations.rts,
+          "onTap": () => launchUrl(
+                Uri.parse("https://rtsvvmc.in/vvcmcrts"),
+              ),
+        },
+        {
+          "icon": "",
+          "text": localizations.swachhata,
+          "onTap": () => launchUrl(
+                Uri.parse(
+                  "https://play.google.com/store/apps/details?id=com.ichangemycity.swachhbharat",
+                ),
+              ),
+        },
+      ],
     ];
     return SizedBox(
       width: MediaQuery.of(context).size.width,
