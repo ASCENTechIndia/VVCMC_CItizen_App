@@ -105,6 +105,7 @@ class _PropertyTaxWidgetState extends State<PropertyTaxWidget> {
                 PropertyTaxDetails data = snapshot.data!;
                 mobileController.text = prefs.getString("mobile")!;
                 emailController.text = prefs.getString("email")!;
+                amountController.text = data.taxes[data.taxes.length - 1].total;
                 if (data.taxes.isEmpty || data.taxes[0].isEmpty) {
                   WidgetsBinding.instance.addPostFrameCallback(
                     (_) => ScaffoldMessenger.of(context).showSnackBar(
@@ -367,6 +368,7 @@ class _PropertyTaxWidgetState extends State<PropertyTaxWidget> {
                                     }
                                     return null;
                                   },
+                                  controller: amountController,
                                   decoration: InputDecoration(
                                     hintText: localizations.amountToPay,
                                     border: const OutlineInputBorder(
