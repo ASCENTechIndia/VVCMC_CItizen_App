@@ -8,6 +8,7 @@
     "enterOtp": "Enter OTP",
     "invalidOtp": "Invalid OTP",
     "resendOtp": "Resend OTP",
+    "otpSent": "OTP Sent",
     "verify": "Verify",
 
     "@_MAIN": {},

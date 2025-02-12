@@ -134,7 +134,37 @@ class _AuthScreenState extends State<AuthScreen> {
               ),
               const SizedBox(height: 10),
               OutlinedButton(
-                onPressed: () {},
+                onPressed: () async {
+                  setState(() {
+                    loading = true;
+                  });
+                  bool result =
+                      await soapClient.storeUserDetails(mobileController.text);
+                  if (result) {
+                    result = await soapClient.register(
+                      prefs.getString("firstName")!,
+                      prefs.getString("lastName")!,
+                      prefs.getString("email")!,
+                      prefs.getString("mobile")!,
+                      prefs.getString("aadhar")!,
+                      prefs.getString("bloodGroup")!,
+                    );
+                  }
+                  setState(() {
+                    loading = false;
+                  });
+                  if (context.mounted) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text(
+                          result
+                              ? localizations.otpSent
+                              : localizations.failedToSendOtp,
+                        ),
+                      ),
+                    );
+                  }
+                },
                 style: OutlinedButton.styleFrom(
                   side: BorderSide(color: Theme.of(context).primaryColor),
                   shape: const RoundedRectangleBorder(
@@ -204,13 +234,16 @@ class _AuthScreenState extends State<AuthScreen> {
                   if (context.mounted) {
                     if (result) {
                       Navigator.of(context).pushReplacementNamed("otp");
-                    } else {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          content: Text(localizations.failedToSendOtp),
-                        ),
-                      );
                     }
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text(
+                          result
+                              ? localizations.otpSent
+                              : localizations.failedToSendOtp,
+                        ),
+                      ),
+                    );
                   }
                 },
                 style: OutlinedButton.styleFrom(
@@ -393,13 +426,16 @@ class _AuthScreenState extends State<AuthScreen> {
                       if (context.mounted) {
                         if (result) {
                           Navigator.of(context).pushReplacementNamed("otp");
-                        } else {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                              content: Text(localizations.somethingWentWrong),
-                            ),
-                          );
                         }
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text(
+                              result
+                                  ? localizations.otpSent
+                                  : localizations.somethingWentWrong,
+                            ),
+                          ),
+                        );
                       }
                     }
                   },
