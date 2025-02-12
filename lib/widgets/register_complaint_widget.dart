@@ -313,6 +313,7 @@ class _RegisterComplaintWidgetState extends State<RegisterComplaintWidget> {
                                     bool success =
                                         await soapClient.registerComplaint(
                                       departmentId.toString(),
+                                      complaintId!,
                                       nameController.text,
                                       mobileController.text,
                                       detailsController.text,

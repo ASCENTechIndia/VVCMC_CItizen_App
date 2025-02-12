@@ -640,6 +640,7 @@ class SoapClient {
 
   Future<bool> registerComplaint(
     String departmentId,
+    int complaintType,
     String customerName,
     String mobileNo,
     String complaint,
@@ -657,7 +658,7 @@ class SoapClient {
         "RegisterComplaint_subject",
         {
           "DepartmentId": departmentId,
-          "ComplaintSubTypeId": "-1",
+          "ComplaintSubTypeId": complaintType.toString(),
           "CustomerName": customerName,
           "MobileNo": mobileNo,
           "Complaint": complaint,
