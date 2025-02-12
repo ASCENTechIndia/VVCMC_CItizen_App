@@ -1,5 +1,8 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:vvcmc_citizen_app/models/bus_schedule.dart';
 import 'package:vvcmc_citizen_app/models/complaint_details.dart';
@@ -35,7 +38,14 @@ class _UtilitiesScreenState extends State<UtilitiesScreen> {
   final addressController = TextEditingController();
   final fromController = TextEditingController();
   final toController = TextEditingController();
+  final dustbinNoController = TextEditingController();
+  final optControllers = List<TextEditingController>.generate(
+    5,
+    (index) => TextEditingController(),
+  );
   String complaintNo = "";
+  int? dustbinType;
+  File? opt1Image;
 
   @override
   void initState() {
@@ -568,51 +578,147 @@ class _UtilitiesScreenState extends State<UtilitiesScreen> {
                     Column(
                       children: List.generate(
                         questions.length,
-                        (index) => Card(
-                          child: Padding(
-                            padding: const EdgeInsets.all(12.0),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.stretch,
-                              children: [
-                                Text(questions[index]),
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.end,
+                        (index) => Column(
+                          children: [
+                            Card(
+                              child: Padding(
+                                padding: const EdgeInsets.all(12.0),
+                                child: Column(
+                                  crossAxisAlignment:
+                                      CrossAxisAlignment.stretch,
                                   children: [
+                                    Text(questions[index]),
                                     Row(
+                                      mainAxisAlignment: MainAxisAlignment.end,
                                       children: [
-                                        Radio(
-                                          value: "Yes",
-                                          groupValue: answers[index],
-                                          onChanged: (value) {
-                                            if (value == null) return;
-                                            setState(() {
-                                              answers[index] = value;
-                                            });
-                                          },
+                                        Row(
+                                          children: [
+                                            Radio(
+                                              value: "Yes",
+                                              groupValue: answers[index],
+                                              onChanged: (value) {
+                                                if (value == null) return;
+                                                setState(() {
+                                                  answers[index] = value;
+                                                });
+                                              },
+                                            ),
+                                            Text(localizations.yes),
+                                          ],
                                         ),
-                                        Text(localizations.yes),
-                                      ],
-                                    ),
-                                    Row(
-                                      children: [
-                                        Radio(
-                                          value: "No",
-                                          groupValue: answers[index],
-                                          onChanged: (value) {
-                                            if (value == null) return;
-                                            setState(() {
-                                              answers[index] = value;
-                                            });
-                                          },
+                                        Row(
+                                          children: [
+                                            Radio(
+                                              value: "No",
+                                              groupValue: answers[index],
+                                              onChanged: (value) {
+                                                if (value == null) return;
+                                                setState(() {
+                                                  answers[index] = value;
+                                                });
+                                              },
+                                            ),
+                                            Text(localizations.no),
+                                          ],
                                         ),
-                                        Text(localizations.no),
                                       ],
                                     ),
                                   ],
                                 ),
-                              ],
+                              ),
                             ),
-                          ),
+                            if (answers[index] == "No" && index == 0)
+                              Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Column(
+                                  children: [
+                                    CircleAvatar(
+                                      radius: 40,
+                                      child: IconButton(
+                                        iconSize: 40,
+                                        icon: const Icon(
+                                            Icons.camera_alt_outlined),
+                                        onPressed: pickImage,
+                                      ),
+                                    ),
+                                    const SizedBox(height: 10),
+                                    Text(
+                                      opt1Image != null
+                                          ? localizations.fileSelected
+                                          : localizations.selectFile,
+                                    ),
+                                  ],
+                                ),
+                              )
+                            else if (answers[index] == "No" && index == 1)
+                              Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Column(
+                                  children: [
+                                    DropdownButtonFormField(
+                                      value: dustbinType,
+                                      onChanged: (item) {
+                                        setState(() {
+                                          dustbinType = item;
+                                        });
+                                      },
+                                      items: const [
+                                        {"name": "Big", "value": 0},
+                                        {"name": "Small", "value": 1},
+                                      ]
+                                          .map(
+                                            (item) => DropdownMenuItem(
+                                              value: item["value"] as int,
+                                              child:
+                                                  Text(item["name"] as String),
+                                            ),
+                                          )
+                                          .toList(),
+                                      decoration: InputDecoration(
+                                        hintText: localizations.typeOfDustbin,
+                                        border: const OutlineInputBorder(
+                                          borderSide:
+                                              BorderSide(color: Colors.black),
+                                        ),
+                                      ),
+                                    ),
+                                    const SizedBox(height: 10),
+                                    TextFormField(
+                                      controller: dustbinNoController,
+                                      decoration: InputDecoration(
+                                        hintText: localizations.no_,
+                                        border: const OutlineInputBorder(
+                                          borderSide:
+                                              BorderSide(color: Colors.black),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              )
+                            else if (answers[index] == "No")
+                              Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Card(
+                                  elevation: 0,
+                                  color: Colors.grey[100],
+                                  shape: const RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.all(
+                                      Radius.circular(0),
+                                    ),
+                                  ),
+                                  child: TextFormField(
+                                    maxLines: 4,
+                                    controller: optControllers[index - 2],
+                                    decoration: InputDecoration(
+                                      contentPadding: const EdgeInsets.all(8.0),
+                                      border: InputBorder.none,
+                                      hintText: localizations.message,
+                                    ),
+                                  ),
+                                ),
+                              )
+                          ],
                         ),
                       ),
                     ),
@@ -626,12 +732,20 @@ class _UtilitiesScreenState extends State<UtilitiesScreen> {
                           landmarkController.text,
                           addressController.text,
                           answers[0] == "Yes",
+                          opt1Image,
                           answers[1] == "Yes",
+                          dustbinType,
+                          dustbinNoController.text,
                           answers[2] == "Yes",
+                          optControllers[0].text,
                           answers[3] == "Yes",
+                          optControllers[1].text,
                           answers[4] == "Yes",
+                          optControllers[2].text,
                           answers[5] == "Yes",
+                          optControllers[3].text,
                           answers[6] == "Yes",
+                          optControllers[4].text,
                         );
                         if (context.mounted) {
                           if (success) {
@@ -831,5 +945,16 @@ class _UtilitiesScreenState extends State<UtilitiesScreen> {
         ],
       ),
     );
+  }
+
+  void pickImage() async {
+    final ImagePicker picker = ImagePicker();
+    final XFile? img = await picker.pickImage(
+      source: ImageSource.camera,
+    );
+    if (img == null) return;
+    setState(() {
+      opt1Image = File(img.path);
+    });
   }
 }

@@ -371,7 +371,6 @@ class SoapClient {
         "ConsumerNo": consumerNo,
       });
       if (header == null) return null;
-      print(header);
       return Receipt.fromString(
         header.findElements("str").first.innerText,
       );
@@ -398,7 +397,6 @@ class SoapClient {
         "RecNo": receiptNo,
       });
       if (header == null) return null;
-      print(header);
       return header.findElements("ReceiptURL").first.innerText;
     } catch (error) {
       log("$error");
@@ -588,12 +586,20 @@ class SoapClient {
     String landmark,
     String address,
     bool opt1,
+    File? opt1Image,
     bool opt2,
+    int? dustbinType,
+    String noOfDustbin,
     bool opt3,
+    String opt3Comm,
     bool opt4,
+    String opt4Comm,
     bool opt5,
+    String opt5Comm,
     bool opt6,
+    String opt6Comm,
     bool opt7,
+    String opt7Comm,
   ) async {
     try {
       final [header, body] = await post(
@@ -605,20 +611,22 @@ class SoapClient {
           "_landmark": landmark,
           "_address": address,
           "_opt1": opt1 ? "Y" : "N",
-          "_opt1_Image": "",
+          "_opt1_Image": opt1Image != null
+              ? base64Encode(await opt1Image.readAsBytes())
+              : "",
           "_opt2": opt2 ? "Y" : "N",
-          "_dustbintype": "0",
-          "_noofdustbin": "0",
+          "_dustbintype": dustbinType?.toString() ?? "",
+          "_noofdustbin": noOfDustbin,
           "_opt3": opt3 ? "Y" : "N",
-          "_opt3comm": "",
+          "_opt3comm": opt3Comm,
           "_opt4": opt4 ? "Y" : "N",
-          "_opt4comm": "",
+          "_opt4comm": opt4Comm,
           "_opt5": opt5 ? "Y" : "N",
-          "_opt5comm": "",
+          "_opt5comm": opt5Comm,
           "_opt6": opt6 ? "Y" : "N",
-          "_opt6comm": "",
+          "_opt6comm": opt6Comm,
           "_opt7": opt7 ? "Y" : "N",
-          "_opt7comm": "",
+          "_opt7comm": opt7Comm,
         },
       );
       if (header == null) return false;
