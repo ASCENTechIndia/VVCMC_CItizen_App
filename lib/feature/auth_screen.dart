@@ -7,7 +7,8 @@ import 'package:vvcmc_citizen_app/utils/soap_client.dart';
 import 'package:vvcmc_citizen_app/widgets/header_widget.dart';
 
 class AuthScreen extends StatefulWidget {
-  const AuthScreen({super.key});
+  final void Function() switchLocale;
+  const AuthScreen({super.key, required this.switchLocale});
 
   @override
   State<AuthScreen> createState() => _AuthScreenState();
@@ -33,13 +34,34 @@ class _AuthScreenState extends State<AuthScreen> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).primaryColor,
-        title: Text(
-          localizations.vasaiVirarMunicipalCorporation,
-          style: const TextStyle(
-            fontSize: 22,
-            fontWeight: FontWeight.bold,
-            color: Colors.white,
-          ),
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              localizations.vasaiVirarMunicipalCorporation,
+              style: const TextStyle(
+                fontSize: 22,
+                fontWeight: FontWeight.bold,
+                color: Colors.white,
+              ),
+            ),
+            InkWell(
+              customBorder: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(20),
+              ),
+              onTap: () async {
+                widget.switchLocale();
+              },
+              child: Padding(
+                padding: const EdgeInsets.all(4.0),
+                child: SizedBox(
+                  width: 24,
+                  height: 24,
+                  child: Image.asset("assets/icons/language.png"),
+                ),
+              ),
+            ),
+          ],
         ),
       ),
       body: PopScope(

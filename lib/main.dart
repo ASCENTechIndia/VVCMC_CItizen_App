@@ -92,7 +92,7 @@ class _MyAppState extends State<MyApp> {
               case "/":
                 return prefs.getBool("loggedIn") ?? false
                     ? Main(switchLocale: switchLocale)
-                    : const AuthScreen();
+                    : AuthScreen(switchLocale: switchLocale);
               case "/main":
                 return Main(switchLocale: switchLocale);
               case "/notifications":
