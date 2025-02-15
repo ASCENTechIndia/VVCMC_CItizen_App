@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -7,6 +9,7 @@ import 'package:vvcmc_citizen_app/models/zone.dart';
 import 'package:vvcmc_citizen_app/utils/get_it.dart';
 import 'package:vvcmc_citizen_app/utils/soap_client.dart';
 import 'package:vvcmc_citizen_app/widgets/header_widget.dart';
+import 'package:webview_flutter/webview_flutter.dart';
 
 class WaterTaxWidget extends StatefulWidget {
   const WaterTaxWidget({
@@ -379,7 +382,20 @@ class _WaterTaxWidgetState extends State<WaterTaxWidget> {
                         const SizedBox(height: 10),
                         OutlinedButton(
                           onPressed: () {
-                            if (formKey.currentState!.validate()) {}
+                            if (detailsFormKey.currentState!.validate()) {
+                              Navigator.of(context, rootNavigator: true)
+                                  .pushNamed(
+                                "/web",
+                                arguments: {
+                                  "url":
+                                      "https://ptaxcollection.onlinevvcmc.in/VVCMCPGApp/PayBillWater.aspx",
+                                  "title": localizations.waterTaxBill,
+                                  "method": LoadRequestMethod.post,
+                                  "body": utf8.encode(
+                                      "msg=${prefs.getString("mobile")}~${prefs.getString("mobile")}~${prefs.getString("email")}~${taxNoController.text}~$zoneId~$wardId"),
+                                },
+                              );
+                            }
                           },
                           style: OutlinedButton.styleFrom(
                             side: BorderSide(

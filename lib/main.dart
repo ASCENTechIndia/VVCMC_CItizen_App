@@ -104,6 +104,8 @@ class _MyAppState extends State<MyApp> {
                 return WebViewScreen(
                   url: args["url"],
                   title: args["title"],
+                  method: args["method"],
+                  body: args["body"],
                 );
               default:
                 return Container();

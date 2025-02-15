@@ -1,12 +1,15 @@
 import 'dart:developer';
+import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 class WebView extends StatefulWidget {
   final String url;
+  final LoadRequestMethod? method;
+  final Uint8List? body;
 
-  const WebView({super.key, required this.url});
+  const WebView({super.key, required this.url, this.method, this.body});
 
   @override
   State<WebView> createState() => _WebViewState();
@@ -74,6 +77,8 @@ class _WebViewState extends State<WebView> {
       )
       ..loadRequest(
         Uri.parse(widget.url),
+        method: widget.method ?? LoadRequestMethod.get,
+        body: widget.body,
       );
 
     controller.setJavaScriptMode(JavaScriptMode.unrestricted);

@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -6,6 +8,7 @@ import 'package:vvcmc_citizen_app/models/property_tax_details.dart';
 import 'package:vvcmc_citizen_app/utils/get_it.dart';
 import 'package:vvcmc_citizen_app/utils/soap_client.dart';
 import 'package:vvcmc_citizen_app/widgets/header_widget.dart';
+import 'package:webview_flutter/webview_flutter.dart';
 
 class PropertyTaxWidget extends StatefulWidget {
   const PropertyTaxWidget({
@@ -381,8 +384,21 @@ class _PropertyTaxWidgetState extends State<PropertyTaxWidget> {
                           ),
                         const SizedBox(height: 10),
                         OutlinedButton(
-                          onPressed: () {
-                            if (detailsFormKey.currentState!.validate()) {}
+                          onPressed: () async {
+                            if (detailsFormKey.currentState!.validate()) {
+                              Navigator.of(context, rootNavigator: true)
+                                  .pushNamed(
+                                "/web",
+                                arguments: {
+                                  "url":
+                                      "https://ptaxcollection.onlinevvcmc.in/VVCMCPGApp/PayBill.aspx",
+                                  "title": localizations.propertyTaxBill,
+                                  "method": LoadRequestMethod.post,
+                                  "body": utf8.encode(
+                                      "msg=${prefs.getString("mobile")}~${prefs.getString("mobile")}~${prefs.getString("email")}~${propertyNoController.text}"),
+                                },
+                              );
+                            }
                           },
                           style: OutlinedButton.styleFrom(
                             side: BorderSide(

@@ -911,14 +911,14 @@ class _ServicesScreenState extends State<ServicesScreen> {
       ],
       [
         {
-          "icon": "",
+          "icon": "rts.png",
           "text": localizations.rts,
           "onTap": () => launchUrl(
                 Uri.parse("https://rtsvvmc.in/vvcmcrts"),
               ),
         },
         {
-          "icon": "",
+          "icon": "swachhata.png",
           "text": localizations.swachhata,
           "onTap": () => launchUrl(
                 Uri.parse(
