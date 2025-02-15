@@ -234,7 +234,11 @@ class _MainState extends State<Main> with TickerProviderStateMixin {
                   },
                   child: Padding(
                     padding: const EdgeInsets.all(4.0),
-                    child: Image.asset("assets/icons/bell.png"),
+                    child: SizedBox(
+                      width: 24,
+                      height: 24,
+                      child: Image.asset("assets/icons/bell.png"),
+                    ),
                   ),
                 ),
                 InkWell(
@@ -246,7 +250,11 @@ class _MainState extends State<Main> with TickerProviderStateMixin {
                   },
                   child: Padding(
                     padding: const EdgeInsets.all(4.0),
-                    child: Image.asset("assets/icons/language.png"),
+                    child: SizedBox(
+                      width: 24,
+                      height: 24,
+                      child: Image.asset("assets/icons/language.png"),
+                    ),
                   ),
                 ),
                 InkWell(
@@ -258,7 +266,11 @@ class _MainState extends State<Main> with TickerProviderStateMixin {
                   },
                   child: Padding(
                     padding: const EdgeInsets.all(4.0),
-                    child: Image.asset("assets/icons/profile.png"),
+                    child: SizedBox(
+                      width: 24,
+                      height: 24,
+                      child: Image.asset("assets/icons/profile.png"),
+                    ),
                   ),
                 ),
               ],
